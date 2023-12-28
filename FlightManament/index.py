@@ -16,7 +16,14 @@ def register():
     return render_template("login.html")
 
 
+@app.route("/bookticket")
+def book_ticket():
+    return render_template("bookticket.html")
 
+
+@app.route("/sale")
+def sale():
+    return render_template("sale.html")
 
 # @app.route("/register", methods=['get', 'post'])
 # def user_register():
