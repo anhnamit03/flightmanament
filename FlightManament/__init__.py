@@ -4,7 +4,7 @@ import cloudinary
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
 from flask_login import LoginManager
-
+from flask_mail_sendgrid import MailSendGrid
 
 app = Flask(__name__)
 app.secret_key='sbsfusf!$%^&*&%^$$$$%^&'
@@ -26,3 +26,6 @@ cloudinary.config(
 login_manager = LoginManager()
 
 login_manager.init_app(app)
+
+app.config['MAIL_SENDGRID_API_KEY'] = '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'
+mail = MailSendGrid(app)
