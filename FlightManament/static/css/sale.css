@@ -1,0 +1,288 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+.grid {
+  width: 1400px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.row-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -15px;
+  margin-right: -15px;
+  margin-bottom: 32px;
+}
+
+.col-3 {
+  max-width: 25%;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.col-5 {
+  width: 41.6667%;
+  padding: 0 15px 40px;
+}
+
+.col-4 {
+  width: 33.3333%;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.col-6 {
+  width: 50%;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.col-8 {
+  width: 66.6667%;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.sale_content {
+  margin-top: 140px;
+}
+
+/* Slideshow container */
+.slideshow-container {
+  background-color: white;
+  margin-top: 6.25rem;
+  max-width: 100%;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+
+}
+
+
+/* Next & previous buttons */
+.prev,.next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+  margin-top: -22px;
+  color: blue;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover,
+.next:hover {
+  background-color: rgba(46, 43, 130, 0.5);
+}
+
+/* Caption text */
+.text {
+  color: #f2f2f2;
+  font-size: 15px;
+  padding: 8px 12px;
+  position: absolute;
+  bottom: 8px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+/* The dots/bullets/indicators */
+.dot {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.active,
+.dot:hover {
+  background-color: #717171;
+}
+
+/* Fading animation */
+.fade {
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+@keyframes fade {
+  from {
+    opacity: .4
+  }
+
+  to {
+    opacity: 1
+  }
+}
+
+/* On smaller screens, decrease text size */
+@media only screen and (max-width: 300px) {
+
+  .prev,
+  .next,
+  .text {
+    font-size: 11px
+  }
+}
+
+
+
+.mySlides {
+  height: 31.25rem;
+  background-color: white;
+  text-align: center;
+  justify-content: center;
+
+}
+
+/* Reset margin and padding for ul */
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Style for each item */
+.item_sale {
+
+  box-sizing: border-box;
+  background-color: #f2f2f2;
+  border-left: 4px solid #1b0ced;
+  /* Color of the tagbar */
+  padding: 10px;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+}
+
+/* Center the text inside each item */
+.item_sale p {
+  margin: 0 auto;
+}
+
+/* Add a little spacing between the tagbar and text */
+.item_sale p::before {
+  content: "\00a0\00a0";
+  /* Add some spacing before the text */
+}
+
+.item_sale:hover {
+  background-color: rgb(13, 92, 197);
+  color: white;
+}
+
+.col-3>h2 {
+  padding: 10px;
+  margin: 10px 0;
+  color: rgb(220, 15, 193);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  margin: 10px auto;
+  /* Thêm thuộc tính margin để căn giữa theo chiều ngang */
+}
+
+#title_sale {
+  padding: 10px;
+  margin: 10px 0;
+  color: blue;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  width: 29%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 2px 20px black;
+  border-radius: 5px;
+  margin: 2%;
+}
+
+#saleContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.image {
+  width: 100%;
+  height: 300px;
+
+}
+
+.image img {
+
+  width: 100%;
+  height: 100%;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+}
+
+.title {
+
+  text-align: center;
+  padding: 10px;
+
+}
+
+h1 {
+  font-size: 20px;
+}
+
+.des {
+  padding: 3px;
+  text-align: center;
+
+  padding-top: 10px;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+
+button:hover {
+  background-color: blue;
+  color: white;
+  transition: .5s;
+  cursor: pointer;
+}
+button{
+  margin-top: 40px;
+  margin-bottom: 10px;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 10px;
+}
+

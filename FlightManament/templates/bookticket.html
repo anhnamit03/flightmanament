@@ -1,0 +1,1814 @@
+{% extends "layout/base.html" %}
+
+{% block title %}SN AIRLINE - Kết nối giấc mơ và điểm đến của bạn{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bookticket.css')}}">
+{% endblock %}
+{% block js %}
+   <script src="{{ url_for('static', filename='javascript/bookticket.js')}}"></script>
+{% endblock %}
+{% block content %}
+   <section class="section_container booking_container">
+
+        <form>
+            <div class="form_group">
+                <span><i class="ri-map-pin-line"></i></span>
+                <div class="input_content">
+                    <div class="input_group">
+                        <select class="from-input" name="from" id="destination">
+
+                        </select>
+                        <label>Từ</label>
+                    </div>
+                    <p>Hiện tại</p>
+                </div>
+            </div>
+            <div class="form_group">
+                <span><i class="ri-map-pin-line"></i></span>
+                <div class="input_content">
+                    <div class="input_group">
+                        <select class="from-input" name="from" id="departure">
+
+                        </select>
+                        <label>Đến</label>
+                    </div>
+                    <p>Điểm đến</p>
+                </div>
+            </div>
+            <div class="form_group">
+                <span><i class="ri-calendar-line"></i></span>
+                <div class="input_content">
+                    <div class="input_group">
+                        <input type="date" id="go_date" />
+                    </div>
+                    <p>Thời gian đi</p>
+                </div>
+            </div>
+            <div class="form_group">
+                <span><i class="ri-user-line"></i></span>
+                <div class="input_content">
+                    <div class="input_group hanhkhach">
+                        <div>
+                            <h3>Hành khách</h3>
+                            <i class="fa-solid fa-up-down" style="color: #000000;"></i>
+                            <ul class="list-customer">
+                                <li>
+                                    <div class="psg-type">
+                                        <h3>Người lớn</h3>
+                                        <p>Người lớn(từ 12 tuổi)</p>
+                                    </div>
+                                    <div class="btn-customer">
+                                        <button id="minus_button_nomal"><i class="fa-solid fa-circle-minus"
+                                                style="color: #1d2ad7;"></i></button>
+                                        <button id="quantity_nomal">1</button>
+                                        <button id="plus_button_nomal"><i class="fa-solid fa-circle-plus"
+                                                style="color: #0f56d2;"></i></button>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="psg-type">
+                                        <h3>trẻ em</h3>
+                                        <p>trẻ em (2-12 tuổi)</p>
+                                    </div>
+                                    <div class="btn-customer">
+                                        <button id="minus_button_child"><i class="fa-solid fa-circle-minus"
+                                                style="color: #1d2ad7;"></i></button>
+                                        <button id="quantity_child">0</button>
+                                        <button id="plus_button_child"><i class="fa-solid fa-circle-plus"
+                                                style="color: #0f56d2;"></i></button>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="psg-type">
+                                        <h3>em bé</h3>
+                                        <p>em bé(dưới 12 tuổi)</p>
+                                    </div>
+                                    <div class="btn-customer">
+                                        <button id="minus_button_baby"><i class="fa-solid fa-circle-minus"
+                                                style="color: #1d2ad7;"></i></button>
+                                        <button id="quantity_baby">0</button>
+                                        <button id="plus_button_baby"><i class="fa-solid fa-circle-plus"
+                                                style="color: #0f56d2;"></i></button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+
+                    </div>
+                    <p id="quantity_passenger">1 hành khách</p>
+                </div>
+            </div>
+
+            <button type="button" class="btn" id="search"><i class="ri-search-line"></i></button>
+
+        </form>
+    </section>
+
+    <!-- Booking Tickets -->
+    <div class="booking_ticket">
+        <div class="grid">
+            <div class="row_grid">
+                <div class="col_2 book-ticket">
+                    <div class="search_title">
+
+                        <h3>Tìm theo giờ</h3>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                    <div class="menu_sidebar">
+                        <div class="search_ticket">
+                            <div class="infor_search">
+                                <div class="input-container">
+                                    <input type="checkbox" name="text-ticket" class="input">
+                                    <div class="content-search">
+                                        <h1>Chuyến bay buổi sớm</h1>
+                                        <p class="ml-0">(00:00 - 06:00)</p>
+                                    </div>
+
+                                </div>
+
+                                <div class="input-container">
+                                    <input type="checkbox" name="text-ticket" class="input"">
+                                    <div class=" content-search">
+                                    <h1>Chuyến bay buổi sáng</h1>
+                                    <p>(06:00 - 12:00)</p>
+                                </div>
+
+                            </div>
+
+                            <div class="input-container">
+                                <input type="checkbox" name="text-ticket" class="input"">
+                                    <div class=" content-search">
+                                <h1>Chuyến bay buổi chiều</h1>
+                                <p>(12:00 - 18:00)</p>
+                            </div>
+                        </div>
+                        <div class="input-container">
+                            <input type="checkbox" name="text-ticket" class="input"">
+                                    <div class=" content-search">
+                            <h1>Chuyến bay buổi tối</h1>
+                            <p>(18:00 - 24:00)</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="search_title">
+
+            <h3>Nâng cấp vé</h3>
+            <i class="fa-solid fa-chevron-down"></i>
+        </div>
+        <div class="menu_sidebar">
+            <div class="search_ticket">
+                <div class="infor_search">
+                    <div class="input-container">
+
+                        <div class="content-search">
+
+                            <p>Phổ thông</p>
+                        </div>
+
+                    </div>
+
+                    <div class="input-container">
+
+                        <div class="content-search">
+
+                            <p>Thương gia</p>
+                        </div>
+
+                    </div>
+
+                    <div class="input-container">
+
+                        <div class="content-search">
+
+                            <p>Hạng nhất</p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="search_title">
+            <i class="fa-solid fa-sort"></i>
+            <h3>Sắp xếp giá</h3>
+        </div>
+
+        <form class="radio-form">
+            <input value="a" name="hopping" type="radio" id="a">
+            <label for="a"><span></span>Tăng dần</label>
+            <input value="b" name="hopping" type="radio" id="b">
+            <label for="b"><span></span>Giảm dần</label>
+
+            <div class="worm">
+                <div class="worm__segment"></div>
+            </div>
+        </form>
+    </div>
+
+    <div class="col_10">
+        <div class="title_cards">
+            <h1>ĐẶT VÉ CÙNG NHAIRLINE</h1>
+        </div>
+        <div class="select-ticket">
+            <h1>Phổ thông</h1>
+            <h1>Thương gia</h1>
+        </div>
+
+        <div class="card_tickets">
+            <div class="card_ticket">
+                <!-- // row -->
+                <div class="group-content">
+                    <div class="card-content">
+                        <div class=" from">
+                            <h3 class="time_from">05:30</h3>
+                            <h4 class="sign_from">SGN</h4>
+                        </div>
+
+                        <div class=" center">
+                            <i class="fa-solid fa-plane"></i>
+                            <h5 class="time_all">2 giờ 15 phút</h5>
+                        </div>
+
+                        <div class=" to">
+                            <h3 class="time_to">07:30</h3>
+                            <h4 class="sign_to">HAN</h4>
+                        </div>
+                    </div>
+
+
+                    <div class=" prices">
+                        <div class="price_1">
+                            <a href="#">2.000.000 VNĐ</a>
+                            <i class="fa-solid fa-chevron-down"></i>
+
+
+                        </div>
+
+                        <div class="price_2">
+                            <a href="#">4.000.000 VNĐ</a>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+                <div class="itinerary-part-offer">
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="itinerary-part-offer second">
+
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card_ticket">
+                <!-- // row -->
+                <div class="group-content">
+                    <div class="card-content">
+                        <div class=" from">
+                            <h3 class="time_from">05:30</h3>
+                            <h4 class="sign_from">SGN</h4>
+                        </div>
+
+                        <div class=" center">
+                            <i class="fa-solid fa-plane"></i>
+                            <h5 class="time_all">2 giờ 15 phút</h5>
+                        </div>
+
+                        <div class=" to">
+                            <h3 class="time_to">07:30</h3>
+                            <h4 class="sign_to">HAN</h4>
+                        </div>
+                    </div>
+
+
+                    <div class=" prices">
+                        <div class="price_1">
+                            <a href="#">2.000.000 VNĐ</a>
+                            <i class="fa-solid fa-chevron-down"></i>
+
+
+                        </div>
+
+                        <div class="price_2">
+                            <a href="#">4.000.000 VNĐ</a>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+                <div class="itinerary-part-offer">
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="itinerary-part-offer second">
+
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card_ticket">
+                <!-- // row -->
+                <div class="group-content">
+                    <div class="card-content">
+                        <div class=" from">
+                            <h3 class="time_from">05:30</h3>
+                            <h4 class="sign_from">SGN</h4>
+                        </div>
+
+                        <div class=" center">
+                            <i class="fa-solid fa-plane"></i>
+                            <h5 class="time_all">2 giờ 15 phút</h5>
+                        </div>
+
+                        <div class=" to">
+                            <h3 class="time_to">07:30</h3>
+                            <h4 class="sign_to">HAN</h4>
+                        </div>
+                    </div>
+
+
+                    <div class=" prices">
+                        <div class="price_1">
+                            <a href="#">2.000.000 VNĐ</a>
+                            <i class="fa-solid fa-chevron-down"></i>
+
+
+                        </div>
+
+                        <div class="price_2">
+                            <a href="#">4.000.000 VNĐ</a>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+                <div class="itinerary-part-offer">
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="itinerary-part-offer second">
+
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card_ticket">
+                <!-- // row -->
+                <div class="group-content">
+                    <div class="card-content">
+                        <div class=" from">
+                            <h3 class="time_from">05:30</h3>
+                            <h4 class="sign_from">SGN</h4>
+                        </div>
+
+                        <div class=" center">
+                            <i class="fa-solid fa-plane"></i>
+                            <h5 class="time_all">2 giờ 15 phút</h5>
+                        </div>
+
+                        <div class=" to">
+                            <h3 class="time_to">07:30</h3>
+                            <h4 class="sign_to">HAN</h4>
+                        </div>
+                    </div>
+
+
+                    <div class=" prices">
+                        <div class="price_1">
+                            <a href="#">2.000.000 VNĐ</a>
+                            <i class="fa-solid fa-chevron-down"></i>
+
+
+                        </div>
+
+                        <div class="price_2">
+                            <a href="#">4.000.000 VNĐ</a>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+                <div class="itinerary-part-offer">
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="itinerary-part-offer second">
+
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card_ticket">
+                <!-- // row -->
+                <div class="group-content">
+                    <div class="card-content">
+                        <div class=" from">
+                            <h3 class="time_from">05:30</h3>
+                            <h4 class="sign_from">SGN</h4>
+                        </div>
+
+                        <div class=" center">
+                            <i class="fa-solid fa-plane"></i>
+                            <h5 class="time_all">2 giờ 15 phút</h5>
+                        </div>
+
+                        <div class=" to">
+                            <h3 class="time_to">07:30</h3>
+                            <h4 class="sign_to">HAN</h4>
+                        </div>
+                    </div>
+
+
+                    <div class=" prices">
+                        <div class="price_1">
+                            <a href="#">2.000.000 VNĐ</a>
+                            <i class="fa-solid fa-chevron-down"></i>
+
+
+                        </div>
+
+                        <div class="price_2">
+                            <a href="#">4.000.000 VNĐ</a>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+                <div class="itinerary-part-offer">
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="itinerary-part-offer second">
+
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Phổ thông siêu tiết kiệm</h1>
+                        </div>
+                        <div class="show-ticket">
+                            <h1>Hết vé</h1>
+                        </div>
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                    Hành lý xách tay: Không quá 12kg
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="footer_col">
+                    <h4>NHAIRLINE</h4>
+                    <ul>
+                        <li>
+                            <a href="">Công ty</a>
+                        </li>
+                        <li>
+                            <a href=""> Đối tác</a>
+                        </li>
+                        <li>
+                            <a href=""> Đội bay</a>
+                        </li>
+                        <li>
+                            <a href="">Cơ hội việc làm</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="footer_col">
+                    <h4>Pháp lý</h4>
+                    <ul>
+                        <li>
+                            <a href="">Điều khoản</a>
+                        </li>
+                        <li>
+                            <a href="">Bảo mật thông tin</a>
+                        </li>
+                        <li>
+                            <a href="">Điều lệ vận chyển</a>
+                        </li>
+                        <li>
+                            <a href="">Quy chế</a>
+                        </li>
+                    </ul>
+                </div>
+
+
+                <div class="footer_col">
+                    <h4>Đặt vé</h4>
+                    <ul>
+                        <li>
+                            <a href="">
+                                Đặt vé ở đâu?
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                Đại lý bán vé
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                Hình thức thanh toán
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                Đăng ký làm đại lý
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+
+                <div class="footer_col">
+                    <h4>Hỗ trợ</h4>
+                    <ul>
+                        <li>
+                            <a href="">
+                                Tư vấn đặt vé
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                Tư vấn khuyến mãi
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                Tư vấn thanh toán
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">Hỗ trợ pháp lý</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="footer_col">
+                    <h4>Vận tải hàng hóa</h4>
+                    <ul>
+                        <li>
+                            <a href="">
+                                Trang web hàng hóa
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Copyright -->
+    <div class="copyright">
+        <p>Copyright &copy 2023 - Bản quyền thuộc về NHAIRLINE</p>
+    </div>
+
+    <!-- Modal Login -->
+    <div class="modal js_modal">
+        <div class="form login form_login">
+            <div class="form-content">
+                <h1 class="login_header">Đăng nhập</h1>
+                <form action="#">
+                    <div class="field input-field">
+                        <input type="email" placeholder="Email của bạn" class="input">
+                    </div>
+                    <div class="field input-field">
+                        <input type="password" placeholder="Mật khẩu" class="password">
+                        <i class='bx bx-hide eye-icon'></i>
+                    </div>
+                    <div class="form-link">
+                        <a href="#" class="forgot-pass">Quên mật khẩu?</a>
+                    </div>
+                    <div class="field button-field">
+                        <button>Đăng nhập</button>
+                    </div>
+                </form>
+                <div class="form-link">
+                    <span>Bạn chưa có tài khoản? <a href="./signup.html" class="link signup-link">Đăng ký
+                            ngay</a></span>
+                </div>
+            </div>
+            <div class="line"></div>
+            <div class="media-options">
+                <a href="#" class="field facebook">
+                    <i class='bx bxl-facebook facebook-icon'></i>
+                    <span>Đăng nhập với Facebook</span>
+                </a>
+            </div>
+            <div class="media-options">
+                <a href="#" class="field google">
+                    <img src="{{ url_for('static', filename='images/google.png') }}" alt="" class="google-img">
+                    <span>Đăng nhập với Google</span>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
