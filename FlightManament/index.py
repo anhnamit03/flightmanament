@@ -1,19 +1,20 @@
 import math
 import cloudinary.uploader
+import flask
+import flask_login
 from flask import render_template, request, redirect, url_for, session, jsonify
-from FlightManament import app
+from flask_login import login_required, current_user, login_user
+
+from FlightManament import app, login_manager
 import os
 import stripe
+
+from FlightManament.models import User
 
 
 @app.route("/")
 def home():
     return render_template("index.html")
-# test
-
-@app.route("/login")
-def register():
-    return render_template("login.html")
 
 
 @app.route("/bookticket")
@@ -25,71 +26,52 @@ def book_ticket():
 def sale():
     return render_template("sale.html")
 
-# @app.route("/register", methods=['get', 'post'])
-# def user_register():
-#     err_mgs = ""
-#     if request.method.__eq__('POST'):
-#         name = request.form.get('name')
-#         email = request.form.get('email')
-#         username = request.form.get('username')
-#         password = request.form.get('password')
-#         confirm = request.form.get('confirm')
-#         avatar_path = None
-#
-#         try:
-#             if password.strip().__eq__(confirm.strip()):
-#                 avtar = request.files.get('avatar')
-#                 if avtar:
-#                     res = cloudinary.uploader.upload(avtar)
-#                     avatar_path = res['secure_url']
-#
-#                 utils.add_user(name=name,
-#                                username=username,
-#                                password=password,
-#                                email=email,
-#                                avatar=avatar_path)
-#                 return redirect(url_for('user_signin'))
-#             else:
-#                 err_mgs = "Mat khau khong khop!!!"
-#         except Exception as ex:
-#             err_mgs = "he thong dang co loi: " + str(ex)
-#
-#     return render_template("register.html", err_mgs=err_mgs)
-#
-#
-# @app.context_processor
-# def comon_response():
-#     return {
-#         'categories': utils.load_categories()
-#     }
-#
-#
-# @app.route('/user_login', methods=['get', 'post'])
-# def user_signin():
-#     err_mgs = ''
-#     if request.method.__eq__('POST'):
-#         username = request.form.get('username')
-#         password = request.form.get('password')
-#
-#         user = utils.check_login(username, password)
-#         if user:
-#             login_user(user=user)
-#             return  redirect(url_for('home'))
-#         else:
-#             err_mgs = 'username or password is incorrect'
-#
-#     return render_template('login.html', err_mgs=err_mgs)
-#
-#
-# @app.route('/user_logout')
-# def user_signout():
-#     logout_user()
-#     return redirect(url_for('user_signin'))
-#
-#
-# @login.user_loader
-# def user_load(user_id):
-#     return utils.get_user_by_id(user_id)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return '''
+            <form action='login' method='POST'>
+                <input type='text' name='username' id='username' placeholder='username'/>
+                <input type='password' name='password' id='password' placeholder='password'/>
+                <input type='submit' name='submit'/>
+            </form>
+        '''
+
+    username = request.form['username']
+    password = request.form['password']
+
+    # Validate credentials (replace this with your actual validation logic)
+    if username is not None and password is not None:
+
+        user = User()
+        user.id = username
+
+        login_user(user)
+        return redirect(url_for('protected'))
+
+    return 'Bad login'
+
+@app.route('/logout')
+def logout():
+    flask_login.logout_user()
+    return 'Logged out'
+
+@login_manager.unauthorized_handler
+def unauthorized_handler():
+    return 'Unauthorized', 401
+
+@app.route('/protected')
+@login_required
+def protected():
+    print("current_user",current_user)
+    return 'Logged in as: ' + current_user.name
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    print("user is", user_id)
+    return User.query.filter_by(username=user_id).first()
 
 
 if __name__ == "__main__":

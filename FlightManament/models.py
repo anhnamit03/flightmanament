@@ -1,3 +1,4 @@
+import flask_login
 from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
 from FlightManament import db
@@ -151,7 +152,7 @@ class Customer(BaseModel):
     birthday = Column(String(50), nullable=False)
 
 
-class User(BaseModel):
+class User(BaseModel,flask_login.UserMixin):
     __tablename__ = "User"
     username = Column(String(50), nullable=False, unique=True)
     password = Column(String(50), nullable=False)
@@ -163,6 +164,7 @@ class User(BaseModel):
     email = Column(String(50), nullable=False)
     birthday = Column(String(50), nullable=False)
     id_role = Column(Integer, ForeignKey("Role.id"), nullable=False)
+
 
 
 class Role(BaseModel):
