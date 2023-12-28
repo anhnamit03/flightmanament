@@ -40,7 +40,8 @@ def home():
 
 @app.route("/bookticket")
 def book_ticket():
-    return render_template("bookticket.html")
+    destinations = ["opt1", "opt2", "opt3", "opt4"]
+    return render_template("bookticket.html", destinations = destinations)
 
 
 @app.route("/sale")

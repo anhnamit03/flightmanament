@@ -28,6 +28,7 @@
                 <div class="input_content">
                     <div class="input_group">
                         <select class="from-input" name="from" id="departure">
+
                         </select>
                         <label>Đến</label>
                     </div>
@@ -1809,5 +1810,31 @@
             </div>
         </div>
     </div>
+<script>
+    var fromDateShow = document.querySelector('#destination');
+    var toDateShow = document.querySelector('#departure');
+    var placeArray = [];
+    var destinations = {{ destinations | tojson }};
+
+        var fromDateOptions = '<option></option>';
+        placeArray.forEach((destinations) => {
+            fromDateOptions += `<option>${destinations}</option>`;
+            fromDateShow.innerHTML = fromDateOptions;
+        });
+        fromDateShow.addEventListener("change", function () {
+            var selectedValue = this.value;
+
+            var newArray = placeArray.filter(function (place) {
+                return destinations !== selectedValue;
+            });
+
+            var toDateOptions = '<option></option>';
+            newArray.forEach((destinations) => {
+                toDateOptions += `<option>${destinations}</option>`;
+            });
+            toDateShow.innerHTML = toDateOptions;
+        });
+
+</script>
 {% endblock %}
 
