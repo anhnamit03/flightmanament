@@ -9,7 +9,7 @@ import stripe
 @app.route("/")
 def home():
     return render_template("index.html")
-
+# test
 
 @app.route("/login")
 def register():
