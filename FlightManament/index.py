@@ -21,19 +21,21 @@ from FlightManament.models import User
 @app.route('/', methods=['GET', 'POST'])
 def home():
     user_info = session.get('user_info')
-    user_name = ""
+    user_name =""
+
+    # login wwith sso
+    google_client_id = '1055243236583-dol1antfv33cudplah7tjb56787vefhg.apps.googleusercontent.com'
+    redirect_uri = 'http://localhost:5000/callback_login_sso'
+    auth_url = f'https://accounts.google.com/o/oauth2/auth?response_type=code&client_id={google_client_id}&redirect_uri={redirect_uri}&scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/contacts.readonly&access_type=online'
+
+
     if user_info:
         # Check if 'names' field is present and not empty
         if 'names' in user_info and user_info['names']:
             # Use the first name from the list (you may adapt this based on your needs)
             user_name = user_info['names'][0].get('displayName', 'Guest')
 
-
-    return render_template("index.html", user_name=user_name)
-
-
-
-
+    return render_template("index.html", user_name=user_name, auth_url = auth_url)
 
 
 @app.route("/bookticket")
@@ -54,6 +56,7 @@ def login_sso():
     auth_url = f'https://accounts.google.com/o/oauth2/auth?response_type=code&client_id={google_client_id}&redirect_uri={redirect_uri}&scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/contacts.readonly&access_type=online'
 
     return f'<a href="{auth_url}">Login with Google</a>'
+
 
 @app.route('/callback_login_sso')
 def callback_login_sso():
@@ -101,10 +104,8 @@ def login():
 
     # Validate credentials (replace this with your actual validation logic)
     if username is not None and password is not None:
-
         user = User()
         user.id = username
-
         login_user(user)
         return redirect(url_for('protected'))
 
@@ -115,9 +116,16 @@ def logout():
     flask_login.logout_user()
     return 'Logged out'
 
+
+
 @login_manager.unauthorized_handler
 def unauthorized_handler():
     return 'Unauthorized', 401
+
+
+
+
+
 
 @app.route('/protected')
 @login_required
