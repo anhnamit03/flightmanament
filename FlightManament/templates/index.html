@@ -4,6 +4,9 @@
 {% block css %}
 
 {% endblock %}
+{% block js %}
+
+{% endblock %}
 {% block content %}
  <div class="banner">
         <div class="banner_content">
@@ -22,57 +25,7 @@
         </div>
         <img src="{{ url_for('static', filename='images/Plane.png') }}" alt="Plane">
     </div>
-<section class="section_container booking_container reveal">
-        <div class="booking_nav">
-            <span class="active">Đặt vé trực tuyến</span>
 
-        </div>
-        <form>
-            <div class="form_group">
-                <span><i class="ri-map-pin-line"></i></span>
-                <div class="input_content">
-                    <div class="input_group">
-                        <input type="text" placeholder=" " />
-                        <label>Từ</label>
-                    </div>
-                    <p>Hiện tại</p>
-                </div>
-            </div>
-            <div class="form_group">
-                <span><i class="ri-map-pin-line"></i></span>
-                <div class="input_content">
-                    <div class="input_group">
-                        <input type="text" placeholder=" " />
-                        <label>Đến</label>
-                    </div>
-                    <p>Điểm đến</p>
-                </div>
-            </div>
-            <div class="form_group">
-                <span><i class="ri-calendar-line"></i></span>
-                <div class="input_content">
-                    <div class="input_group">
-                        <input type="date"/>
-                    </div>
-                    <p>Thời gian đi</p>
-                </div>
-            </div>
-            <div class="form_group">
-                <span><i class="ri-user-line"></i></span>
-                <div class="input_content">
-                    <div class="input_group">
-                        <input type="text" placeholder="" />
-                        <label>Hành khách</label>
-                    </div>
-                    <p>Số lượng hành khách</p>
-                </div>
-            </div>
-            <a href="">
-                <button class="btn"><i class="ri-search-line"></i></button>
-            </a>
-
-        </form>
-    </section>
 <!-- Best Travel Of Month-->
     <div class="travel_introduce">
         <h1 class="travel_title reveal">Địa điểm du lịch của tháng</h1>
@@ -197,4 +150,5 @@
     </div>
 
 {% endblock %}
+
 
