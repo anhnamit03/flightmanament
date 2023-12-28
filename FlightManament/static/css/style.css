@@ -1,0 +1,445 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Banner */
+.banner {
+    height: 100vh;
+    position: relative;
+    background: url(../images/Sky.png) center no-repeat;
+    background-size: cover;
+    overflow: hidden;
+}
+
+.banner::before,
+.banner:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+}
+
+.banner::before {
+    width: 70%;
+    background: url(../images/Clouds.png) center no-repeat;
+    background-size: cover;
+}
+
+.banner::after {
+    background: linear-gradient(90deg, #f1f1f1 0%, rgba(255, 255, 255, 0) 100%);
+    width: 50%;
+}
+
+.banner img {
+    width: 50%;
+    max-width: 1000px;
+    position: absolute;
+    right: 0;
+    top: 22%;
+    animation: fadeInRight 1s ease-in
+}
+
+.banner .banner_content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    padding: 0 48px;
+    height: 100%;
+    max-width: 500px;
+    animation: fadeInLeft 1s ease-in;
+}
+
+.banner .banner_content div h1 {
+    font-size: 2.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #018de5;
+}
+
+.banner .banner_content div h1 span {
+    color: #3d3a4e;
+}
+
+.banner .banner_content a .button {
+    position: relative;
+    overflow: hidden;
+    height: 48px;
+    padding: 0 32px;
+    border-radius: 24px;
+    background: #3d3a4e;
+    background-size: 400%;
+    color: #fff;
+    border: none;
+    margin-top: 20px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.banner .banner_content a .button .button_content {
+    position: relative;
+    z-index: 1;
+}
+
+.banner .banner_content a .button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    width: 100%;
+    height: inherit;
+    border-radius: inherit;
+    background: linear-gradient(82.3deg,
+            rgba(95, 187, 245, 0.8) 10.8%,
+            rgba(1, 141, 229, 0.8) 94.3%);
+    transition: all 0.475s;
+}
+
+.banner .banner_content a .button:hover::before {
+    transform: scaleX(1);
+}
+
+@keyframes fadeInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Form Booking Tickets */
+.section_container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 5rem 1rem;
+}
+
+.booking_container {
+    border-radius: 2rem;
+    border: 1px solid #f1f5f9;
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.booking_nav {
+    max-width: 600px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    background-color: #f1f5f9;
+    border-radius: 5px;
+}
+
+.booking_nav span {
+    flex: 1;
+    padding: 1rem 2rem;
+    font-weight: 500;
+    color: #64748b;
+    text-align: center;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.booking_nav span.active {
+    color: #fff;
+    background-color: #3d5cb8;
+}
+
+
+.booking_container form {
+    margin-top: 4rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr) auto;
+    gap: 1rem;
+}
+
+.booking_container .input_content {
+    width: 100%;
+}
+
+.booking_container .form_group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.booking_container .form_group span {
+    padding: 10px;
+    font-size: 1.5rem;
+    color: #0f172a;
+    background-color: #f1f5f9;
+    border-radius: 1rem;
+}
+
+.booking_container .btn{
+    padding: 16px;
+    font-size: 1.5rem;
+    border-radius: 20px;
+    background-color: #018de5;
+    border: 1px solid #fff;
+    cursor: pointer;
+}
+
+.booking_container .btn i{
+    color: #fff;
+}
+
+.booking_container .input_group {
+    width: 100%;
+    position: relative;
+}
+
+.booking_container label {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    font-weight: 500;
+    color: #0f172a;
+    pointer-events: none;
+    transition: 0.3s;
+}
+
+.booking_container input {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 1rem;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid #3d5cb8;
+    color: #0f172a;
+}
+
+.booking_container input:not(:placeholder-shown)~label,
+.booking_container input:focus~label {
+    font-size: 0.8rem;
+    top: 0;
+}
+
+.booking_container .form_group p {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+.booking_container a .btn {
+    padding: 1rem;
+    font-size: 1.5rem;
+}
+
+/*Travel Introduce*/
+.travel_introduce .travel_title {
+    color: #018de5;
+    font-size: 2.5rem;
+    text-align: center;
+    padding: 80px;
+}
+
+.travel_introduce .travel_cards {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.travel_introduce .travel_cards .travel_card {
+    width: 20%;
+    height: 500px;
+    position: relative;
+    overflow: hidden;
+    background: radial-gradient(#111 50%, #000 100%);
+    margin: 0 20px;
+    border-radius: 100px;
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.1);
+    border: 2px solid #3d3a4e;
+}
+
+.travel_introduce .travel_cards .travel_card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transform: scale(1.3);
+    transition: all 0.3s ease-out;
+    overflow: hidden;
+}
+
+.travel_introduce .travel_cards .travel_card:hover img {
+    transform: scale(1.1) translateY(-20px);
+    opacity: 0.3;
+}
+
+.travel_introduce .travel_cards .travel_card .travel_des {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+    color: #fff;
+    font-size: 1.2rem;
+}
+
+.travel_introduce .travel_cards .travel_card .travel_des h3 {
+    font-weight: 700;
+    font-size: 2rem;
+    transform: translateY(30px);
+    opacity: 0;
+    transition: all 0.3s ease-out;
+
+}
+
+.travel_introduce .travel_cards .travel_card .travel_des p {
+    transform: translateY(30px);
+    opacity: 0;
+    transition: all 0.3s ease-out 0.2s;
+    margin-top: 10px;
+}
+
+.travel_introduce .travel_cards .travel_card .travel_des a button {
+    position: relative;
+    display: inline-block;
+    margin: 20px 0;
+    padding: 15px 30px;
+    text-align: center;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    text-decoration: none;
+    color: #fff;
+    cursor: pointer;
+    transition: ease-out 0.5s;
+    border-radius: 20px;
+    background-color: #2598df;
+    color: #fff;
+    border: 1px solid #fff;
+    text-transform: uppercase;
+    transform: translateY(30px);
+    opacity: 0;
+    font-weight: 500;
+    transition: all 0.3s ease-out 0.4s;
+}
+
+.travel_introduce .travel_cards .travel_card:hover .travel_des h3 {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.travel_introduce .travel_cards .travel_card:hover .travel_des p {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.travel_introduce .travel_cards .travel_card:hover .travel_des a button {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/*Service Introduce*/
+.service_introduce {
+   margin: 100px 0;
+}
+
+.service_introduce .title_service p {
+    margin-bottom: 16px;
+    text-align: center;
+    font-weight: 600;
+    color: #018de5;
+}
+
+.service_introduce .title_service h3 {
+    text-align: center;
+    font-size: 3rem;
+    line-height: 4rem;
+    color: #018de5;
+}
+
+.service_container{
+    display: flex;
+    width: 1200px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.service_container .left{
+    width: 50%;
+}
+
+.service_container .left .des .number {
+    display: inline-block;
+    padding: 5px 15px;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #fff;
+    background-color: #018de5;
+    border-radius: 2rem;
+}
+
+.service_container .left .des h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 0.5rem;
+}
+
+.service_container .left .des p {
+    color: #64748b;
+    margin-bottom: 2rem;
+}
+
+.service_container .right{
+    width: 50%;
+}
+
+.service_container .right .service_imgs {
+    position: relative;
+    margin-top: 262px;
+}
+
+.service_container .right .service_imgs .imgs img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-radius: 10rem;
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.service_container .right .service_imgs img:nth-child(1) {
+    max-width: 230px;
+    transform: translate(calc(-50% - 9rem), calc(-50% + 5rem));
+    z-index: 3;
+}
+
+.service_container .right .service_imgs img:nth-child(2) {
+    max-width: 230px;
+    transform: translate(-50%, calc(-50% - 5rem));
+    z-index: 2;
+}
+
+.service_container .right .service_imgs img:nth-child(3) {
+    max-width: 230px;
+    transform: translate(calc(-50% + 9rem), calc(-50% + 5rem));
+}

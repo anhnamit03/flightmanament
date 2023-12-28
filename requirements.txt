@@ -1,0 +1,4 @@
+stripe~=7.10.0
+flask~=3.0.0
+cloudinary~=1.37.0
+SQLAlchemy~=2.0.23

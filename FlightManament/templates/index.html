@@ -1,0 +1,200 @@
+{% extends "layout/base.html" %}
+
+{% block title %}SN AIRLINE - Kết nối giấc mơ và điểm đến của bạn{% endblock %}
+{% block css %}
+
+{% endblock %}
+{% block content %}
+ <div class="banner">
+        <div class="banner_content">
+            <div>
+                <h1>
+                    <span>Kết nối</span> giấc<br>
+                    mơ và điểm<br>
+                    đến của bạn
+                </h1>
+                <a href="">
+                    <button class="button">
+                        <span class="button_content">Xem thêm</span>
+                    </button>
+                </a>
+            </div>
+        </div>
+        <img src="{{ url_for('static', filename='images/Plane.png') }}" alt="Plane">
+    </div>
+<section class="section_container booking_container reveal">
+        <div class="booking_nav">
+            <span class="active">Đặt vé trực tuyến</span>
+
+        </div>
+        <form>
+            <div class="form_group">
+                <span><i class="ri-map-pin-line"></i></span>
+                <div class="input_content">
+                    <div class="input_group">
+                        <input type="text" placeholder=" " />
+                        <label>Từ</label>
+                    </div>
+                    <p>Hiện tại</p>
+                </div>
+            </div>
+            <div class="form_group">
+                <span><i class="ri-map-pin-line"></i></span>
+                <div class="input_content">
+                    <div class="input_group">
+                        <input type="text" placeholder=" " />
+                        <label>Đến</label>
+                    </div>
+                    <p>Điểm đến</p>
+                </div>
+            </div>
+            <div class="form_group">
+                <span><i class="ri-calendar-line"></i></span>
+                <div class="input_content">
+                    <div class="input_group">
+                        <input type="date"/>
+                    </div>
+                    <p>Thời gian đi</p>
+                </div>
+            </div>
+            <div class="form_group">
+                <span><i class="ri-user-line"></i></span>
+                <div class="input_content">
+                    <div class="input_group">
+                        <input type="text" placeholder="" />
+                        <label>Hành khách</label>
+                    </div>
+                    <p>Số lượng hành khách</p>
+                </div>
+            </div>
+            <a href="">
+                <button class="btn"><i class="ri-search-line"></i></button>
+            </a>
+
+        </form>
+    </section>
+<!-- Best Travel Of Month-->
+    <div class="travel_introduce">
+        <h1 class="travel_title reveal">Địa điểm du lịch của tháng</h1>
+        <div class="travel_cards reveal">
+            <div class="travel_card">
+                <img src="{{ url_for('static', filename='images/NewYork.jpg') }}" alt="">
+
+                <div class="travel_des">
+                    <h3>NewYork</h3>
+                    <p>New York là một điểm đến thú vị và đa dạng với cảnh quan nổi tiếng, văn hóa phong phú, cơ hội mua
+                        sắm tuyệt vời và nền ẩm thực đa dạng. Thành phố này thường được xem là một trong những điểm đáng
+                        sống và trải nghiệm trên thế giới</p>
+                    <a href="">
+                        <button>Đặt vé</button>
+                    </a>
+                </div>
+            </div>
+
+            <div class="travel_card">
+                <img src="{{ url_for('static', filename='images/LonDon.jpg') }}" alt="">
+
+                <div class="travel_des">
+                    <h3>London</h3>
+                    <p>London là một trong những thành phố lâu đời, đa dạng về văn hóa và lịch sử, và có sức hút du lịch
+                        vô cùng mạnh mẽ. Đây là một điểm đến hấp dẫn cho những người yêu thích nghệ thuật, văn hóa và
+                        kiến thức lịch sử.</p>
+                    <a href="">
+                        <button>Đặt vé</button>
+                    </a>
+                </div>
+            </div>
+
+            <div class="travel_card">
+                <img src="{{ url_for('static', filename='images/DaNang.jpg') }}" alt="">
+
+                <div class="travel_des">
+                    <h3>Đà Nẵng</h3>
+                    <p>Đà Nẵng là một điểm đến hấp dẫn với cảnh quan thiên nhiên đẹp, kiến trúc độc đáo và ẩm thực phong
+                        phú. Thành phố này được xem là một điểm dừng chân tuyệt vời trong hành trình khám phá miền Trung
+                        Việt Nam.</p>
+                    <a href="">
+                        <button>Đặt vé</button>
+                    </a>
+                </div>
+            </div>
+
+            <div class="travel_card">
+                <img src="{{ url_for('static', filename='images/DaLat.jpg') }}" alt="">
+
+                <div class="travel_des">
+                    <h3>Đà Lạt</h3>
+                    <p>Đà Lạt là một điểm đến du lịch đa dạng với cảnh quan thiên nhiên tươi đẹp, kiến trúc độc đáo và
+                        không gian mát mẻ. Đây là nơi lý tưởng để thư giãn, khám phá và trải nghiệm văn hóa độc đáo của
+                        miền Trung Việt Nam.</p>
+                    <a href="">
+                        <button>Đặt vé</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Service Introduce-->
+    <div class="service_introduce reveal">
+        <div class="title_service">
+            <p>Vì sao bạn chọn SN AIRLINE ?</p>
+            <h3>SN AIRLINE đem lại sự hài lòng cho khách hàng</h3>
+        </div>
+    </div>
+
+    <div class="service_container reveal">
+        <div class="left">
+            <div class="des">
+                <span class="number">01</span>
+                <h4>Đặt vé</h4>
+                <p>
+                    Quý khách hàng có thể đặt trước vé máy bay từ nhiều nguồn khác nhau như Traveloka,
+                    Vietnambooking, các đại lý,...
+                </p>
+            </div>
+
+            <div class="des">
+                <span class="number">03</span>
+                <h4>Thanh toán</h4>
+                <p>
+                    Khách hàng có thể thanh toán vé máy bay dưới nhiều hình thức khác nhau như Momo, các app
+                    Mobile
+                    Banking và tiền mặt, Zalo Pay,...
+                </p>
+            </div>
+
+            <div class="des">
+                <span class="number">03</span>
+                <h4>Hoàn trả</h4>
+                <p>
+                    Nếu khách hàng phát sinh lỗi trong quá trình thanh toán hay muốn đổi trả vé, SN AIRLINE
+                    sẽ hoàn
+                    trả vé cho khách theo chính sách của chúng tôi.
+                </p>
+            </div>
+
+            <div class="des">
+                <span class="number">04</span>
+                <h4>Giá cả</h4>
+                <p>
+                    SN AIRLINE đem lại một mức giá hợp túi tiền cho khách hàng. Ngoài ra, chúng tôi còn rất
+                    nhiều
+                    chương trình ưu đãi, giảm giá cho quý khách hàng.
+                </p>
+            </div>
+        </div>
+
+        <div class="right">
+            <div class="service_imgs">
+                <div class="imgs">
+                    <img src="{{ url_for('static', filename='images/Service1.jpg') }}" alt="">
+                    <img src="{{ url_for('static', filename='images/Service2.jpg') }}" alt="">
+                    <img src="{{ url_for('static', filename='images/Service3.jpg') }}" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
