@@ -8,7 +8,7 @@
 .banner {
     height: 100vh;
     position: relative;
-    background: url(../images/Sky.png) center no-repeat;
+    background: url(../image/Sky.png) center no-repeat;
     background-size: cover;
     overflow: hidden;
 }
