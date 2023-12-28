@@ -21,16 +21,13 @@ from FlightManament.models import User
 @app.route('/', methods=['GET', 'POST'])
 def home():
     user_info = session.get('user_info')
-
+    user_name = ""
     if user_info:
         # Check if 'names' field is present and not empty
         if 'names' in user_info and user_info['names']:
             # Use the first name from the list (you may adapt this based on your needs)
             user_name = user_info['names'][0].get('displayName', 'Guest')
-        else:
-            user_name = 'Guest'
-    else:
-        user_name = 'Guest'
+
 
     return render_template("index.html", user_name=user_name)
 
