@@ -1,6 +1,6 @@
 import json, os
 from FlightManament import app, db
-from FlightManament.models import  User
+from FlightManament.models import *
 import hashlib
 
 
@@ -21,6 +21,12 @@ def add_user(name, password, username, **kwargs):
     db.session.commit()
 
 
+def get_name_airport():
+    names = Airport.query.with_entities(Airport.name).all()
+    name_list = [name[0] for name in names]
+    return name_list
+
+
 def check_login(username, password):
     if username and password:
         password = hashlib.md5(password.strip().encode('utf-8')).hexdigest()
@@ -31,3 +37,4 @@ def check_login(username, password):
 
 def get_user_by_id(user_id):
     return User.query.get(user_id)
+

@@ -2,17 +2,18 @@ import math
 import cloudinary.uploader
 from flask import render_template, request, redirect, url_for, session, jsonify
 from FlightManament import app
+from utils import *
 import os
 import stripe
 
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def home():
     return render_template("index.html")
-# test
+
 
 @app.route("/login")
-def register():
+def login():
     return render_template("login.html")
 
 

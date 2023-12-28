@@ -14,13 +14,13 @@
             <div class="btn_mobile close_btn">
                 <i class="fa-solid fa-xmark close_btn"></i>
             </div>
-            <a href="">Trang chủ</a>
-            <a href="">Giới thiệu</a>
-            <a href="">Đặt vé</a>
+            <a href="{{ url_for('home') }}">Trang chủ</a>
+            <a href="{{ url_for('sale') }}">Giới thiệu</a>
+            <a href="{{ url_for('book_ticket') }}">Đặt vé</a>
             <a href="">Khuyến mãi</a>
             <a href="">Tin tức</a>
             <a href="">Góp ý</a>
-            <a href="" class="js_login">Đăng nhập</a>
+            <a href="{{ url_for('login') }}" class="js_login">Đăng nhập</a>
         </div>
         <div class="btn_mobile  menu_btn">
             <i class="fa-solid fa-bars"></i>
