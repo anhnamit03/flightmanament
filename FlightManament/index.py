@@ -7,13 +7,14 @@ from flask import render_template, request, redirect, url_for, session, jsonify
 
 from flask_login import login_required, current_user, login_user
 
-from FlightManament import app, login_manager
+
+from FlightManament import app, login_manager, mail
 
 from FlightManament import app
 from utils import *
+from flask_mail import Message
 
-import os
-import stripe
+
 
 from FlightManament.models import User
 
@@ -58,6 +59,13 @@ def login_sso():
 
     return f'<a href="{auth_url}">Login with Google</a>'
 
+<<<<<<< HEAD
+=======
+@app.route('/log_out')
+def log_out():
+    session['user_info'] = None
+    return redirect(url_for('home'))
+>>>>>>> 4e1b990efd2719f6c1c695ba0c7ed1f8c7bc974f
 
 @app.route('/callback_login_sso')
 def callback_login_sso():
@@ -80,7 +88,7 @@ def callback_login_sso():
     token_info = response.json()
 
     # Use the access token to get user info
-    user_info_url = 'https://people.googleapis.com/v1/people/me?personFields=names'
+    user_info_url =  'https://www.googleapis.com/oauth2/v3/userinfo'
 
     headers = {'Authorization': f'Bearer {token_info["access_token"]}'}
     user_info_response = requests.get(user_info_url, headers=headers)
@@ -89,7 +97,17 @@ def callback_login_sso():
     # Store user info in session or database as needed
     session['user_info'] = user_info
 
+    if user_info is not None:
+        #  send message
+        msg = Message("Hello",
+                      sender="dangvykhoi@gmail.com",
 
+                      recipients=[user_info["email"]])
+
+        msg.template_id = 'd-3b20516cd9424fe59bed6499de841098'
+        msg.dynamic_template_data = {'name': user_info["name"]}
+
+    mail.send(msg)
 
     return redirect(url_for('home'))
 
