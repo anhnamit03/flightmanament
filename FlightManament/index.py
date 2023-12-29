@@ -2,13 +2,14 @@ import math
 import cloudinary.uploader
 import flask
 import flask_login
+import stripe
 import requests
 from flask import render_template, request, redirect, url_for, session, jsonify
 
 from flask_login import login_required, current_user, login_user
 
-
-from FlightManament import app, login_manager, mail
+import FlightManament
+from FlightManament import app, mail, login_manager
 
 from FlightManament import app
 from utils import *
@@ -17,6 +18,7 @@ from flask_mail import Message
 
 
 from FlightManament.models import User
+
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -29,8 +31,7 @@ def home():
     redirect_uri = 'http://localhost:5000/callback_login_sso'
     auth_url = f'https://accounts.google.com/o/oauth2/auth?response_type=code&client_id={google_client_id}&redirect_uri={redirect_uri}&scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/contacts.readonly&access_type=online'
 
-
-    if user_info:
+    if user_info is not None:
         # Check if 'names' field is present and not empty
         if 'names' in user_info and user_info['names']:
             # Use the first name from the list (you may adapt this based on your needs)
@@ -43,6 +44,11 @@ def home():
 def book_ticket():
     destinations = ["opt1", "opt2", "opt3", "opt4"]
     return render_template("bookticket.html", destinations = destinations)
+
+
+@app.route("/introduce")
+def introduce():
+    return render_template("introduce.html")
 
 
 @app.route("/sale")
@@ -59,13 +65,11 @@ def login_sso():
 
     return f'<a href="{auth_url}">Login with Google</a>'
 
-<<<<<<< HEAD
-=======
 @app.route('/log_out')
 def log_out():
     session['user_info'] = None
     return redirect(url_for('home'))
->>>>>>> 4e1b990efd2719f6c1c695ba0c7ed1f8c7bc974f
+
 
 @app.route('/callback_login_sso')
 def callback_login_sso():
@@ -117,7 +121,14 @@ def callback_login_sso():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-
+    if request.method == 'GET':
+        return '''
+               <form action='login' method='POST'>
+                   <input type='text' name='username' id='username' placeholder='username'/>
+                   <input type='password' name='password' id='password' placeholder='password'/>
+                   <input type='submit' name='submit'/>
+               </form>
+           '''
     username = request.form['username']
     password = request.form['password']
 
@@ -129,6 +140,11 @@ def login():
         return redirect(url_for('protected'))
 
     return 'Bad login'
+
+@login_manager.user_loader
+def load_user(user_id):
+    print("user is", user_id)
+    return User.query.filter_by(username=user_id).first()
 
 @app.route('/logout')
 def logout():
@@ -142,22 +158,45 @@ def unauthorized_handler():
     return 'Unauthorized', 401
 
 
-
-
-
-
 @app.route('/protected')
 @login_required
 def protected():
     print("current_user",current_user)
     return 'Logged in as: ' + current_user.name
 
+@app.route('/checkout', methods=['POST'])
+def cteate_checkout_session():
+    try:
+        checkout_session = stripe.checkout.Sesion.create(
+            line_items=[
+                {
+                    "price":"price_1OSXXuAKLdt3jKp1cjT0pjwe",
+                    "quantity":1
+                }
+            ],
+            mode = "subscription"
 
-@login_manager.user_loader
-def load_user(user_id):
-    print("user is", user_id)
-    return User.query.filter_by(username=user_id).first()
 
+        )
+    except Exception as e:
+        return str(e)
+
+    return redirect()
+
+
+@app.route("/hello")
+def hello_world():
+    return jsonify("hello, world!")
+
+
+@app.route("/")
+def index1():
+    return render_template("index1.html")
+
+# @app.route("/config")
+# def get_publishable_key():
+#     stripe_config = {"publicKey": stripe_keys["publishable_key"]}
+#     return jsonify(stripe_config)
 
 if __name__ == "__main__":
     app.run(debug=True)

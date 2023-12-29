@@ -1,0 +1,117 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Roboto", sans-serif;
+}
+
+img {
+    width: 100%;
+}
+
+body{
+    background-color: #eae3fd;
+}
+
+/* Introduce */
+.main-body {
+    padding-bottom: 30px;
+}
+
+.main-body img{
+    height: 50vh;
+}
+
+.main-body .intro-container {
+    width: 95%;
+    margin: auto;
+    background-color: #fff;
+    box-shadow: 0 5px 15px rgb(0 0 0 / 25%);
+}
+
+.intro-container .crossbar {
+    padding: 16px 0;
+    background: #1d1e23;
+    color: #0000;
+}
+
+.intro-container .crossbar h1 {
+    text-align: center;
+    font-size: 3rem;
+    color: orangered;
+    -webkit-text-stroke: 1px #8ad3ff;
+    background-image: linear-gradient(-225deg,
+            #4a18b7 0%,
+            #a174ff 29%,
+            #5ebbff 67%,
+            #1ec9e0 100%);
+    background-size: 200%;
+    background-clip: text;
+    user-select: none;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textColor 2s linear infinite;
+}
+
+@keyframes textColor {
+    to {
+        background-position: 200% center;
+    }
+}
+
+.main-body .row-intro {
+    margin: 10px 10px 5px;
+    display: flex;
+}
+
+.row-intro .intro-col5 {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.intro-col5 .intro-box-full {
+    margin: 0 5px;
+}
+
+.intro-col5 .intro-box-full img {
+    margin: 5px 0;
+    border: 2px solid #090a0f;
+}
+
+.intro-col5 .intro-box-5 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    padding: 20px;
+    margin: 10px 5px;
+    font-size: 1.6rem;
+    text-align: justify;
+    color: #ccc;
+    background: #1d1e23;
+    border: 2px solid #090a0f;
+}
+
+.intro-box-5 h2 {
+    background: linear-gradient(0, #5ebbff 0%, #a174ff 100%);
+    user-select: none;
+    text-decoration: underline;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: #0000;
+    -webkit-text-stroke: 1px #8ad3ff;
+    text-transform: uppercase;
+}
+
+.intro-box-5 p {
+    padding: 10px 0;
+    line-height: 1.4;
+}

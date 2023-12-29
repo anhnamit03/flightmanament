@@ -16,10 +16,10 @@
         </div>
 
         <a href="{{ url_for('home') }}">Trang chủ</a>
-        <a href="{{ url_for('sale') }}">Giới thiệu</a>
+        <a href="{{ url_for('introduce') }}">Giới thiệu</a>
         <a href="{{ url_for('book_ticket') }}">Đặt vé</a>
-        <a href="">Khuyến mãi</a>
-        <a href="">Tin tức</a>
+        <a href="{{ url_for('sale') }}">Khuyến mãi</a>
+
         <a href="">Góp ý</a>
         {% if user_name %}
           <a href="" class="login_header">{{ user_name }}</a>
