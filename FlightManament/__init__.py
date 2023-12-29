@@ -27,5 +27,5 @@ login_manager = LoginManager()
 
 login_manager.init_app(app)
 
-app.config['MAIL_SENDGRID_API_KEY'] = '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'
+app.config['MAIL_SENDGRID_API_KEY'] = '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'
 mail = MailSendGrid(app)
