@@ -109,6 +109,9 @@ def callback_login_sso():
 
     mail.send(msg)
 
+
+
+    # // send otp
     return redirect(url_for('home'))
 
 
