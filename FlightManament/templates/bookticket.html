@@ -10,11 +10,14 @@
 {% block content %}
    <section class="section_container booking_container">
 
-        <form>
+        <form method="get" action="{{ url_for('book_ticket') }}" enctype="multipart/form-data">
             <div class="form_group">
                 <span><i class="ri-map-pin-line"></i></span>
                 <div class="input_content">
                     <div class="input_group">
+                        {% if destination %}
+                            <h2 class="displayforpage">{{destination}}</h2>
+                        {% endif %}
                         <select class="from-input" name="destination" id="destination">
 
                         </select>
@@ -27,6 +30,9 @@
                 <span><i class="ri-map-pin-line"></i></span>
                 <div class="input_content">
                     <div class="input_group">
+                        {% if destination %}
+                            <h2 class="displayforpage">{{departure}}</h2>
+                        {% endif %}
                         <select class="from-input" name="departure" id="departure">
 
                         </select>
@@ -39,6 +45,9 @@
                 <span><i class="ri-calendar-line"></i></span>
                 <div class="input_content">
                     <div class="input_group">
+                        {% if destination %}
+                            <h2 class="displayforpage" >{{go_date}}</h2>
+                        {% endif %}
                         <input type="date" id="go_date" name="go_date"  />
                     </div>
                     <p>Thời gian đi</p>
@@ -49,7 +58,7 @@
                 <div class="input_content">
                     <div class="input_group hanhkhach">
                         <div>
-                            <h3>Hành khách</h3>
+                            <h5>Hành khách</h5>
                             <i class="fa-solid fa-up-down" style="color: #000000;"></i>
                             <ul class="list-customer">
                                 <li>
@@ -100,7 +109,7 @@
                 </div>
             </div>
 
-            <button type="button" class="btn" id="search"><i class="ri-search-line"></i></button>
+            <button type="submit" class="btn" id="search"><i class="ri-search-line"></i></button>
 
         </form>
     </section>
@@ -179,6 +188,7 @@
             <h1>ĐẶT VÉ CÙNG NHAIRLINE</h1>
             <br>
         </div>
+         <br>
         <div class="select-ticket">
             <h1>Phổ thông</h1>
             <h1>Thương gia</h1>
@@ -512,7 +522,10 @@
     </div>
     </div>
     </div>
-
+<h1>{{quantity_adult}}</h1>
+<h1>{{go_date}}</h1>
+<h1>{{destination}}</h1>
+<h1>{{departure}}</h1>
 
 <script>
     var fromDateShow = document.querySelector('#destination');
@@ -543,6 +556,9 @@
         });
             toDateShow.innerHTML = toDateOptions;
         });
+
+
+
 
 </script>
 <script src="{{ url_for('static', filename='javascript/bookticket.js')}}"></script>

@@ -39,13 +39,20 @@ def home():
 
 @app.route("/bookticket", methods = ['get', 'post'])
 def book_ticket():
-    if request.method.__eq__('POST'):
-        destination = request.form.get('destination')
-        departure = request.form.get('departure')
-        go_date = request.form.get('go_date')
-
     destinations = ["opt1", "opt2", "opt3", "opt4"]
-    return render_template("bookticket.html", destinations = destinations)
+    destination = request.args.get('destination')
+    departure = request.args.get('departure')
+    go_date = request.args.get('go_date')
+    quantity_adult = request.args.get('quantity_nomal')
+    quantity_child = request.args.get('quantity_child')
+    quantity_baby = request.args.get('quantity_baby')
+    return render_template("bookticket.html", destinations=destinations,
+                           destination=destination,
+                           departure=departure,
+                           go_date=go_date,
+                           quantity_adult=quantity_adult,
+                           quantity_child=quantity_child,
+                           quantity_baby=quantity_baby)
 
 
 @app.route("/introduce")
