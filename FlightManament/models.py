@@ -72,6 +72,7 @@ class Flight(BaseModel):
     __tablename__ = "Flight"
     start_time = Column(DateTime, nullable=False)
     id_plane = Column(Integer, ForeignKey('Plane.id'), nullable= False)
+    id_team_flight = Column(Integer, ForeignKey('TeamFlight.id'), nullable=False)
 
     def __str__(self):
         return self.name
@@ -164,6 +165,7 @@ class User(BaseModel,flask_login.UserMixin):
     email = Column(String(50), nullable=False)
     birthday = Column(String(50), nullable=False)
     id_role = Column(Integer, ForeignKey("Role.id"), nullable=False)
+    id_team_flight = Column(Integer, ForeignKey("TeamFlight.id"))
 
 
 
@@ -177,6 +179,11 @@ class Statistical(BaseModel):
     __tablename__ = "Statistical"
     link_statistical = Column(String(255))
     id_user = Column(Integer, ForeignKey("User.id"), nullable=False)
+
+
+class TeamFlight(BaseModel):
+    __tablename__ = "TeamFlight"
+    description = Column(String(255))
 
 
 if __name__ == "__main__":

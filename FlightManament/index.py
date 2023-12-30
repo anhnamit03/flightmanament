@@ -14,9 +14,6 @@ from FlightManament import app, mail, login_manager
 from FlightManament import app
 from utils import *
 from flask_mail import Message
-
-
-
 from FlightManament.models import User
 
 
@@ -40,8 +37,13 @@ def home():
     return render_template("index.html", user_name=user_name, auth_url = auth_url)
 
 
-@app.route("/bookticket")
+@app.route("/bookticket", methods = ['get', 'post'])
 def book_ticket():
+    if request.method.__eq__('POST'):
+        destination = request.form.get('destination')
+        departure = request.form.get('departure')
+        go_date = request.form.get('go_date')
+
     destinations = ["opt1", "opt2", "opt3", "opt4"]
     return render_template("bookticket.html", destinations = destinations)
 
