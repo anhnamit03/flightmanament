@@ -33,9 +33,9 @@ def home():
 
     if user_info is not None:
         # Check if 'names' field is present and not empty
-        if 'names' in user_info and user_info['names']:
+        if 'name' in user_info and user_info['name']:
             # Use the first name from the list (you may adapt this based on your needs)
-            user_name = user_info['names'][0].get('displayName', 'Guest')
+            user_name = user_info['name']
 
     return render_template("index.html", user_name=user_name, auth_url = auth_url)
 
