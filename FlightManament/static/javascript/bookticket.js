@@ -186,7 +186,7 @@ var quantitychild = document.getElementById("quantity_child");
 var quantitynomal = document.getElementById("quantity_nomal");
 var quantitybaby = document.getElementById("quantity_baby");
 var passenger_child = 0;
-var passenger_nomal = 1;
+var passenger_nomal = 0;
 var passenger_baby = 0;
 
 function updatePassengerQuantity() {

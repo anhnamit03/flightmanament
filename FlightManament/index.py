@@ -40,19 +40,19 @@ def home():
 @app.route("/bookticket", methods = ['get', 'post'])
 def book_ticket():
     destinations = ["opt1", "opt2", "opt3", "opt4"]
-    destination = request.args.get('destination')
-    departure = request.args.get('departure')
-    go_date = request.args.get('go_date')
-    quantity_adult = request.args.get('quantity_nomal')
-    quantity_child = request.args.get('quantity_child')
-    quantity_baby = request.args.get('quantity_baby')
+    if request.method.__eq__("GET"):
+        destination = request.args.get('destination')
+        departure = request.args.get('departure')
+        go_date = request.args.get('go_date')
+    if request.method.__eq__("POST"):
+        data = request.json
+        quantity = data.get('quantity')
+
     return render_template("bookticket.html", destinations=destinations,
                            destination=destination,
                            departure=departure,
                            go_date=go_date,
-                           quantity_adult=quantity_adult,
-                           quantity_child=quantity_child,
-                           quantity_baby=quantity_baby)
+                           quantity=quantity)
 
 
 @app.route("/introduce")
@@ -122,8 +122,6 @@ def callback_login_sso():
 
     mail.send(msg)
 
-
-
     # // send otp
     return redirect(url_for('home'))
 
@@ -153,16 +151,17 @@ def login():
 
     return 'Bad login'
 
+
 @login_manager.user_loader
 def load_user(user_id):
     print("user is", user_id)
     return User.query.filter_by(username=user_id).first()
 
+
 @app.route('/logout')
 def logout():
     flask_login.logout_user()
     return 'Logged out'
-
 
 
 @login_manager.unauthorized_handler
@@ -176,17 +175,18 @@ def protected():
     print("current_user",current_user)
     return 'Logged in as: ' + current_user.name
 
+
 @app.route('/checkout', methods=['POST'])
 def cteate_checkout_session():
     try:
         checkout_session = stripe.checkout.Sesion.create(
             line_items=[
                 {
-                    "price":"price_1OSXXuAKLdt3jKp1cjT0pjwe",
-                    "quantity":1
+                    "price": "price_1OSXXuAKLdt3jKp1cjT0pjwe",
+                    "quantity": 1
                 }
             ],
-            mode = "subscription"
+            mode="subscription"
 
 
         )

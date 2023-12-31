@@ -69,7 +69,7 @@
                                     <div class="btn-customer">
                                         <button type="button" id="minus_button_nomal"><i class="fa-solid fa-circle-minus"
                                                 style="color: #1d2ad7;"></i></button>
-                                        <button type="button" id="quantity_nomal">1</button>
+                                        <button type="button" id="quantity_nomal">0</button>
                                         <button type="button" id="plus_button_nomal"><i class="fa-solid fa-circle-plus"
                                                 style="color: #0f56d2;"></i></button>
                                     </div>
@@ -105,7 +105,7 @@
 
 
                     </div>
-                    <p id="quantity_passenger">1 hành khách</p>
+                    <p id="quantity_passenger"></p>
                 </div>
             </div>
 
@@ -522,7 +522,7 @@
     </div>
     </div>
     </div>
-<h1>{{quantity_adult}}</h1>
+<h1>{{quantity}}</h1>
 <h1>{{go_date}}</h1>
 <h1>{{destination}}</h1>
 <h1>{{departure}}</h1>
@@ -557,9 +557,26 @@
             toDateShow.innerHTML = toDateOptions;
         });
 
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("quantity_child").addEventListener("click", function() {
+        var quantityValue = document.getElementById("quantity_child").innerText;
 
-
-
+        fetch("/book_ticket", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ "quantity": quantityValue })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+    });
+});
 </script>
 <script src="{{ url_for('static', filename='javascript/bookticket.js')}}"></script>
 {% endblock %}
