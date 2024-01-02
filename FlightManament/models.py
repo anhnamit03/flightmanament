@@ -168,7 +168,6 @@ class User(BaseModel,flask_login.UserMixin):
     id_team_flight = Column(Integer, ForeignKey("TeamFlight.id"))
 
 
-
 class Role(BaseModel):
     __tablename__ = "Role"
     position = Column(String(50), nullable=False)

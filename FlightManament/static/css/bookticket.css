@@ -588,7 +588,8 @@ ol {
 }
 
 .seat{
-  margin-left:26px;
+  width:20px;
+  margin-left:30px;
   display: flex;
   flex: 0 0 14.28571428571429%;
   padding: 5px;
@@ -646,6 +647,7 @@ ol {
   animation-duration: 300ms;
   animation-fill-mode: both;
 }
+
 
 .seat label:before {
   content: "";
@@ -734,6 +736,13 @@ ol {
 .displayforpage{
     color:#018de5
 }
-
+.selectd{
+    display:flex;
+    width: 32px;
+    height: 32px;
+    background-color:#018de5;
+    align-items:center;
+    justify-content:center;
+}
 
 

@@ -2,143 +2,156 @@
 
 {% block title %}SN AIRLINE - Kết nối giấc mơ và điểm đến của bạn{% endblock %}
 {% block css %}
+
 <link rel="stylesheet" href="{{ url_for('static', filename='css/bookticket.css')}}">
 {% endblock %}
 {% block js %}
 
+<script>
+    var checkbox = document.getElementById('2')
+
+    checkbox.disabled = true;
+
+</script>
 {% endblock %}
 {% block content %}
-   <section class="section_container booking_container">
 
-        <form method="get" action="{{ url_for('book_ticket') }}" enctype="multipart/form-data">
-            <div class="form_group">
-                <span><i class="ri-map-pin-line"></i></span>
-                <div class="input_content">
-                    <div class="input_group">
-                        {% if destination %}
-                            <h2 class="displayforpage">{{destination}}</h2>
-                        {% endif %}
-                        <select class="from-input" name="destination" id="destination">
+<section class="section_container booking_container">
 
-                        </select>
-                        <label></label>
-                    </div>
-                    <p>Hiện tại</p>
+    <form method="get" action="{{ url_for('book_ticket') }}" enctype="multipart/form-data">
+        <div class="form_group">
+            <span><i class="ri-map-pin-line"></i></span>
+            <div class="input_content">
+                <div class="input_group">
+                    {% if destination %}
+                    <h2 class="displayforpage">{{destination}}</h2>
+                    {% endif %}
+                    <select class="from-input" name="destination" id="destination">
+
+                    </select>
+                    <label></label>
                 </div>
+                <p>Hiện tại</p>
             </div>
-            <div class="form_group">
-                <span><i class="ri-map-pin-line"></i></span>
-                <div class="input_content">
-                    <div class="input_group">
-                        {% if destination %}
-                            <h2 class="displayforpage">{{departure}}</h2>
-                        {% endif %}
-                        <select class="from-input" name="departure" id="departure">
+        </div>
+        <div class="form_group">
+            <span><i class="ri-map-pin-line"></i></span>
+            <div class="input_content">
+                <div class="input_group">
+                    {% if destination %}
+                    <h2 class="displayforpage">{{departure}}</h2>
+                    {% endif %}
+                    <select class="from-input" name="departure" id="departure">
 
-                        </select>
-                        <label></label>
-                    </div>
-                    <p>Điểm đến</p>
+                    </select>
+                    <label></label>
                 </div>
+                <p>Điểm đến</p>
             </div>
-            <div class="form_group">
-                <span><i class="ri-calendar-line"></i></span>
-                <div class="input_content">
-                    <div class="input_group">
-                        {% if destination %}
-                            <h2 class="displayforpage" >{{go_date}}</h2>
-                        {% endif %}
-                        <input type="date" id="go_date" name="go_date"  />
-                    </div>
-                    <p>Thời gian đi</p>
+        </div>
+        <div class="form_group">
+            <span><i class="ri-calendar-line"></i></span>
+            <div class="input_content">
+                <div class="input_group">
+                    {% if destination %}
+                    <h2 class="displayforpage">{{go_date}}</h2>
+                    {% endif %}
+                    <input type="date" id="go_date" name="go_date"/>
                 </div>
+                <p>Thời gian đi</p>
             </div>
-            <div class="form_group">
-                <span><i class="ri-user-line"></i></span>
-                <div class="input_content">
-                    <div class="input_group hanhkhach">
-                        <div>
-                            <h5>Hành khách</h5>
-                            <i class="fa-solid fa-up-down" style="color: #000000;"></i>
-                            <ul class="list-customer">
-                                <li>
-                                    <div class="psg-type">
-                                        <h3>Người lớn</h3>
-                                        <p>Người lớn(từ 12 tuổi)</p>
-                                    </div>
-                                    <div class="btn-customer">
-                                        <button type="button" id="minus_button_nomal"><i class="fa-solid fa-circle-minus"
-                                                style="color: #1d2ad7;"></i></button>
-                                        <button type="button" id="quantity_nomal">0</button>
-                                        <button type="button" id="plus_button_nomal"><i class="fa-solid fa-circle-plus"
-                                                style="color: #0f56d2;"></i></button>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="psg-type">
-                                        <h3>trẻ em</h3>
-                                        <p>trẻ em (2-12 tuổi)</p>
-                                    </div>
-                                    <div class="btn-customer">
-                                        <button type="button" id="minus_button_child"><i class="fa-solid fa-circle-minus"
-                                                style="color: #1d2ad7;"></i></button>
-                                        <button type="button" id="quantity_child">0</button>
-                                        <button type="button" id="plus_button_child"><i class="fa-solid fa-circle-plus"
-                                                style="color: #0f56d2;"></i></button>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="psg-type">
-                                        <h3>em bé</h3>
-                                        <p>em bé(dưới 12 tuổi)</p>
-                                    </div>
-                                    <div class="btn-customer">
-                                        <button type="button" id="minus_button_baby"><i class="fa-solid fa-circle-minus"
-                                                style="color: #1d2ad7;"></i></button>
-                                        <button type="button" id="quantity_baby">0</button>
-                                        <button type="button" id="plus_button_baby"><i class="fa-solid fa-circle-plus"
-                                                style="color: #0f56d2;"></i></button>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-
-
+        </div>
+        <div class="form_group">
+            <span><i class="ri-user-line"></i></span>
+            <div class="input_content">
+                <div class="input_group hanhkhach">
+                    <div>
+                        <h5>Hành khách</h5>
+                        <i class="fa-solid fa-up-down" style="color: #000000;"></i>
+                        <ul class="list-customer">
+                            <li>
+                                <div class="psg-type">
+                                    <h3>Người lớn</h3>
+                                    <p>Người lớn(từ 12 tuổi)</p>
+                                </div>
+                                <div class="btn-customer">
+                                    <button type="button" id="minus_button_nomal"><i class="fa-solid fa-circle-minus"
+                                                                                     style="color: #1d2ad7;"></i>
+                                    </button>
+                                    <button type="button" id="quantity_nomal">0</button>
+                                    <button type="button" id="plus_button_nomal"><i class="fa-solid fa-circle-plus"
+                                                                                    style="color: #0f56d2;"></i>
+                                    </button>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="psg-type">
+                                    <h3>trẻ em</h3>
+                                    <p>trẻ em (2-12 tuổi)</p>
+                                </div>
+                                <div class="btn-customer">
+                                    <button type="button" id="minus_button_child"><i class="fa-solid fa-circle-minus"
+                                                                                     style="color: #1d2ad7;"></i>
+                                    </button>
+                                    <button type="button" id="quantity_child">0</button>
+                                    <button type="button" id="plus_button_child"><i class="fa-solid fa-circle-plus"
+                                                                                    style="color: #0f56d2;"></i>
+                                    </button>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="psg-type">
+                                    <h3>em bé</h3>
+                                    <p>em bé(dưới 12 tuổi)</p>
+                                </div>
+                                <div class="btn-customer">
+                                    <button type="button" id="minus_button_baby"><i class="fa-solid fa-circle-minus"
+                                                                                    style="color: #1d2ad7;"></i>
+                                    </button>
+                                    <button type="button" id="quantity_baby">0</button>
+                                    <button type="button" id="plus_button_baby"><i class="fa-solid fa-circle-plus"
+                                                                                   style="color: #0f56d2;"></i></button>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
-                    <p id="quantity_passenger"></p>
+
+
                 </div>
+                <p id="quantity_passenger"></p>
             </div>
+        </div>
 
-            <button type="submit" class="btn" id="search"><i class="ri-search-line"></i></button>
+        <button type="submit" class="btn" id="search"><i class="ri-search-line"></i></button>
 
-        </form>
-    </section>
+    </form>
+</section>
 
-    <!-- Booking Tickets -->
-    <div class="booking_ticket">
-        <div class="grid">
-            <div class="row_grid">
-                <div class="col_2 book-ticket">
-                    <div class="search_title">
+<!-- Booking Tickets -->
+<div class="booking_ticket">
+    <div class="grid">
+        <div class="row_grid">
+            <div class="col_2 book-ticket">
+                <div class="search_title">
 
-                        <h3>Tìm theo giờ</h3>
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </div>
-                    <div class="menu_sidebar">
-                        <div class="search_ticket">
-                            <div class="infor_search">
-                                <div class="input-container">
-                                    <input type="checkbox" name="text-ticket" class="input">
-                                    <div class="content-search">
-                                        <h1>Chuyến bay buổi sớm</h1>
-                                        <p class="ml-0">(00:00 - 06:00)</p>
-                                    </div>
-
+                    <h3>Tìm theo giờ</h3>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="menu_sidebar">
+                    <div class="search_ticket">
+                        <div class="infor_search">
+                            <div class="input-container">
+                                <input type="checkbox" name="text-ticket" class="input">
+                                <div class="content-search">
+                                    <h1>Chuyến bay buổi sớm</h1>
+                                    <p class="ml-0">(00:00 - 06:00)</p>
                                 </div>
 
-                                <div class="input-container">
-                                    <input type="checkbox" name="text-ticket" class="input"">
-                                    <div class=" content-search">
+                            </div>
+
+                            <div class="input-container">
+                                <input type="checkbox" name="text-ticket" class="input"">
+                                <div class=" content-search">
                                     <h1>Chuyến bay buổi sáng</h1>
                                     <p>(06:00 - 12:00)</p>
                                 </div>
@@ -147,381 +160,187 @@
 
                             <div class="input-container">
                                 <input type="checkbox" name="text-ticket" class="input"">
-                                    <div class=" content-search">
-                                <h1>Chuyến bay buổi chiều</h1>
-                                <p>(12:00 - 18:00)</p>
+                                <div class=" content-search">
+                                    <h1>Chuyến bay buổi chiều</h1>
+                                    <p>(12:00 - 18:00)</p>
+                                </div>
+                            </div>
+                            <div class="input-container">
+                                <input type="checkbox" name="text-ticket" class="input"">
+                                <div class=" content-search">
+                                    <h1>Chuyến bay buổi tối</h1>
+                                    <p>(18:00 - 24:00)</p>
+                                </div>
                             </div>
                         </div>
-                        <div class="input-container">
-                            <input type="checkbox" name="text-ticket" class="input"">
-                                    <div class=" content-search">
-                            <h1>Chuyến bay buổi tối</h1>
-                            <p>(18:00 - 24:00)</p>
+
+                    </div>
+                </div>
+
+
+                <div class="search_title">
+                    <i class="fa-solid fa-sort"></i>
+                    <h3>Sắp xếp giá</h3>
+                </div>
+
+                <form class="radio-form">
+                    <input value="a" name="hopping" type="radio" id="a">
+                    <label for="a"><span></span>Tăng dần</label>
+                    <input value="b" name="hopping" type="radio" id="b">
+                    <label for="b"><span></span>Giảm dần</label>
+
+                    <div class="worm">
+                        <div class="worm__segment"></div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col_10">
+                <div class="title_cards">
+                    <br>
+                    <h1>ĐẶT VÉ CÙNG NHAIRLINE</h1>
+                    <br>
+                </div>
+                <br>
+                <div class="select-ticket">
+                    <h1>Phổ thông</h1>
+                    <h1>Thương gia</h1>
+                </div>
+
+                <div class="card_tickets">
+                    <div class="card_ticket">
+                        <!-- // row -->
+                        <div class="group-content">
+                            <div class="card-content">
+                                <div class=" from">
+                                    <h3 class="time_from">05:30</h3>
+                                    <h4 class="sign_from">SGN</h4>
+                                </div>
+
+                                <div class=" center">
+                                    <i class="fa-solid fa-plane"></i>
+                                    <h5 class="time_all">2 giờ 15 phút</h5>
+                                </div>
+
+                                <div class=" to">
+                                    <h3 class="time_to">07:30</h3>
+                                    <h4 class="sign_to">HAN</h4>
+                                </div>
+                            </div>
+
+
+                            <div class=" prices">
+                                <div class="price_1">
+                                    <a href="#">2.000.000 VNĐ</a>
+                                    <i class="fa-solid fa-chevron-down"></i>
+
+
+                                </div>
+
+                                <div class="price_2">
+                                    <a href="#">4.000.000 VNĐ</a>
+                                    <i class="fa-solid fa-chevron-down"></i>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="itinerary-part-offer second">
+
+                            <div class="offer-branch">
+                                <div class="content-header">
+                                    <h1>Phổ thông siêu tiết kiệm</h1>
+                                </div>
+                                <div class="show-ticket">
+                                    <h1>Còn Vé</h1>
+                                </div>
+                                <div class="extand-ticket">
+                                    <ul>
+                                        <li>
+                                            <i class="fa-solid fa-check" style="color: #018de5;"></i>
+                                            Hành lý xách tay: Không quá 12kg
+                                        </li>
+                                        <li>
+                                            <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                            Không bao gồm hành lý ký gửi
+                                        </li>
+                                        <li>
+                                            <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                            Thay đổi mất phí
+                                        </li>
+                                        <li>
+                                            <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                            Không được phép đổi chuyến tại sân bay
+                                        </li>
+                                        <li>
+                                            <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                            Hoàn/hủy vé mất phí
+                                        </li>
+                                        <li>
+                                            <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                            Tích lũy 10% số dặm
+                                        </li>
+                                        <li>
+                                            <a href="#">XEM CHI TIẾT</a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="offer-branch">
+                                <div class="content-header">
+                                    <h1>Chọn ghế bay</h1>
+                                </div>
+
+                                <div class="extand-ticket">
+
+                                    <form>
+                                        <ol class="cabin fuselage">
+
+                                            <li class="row row--2">
+                                                <ol class="seats" type="A">
+                                                    <li class="seat">
+                                                        <input type="checkbox" id="1"/>
+                                                        <label for="1">1</label>
+                                                    </li>
+                                                    <li class="seat select">
+                                                        <div class="selectd">2</div>
+                                                    </li>
+                                                    <li class="seat">
+                                                        <input type="checkbox" id="3"/>
+                                                        <label for="3">3</label>
+                                                    </li>
+                                                    <li class="seat">
+                                                        <input type="checkbox" id="4"/>
+                                                        <label for="4">4</label>
+                                                    </li>
+                                                    <li class="seat">
+                                                        <input type="checkbox" id="5"/>
+                                                        <label for="5">5</label>
+                                                    </li>
+                                                    <li class="seat">
+                                                        <input type="checkbox" id="6"/>
+                                                        <label for="6">6</label>
+                                                    </li>
+                                                </ol>
+                                            </li>
+                                        </ol>
+                                        <button type="submit" class="btn"><i class="fa-solid fa-check"></i></button>
+                                    </form>
+
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>
 
             </div>
         </div>
-
-
-        <div class="search_title">
-            <i class="fa-solid fa-sort"></i>
-            <h3>Sắp xếp giá</h3>
-        </div>
-
-        <form class="radio-form">
-            <input value="a" name="hopping" type="radio" id="a">
-            <label for="a"><span></span>Tăng dần</label>
-            <input value="b" name="hopping" type="radio" id="b">
-            <label for="b"><span></span>Giảm dần</label>
-
-            <div class="worm">
-                <div class="worm__segment"></div>
-            </div>
-        </form>
     </div>
-
-    <div class="col_10">
-        <div class="title_cards">
-            <br>
-            <h1>ĐẶT VÉ CÙNG NHAIRLINE</h1>
-            <br>
-        </div>
-         <br>
-        <div class="select-ticket">
-            <h1>Phổ thông</h1>
-            <h1>Thương gia</h1>
-        </div>
-
-        <div class="card_tickets">
-            <div class="card_ticket">
-                <!-- // row -->
-                <div class="group-content">
-                    <div class="card-content">
-                        <div class=" from">
-                            <h3 class="time_from">05:30</h3>
-                            <h4 class="sign_from">SGN</h4>
-                        </div>
-
-                        <div class=" center">
-                            <i class="fa-solid fa-plane"></i>
-                            <h5 class="time_all">2 giờ 15 phút</h5>
-                        </div>
-
-                        <div class=" to">
-                            <h3 class="time_to">07:30</h3>
-                            <h4 class="sign_to">HAN</h4>
-                        </div>
-                    </div>
-
-
-                    <div class=" prices">
-                        <div class="price_1">
-                            <a href="#">2.000.000 VNĐ</a>
-                            <i class="fa-solid fa-chevron-down"></i>
-
-
-                        </div>
-
-                        <div class="price_2">
-                            <a href="#">4.000.000 VNĐ</a>
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="itinerary-part-offer second">
-
-                    <div class="offer-branch">
-                        <div class="content-header">
-                            <h1>Phổ thông siêu tiết kiệm</h1>
-                        </div>
-                        <div class="show-ticket">
-                            <h1>Còn Vé</h1>
-                        </div>
-                        <div class="extand-ticket">
-                            <ul>
-                                <li>
-                                    <i class="fa-solid fa-check" style="color: #018de5;"></i>
-                                    Hành lý xách tay: Không quá 12kg
-                                </li>
-                                <li>
-                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
-                                    Không bao gồm hành lý ký gửi
-                                </li>
-                                <li>
-                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
-                                    Thay đổi mất phí
-                                </li>
-                                <li>
-                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
-                                    Không được phép đổi chuyến tại sân bay
-                                </li>
-                                <li>
-                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
-                                    Hoàn/hủy vé mất phí
-                                </li>
-                                <li>
-                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
-                                    Tích lũy 10% số dặm
-                                </li>
-                                <li>
-                                    <a href="#">XEM CHI TIẾT</a>
-                                </li>
-
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="offer-branch">
-                        <div class="content-header">
-                            <h1>Chọn ghế bay</h1>
-                        </div>
-
-                        <div class="extand-ticket">
-
-  <ol class="cabin fuselage">
-
-    <li class="row row--2" >
-      <ol class="seats" type="A">
-        <li class="seat">
-          <input type="checkbox" id="2A" />
-          <label for="2A">2A</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="2B" />
-          <label for="2B">2B</label>
-        </li>
-        <li class="seat" >
-          <input type="checkbox" id="2C" />
-          <label for="2C">2C</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="2D" />
-          <label for="2D">2D</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="2E" />
-          <label for="2E">2E</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="2F" />
-          <label for="2F">2F</label>
-        </li>
-      </ol>
-    </li>
-    <li class="row row--3">
-      <ol class="seats" type="A">
-        <li class="seat">
-          <input type="checkbox" id="3A" />
-          <label for="3A">3A</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="3B" />
-          <label for="3B">3B</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="3C" />
-          <label for="3C">3C</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="3D" />
-          <label for="3D">3D</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="3E" />
-          <label for="3E">3E</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="3F" />
-          <label for="3F">3F</label>
-        </li>
-      </ol>
-    </li>
-    <li class="row row--4">
-      <ol class="seats" type="A">
-        <li class="seat">
-          <input type="checkbox" id="4A" />
-          <label for="4A">4A</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="4B" />
-          <label for="4B">4B</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="4C" />
-          <label for="4C">4C</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="4D" />
-          <label for="4D">4D</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="4E" />
-          <label for="4E">4E</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="4F" />
-          <label for="4F">4F</label>
-        </li>
-      </ol>
-    </li>
-    <li class="row row--5">
-      <ol class="seats" type="A">
-        <li class="seat">
-          <input type="checkbox" id="5A" />
-          <label for="5A">5A</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="5B" />
-          <label for="5B">5B</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="5C" />
-          <label for="5C">5C</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="5D" />
-          <label for="5D">5D</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="5E" />
-          <label for="5E">5E</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="5F" />
-          <label for="5F">5F</label>
-        </li>
-      </ol>
-    </li>
-    <li class="row row--6">
-      <ol class="seats" type="A">
-        <li class="seat">
-          <input type="checkbox" id="6A" />
-          <label for="6A">6A</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="6B" />
-          <label for="6B">6B</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="6C" />
-          <label for="6C">6C</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="6D" />
-          <label for="6D">6D</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="6E" />
-          <label for="6E">6E</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="6F" />
-          <label for="6F">6F</label>
-        </li>
-      </ol>
-    </li>
-    <li class="row row--7">
-      <ol class="seats" type="A">
-        <li class="seat">
-          <input type="checkbox" id="7A" />
-          <label for="7A">7A</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="7B" />
-          <label for="7B">7B</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="7C" />
-          <label for="7C">7C</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="7D" />
-          <label for="7D">7D</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="7E" />
-          <label for="7E">7E</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="7F" />
-          <label for="7F">7F</label>
-        </li>
-      </ol>
-    </li>
-    <li class="row row--8">
-      <ol class="seats" type="A">
-        <li class="seat">
-          <input type="checkbox" id="8A" />
-          <label for="8A">8A</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="8B" />
-          <label for="8B">8B</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="8C" />
-          <label for="8C">8C</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="8D" />
-          <label for="8D">8D</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="8E" />
-          <label for="8E">8E</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="8F" />
-          <label for="8F">8F</label>
-        </li>
-      </ol>
-    </li>
-    <li class="row row--9">
-      <ol class="seats" type="A">
-        <li class="seat">
-          <input type="checkbox" id="9A" />
-          <label for="9A">9A</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="9B" />
-          <label for="9B">9B</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="9C" />
-          <label for="9C">9C</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="9D" />
-          <label for="9D">9D</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="9E" />
-          <label for="9E">9E</label>
-        </li>
-        <li class="seat">
-          <input type="checkbox" id="9F" />
-          <label for="9F">9F</label>
-        </li>
-      </ol>
-    </li>
-
-  </ol>
-
+</div>
 </div>
 
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    </div>
-    </div>
-    </div>
 <h1>{{quantity}}</h1>
 <h1>{{go_date}}</h1>
 <h1>{{destination}}</h1>
@@ -533,51 +352,52 @@
     var placeArray = [];
     var destinations = {{ destinations | tojson }};
 
-        var fromDateOptions = '<option></option>';
-        destinations.forEach((destination) => {
-            fromDateOptions += `<option>${destination}</option>`;
+    var fromDateOptions = '<option></option>';
+    destinations.forEach((destination) => {
+        fromDateOptions += `<option>${destination}</option>`;
 
+    });
+
+    fromDateShow.innerHTML = fromDateOptions;
+
+    fromDateShow.addEventListener("change", function () {
+        var selectedValue = this.value;
+
+        var departures = destinations.filter(function(item) {
+            return item !== selectedValue;
         });
 
-        fromDateShow.innerHTML = fromDateOptions;
 
-        fromDateShow.addEventListener("change", function () {
-            var selectedValue = this.value;
-
-            var departures = destinations.filter(function(item) {
-            return item !== selectedValue;
-            });
-
-
-         var toDateOptions = '<option></option>';
+        var toDateOptions = '<option></option>';
         departures.forEach((departure) => {
             toDateOptions += `<option>${departure}</option>`;
 
         });
-            toDateShow.innerHTML = toDateOptions;
-        });
+        toDateShow.innerHTML = toDateOptions;
+    });
 
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("quantity_child").addEventListener("click", function() {
-        var quantityValue = document.getElementById("quantity_child").innerText;
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("quantity_child").addEventListener("click", function() {
+            var quantityValue = document.getElementById("quantity_child").innerText;
 
-        fetch("/book_ticket", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ "quantity": quantityValue })
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-        })
-        .catch(error => {
-            console.error("Error:", error);
+            fetch("/book_ticket", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ "quantity": quantityValue })
+            })
+                .then(response => response.json())
+                .then(data => {
+                console.log(data);
+            })
+                .catch(error => {
+                console.error("Error:", error);
+            });
         });
     });
-});
 </script>
 <script src="{{ url_for('static', filename='javascript/bookticket.js')}}"></script>
+
 {% endblock %}
 

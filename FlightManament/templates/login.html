@@ -1,12 +1,6 @@
-<!DOCTYPE html>
-<html lang="vn">
+ <!-- Modal Login -->
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng ký - NHAIRLINE</title>
-    <link rel="shortcut icon" href="{{ url_for('static', filename='images/Icon.png')}}" type="image/x-icon">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css')}}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -17,65 +11,42 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/default.css')}}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css')}}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css')}}">
-</head>
-
-<body>
-    <div class="container">
-        <div class="title">Đăng ký</div>
-        <div class="content">
-            <form action="#">
-                <div class="user-details">
-                    <div class="input-box">
-                        <span class="details">Họ và tên</span>
-                        <input type="text" placeholder="Nhập họ và tên" required>
-                    </div>
-                    <div class="input-box">
-                        <span class="details">Tên đăn nhập</span>
-                        <input type="text" placeholder="Nhập tên  mật khẩu" required>
-                    </div>
-                    <div class="input-box">
-                        <span class="details">Email</span>
-                        <input type="text" placeholder="Nhập email" required>
-                    </div>
-                    <div class="input-box">
-                        <span class="details">Số điện thoại</span>
-                        <input type="text" placeholder="Nhập số điện thoại" required>
-                    </div>
-                    <div class="input-box">
-                        <span class="details">Mật khẩu</span>
-                        <input type="text" placeholder="Nhập mật khẩu" required>
-                    </div>
-
-                    <div class="input-box">
-                        <span class="details">Xác nhận mật khẩu</span>
-                        <input type="text" placeholder="Xác nhận mật khẩu của bạn" required>
+            <div class="form login form_login">
+                <div class="form-content">
+                    <h1 class="login_header">Đăng nhập</h1>
+                    <form method="post" action="{{ url_for('login') }}">
+                        <div class="field input-field">
+                            <input type="text" placeholder="Tài khoản" class="input" id="username" name="username">
+                        </div>
+                        <div class="field input-field">
+                            <input type="password" placeholder="Mật khẩu" class="password" id="password" name="password">
+                            <i class='bx bx-hide eye-icon'></i>
+                        </div>
+                        <div class="form-link">
+                            <a href="#" class="forgot-pass">Quên mật khẩu?</a>
+                        </div>
+                        <div class="field button-field">
+                            <button type="submit">Đăng nhập</button>
+                        </div>
+                    </form>
+                    <div class="form-link">
+                        <span>Bạn chưa có tài khoản? <a href="./signup.html" class="link signup-link">Đăng ký ngay</a></span>
                     </div>
                 </div>
-                <div class="gender-details">
-                    <input type="radio" name="gender" id="dot-1">
-                    <input type="radio" name="gender" id="dot-2">
-                    <input type="radio" name="gender" id="dot-3">
-                    <span class="gender-title">Giới tính</span>
-                    <div class="category">
-                        <label for="dot-1">
-                            <span class="dot one"></span>
-                            <span class="gender">Nam</span>
-                        </label>
-                        <label for="dot-2">
-                            <span class="dot two"></span>
-                            <span class="gender">Nữ</span>
-                        </label>
-                    </div>
+                <div class="line"></div>
+                <div class="media-options">
+                    <a href="#" class="field facebook">
+                        <i class='bx bxl-facebook facebook-icon'></i>
+                        <span>Đăng nhập với Facebook</span>
+                    </a>
                 </div>
-                <div class="button">
-                    <input type="submit" value="Register">
+                <div class="media-options">
+                    <a href="{{auth_url}}" class="field google">
+                        <img src="{{ url_for('static', filename='images/google.png') }}" alt="" class="google-img">
+                        <span>Đăng nhập với Google</span>
+                    </a>
                 </div>
-            </form>
-        </div>
-    </div>
-</body>
-
-</html>
+            </div>
+<h1>{{username}}</h1>
+<h1>{{password}}</h1>
+ <h1>{{error_mgs}}</h1>

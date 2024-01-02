@@ -3,13 +3,14 @@ import cloudinary.uploader
 import flask
 import flask_login
 import stripe
+import utils
 import requests
 from flask import render_template, request, redirect, url_for, session, jsonify
 
 from flask_login import login_required, current_user, login_user
 
 import FlightManament
-from FlightManament import app, mail, login_manager
+from FlightManament import app, mail, login_manager, stripe_keys
 
 from FlightManament import app
 from utils import *
@@ -17,42 +18,42 @@ from flask_mail import Message
 from FlightManament.models import User
 
 
-
-@app.route('/', methods=['GET', 'POST'])
-def home():
-    user_info = session.get('user_info')
-    user_name =""
-
-    # login wwith sso
-    google_client_id = '1055243236583-dol1antfv33cudplah7tjb56787vefhg.apps.googleusercontent.com'
-    redirect_uri = 'http://localhost:5000/callback_login_sso'
-    auth_url = f'https://accounts.google.com/o/oauth2/auth?response_type=code&client_id={google_client_id}&redirect_uri={redirect_uri}&scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/contacts.readonly&access_type=online'
-
-    if user_info is not None:
-        # Check if 'names' field is present and not empty
-        if 'name' in user_info and user_info['name']:
-            # Use the first name from the list (you may adapt this based on your needs)
-            user_name = user_info['name']
-
-    return render_template("index.html", user_name=user_name, auth_url = auth_url)
+stripe.api_key = stripe_keys["secret_key"]
+# @app.route('/', methods=['GET', 'POST'])
+# def home():
+#     user_info = session.get('user_info')
+#     user_name = ""
+#
+#
+#     # login wwith sso
+#     google_client_id = '1055243236583-dol1antfv33cudplah7tjb56787vefhg.apps.googleusercontent.com'
+#     redirect_uri = 'http://localhost:5000/callback_login_sso'
+#     auth_url = f'https://accounts.google.com/o/oauth2/auth?response_type=code&client_id={google_client_id}&redirect_uri={redirect_uri}&scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/contacts.readonly&access_type=online'
+#
+#     if user_info is not None:
+#         # Check if 'names' field is present and not empty
+#         if 'name' in user_info and user_info['name']:
+#             # Use the first name from the list (you may adapt this based on your needs)
+#             user_name = user_info['name']
+#
+#     return render_template("index.html", user_name=user_name, auth_url = auth_url)
 
 
 @app.route("/bookticket", methods = ['get', 'post'])
 def book_ticket():
-    destinations = ["opt1", "opt2", "opt3", "opt4"]
+    destinations = utils.get_name_airport()
     if request.method.__eq__("GET"):
         destination = request.args.get('destination')
         departure = request.args.get('departure')
         go_date = request.args.get('go_date')
-    if request.method.__eq__("POST"):
-        data = request.json
-        quantity = data.get('quantity')
 
-    return render_template("bookticket.html", destinations=destinations,
+
+    return render_template("bookticket.html",
+                           destinations=destinations,
                            destination=destination,
                            departure=departure,
                            go_date=go_date,
-                           quantity=quantity)
+                           )
 
 
 @app.route("/introduce")
@@ -131,30 +132,22 @@ def callback_login_sso():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'GET':
-        return '''
-               <form action='login' method='POST'>
-                   <input type='text' name='username' id='username' placeholder='username'/>
-                   <input type='password' name='password' id='password' placeholder='password'/>
-                   <input type='submit' name='submit'/>
-               </form>
-           '''
-    username = request.form['username']
-    password = request.form['password']
+    error_msg = ""
+    if request.method == "POST":
+        username = request.form.get('username')
+        password = request.form.get('password')
+        user = utils.check_login(username=username, password=password)
+        if user:
+            login_user(user=user)
+            return redirect(url_for('home'))
+        else:
+            error_msg = "Tài khoản hoặc mật khẩu không chính xác"
 
-    # Validate credentials (replace this with your actual validation logic)
-    if username is not None and password is not None:
-        user = User()
-        user.id = username
-        login_user(user)
-        return redirect(url_for('protected'))
-
-    return 'Bad login'
+    return render_template("login.html", error_msg=error_msg)
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    print("user is", user_id)
     return User.query.filter_by(username=user_id).first()
 
 
@@ -176,39 +169,64 @@ def protected():
     return 'Logged in as: ' + current_user.name
 
 
-@app.route('/checkout', methods=['POST'])
-def cteate_checkout_session():
-    try:
-        checkout_session = stripe.checkout.Sesion.create(
-            line_items=[
-                {
-                    "price": "price_1OSXXuAKLdt3jKp1cjT0pjwe",
-                    "quantity": 1
-                }
-            ],
-            mode="subscription"
+@app.route('/test')
+def test():
+    return  render_template('test.html')
 
 
-        )
-    except Exception as e:
-        return str(e)
-
-    return redirect()
-
-
-@app.route("/hello")
-def hello_world():
-    return jsonify("hello, world!")
+@app.route("/401")
+def ffgdd():
+    return render_template('401.html')
 
 
 @app.route("/")
-def index1():
-    return render_template("index1.html")
+def payment():
+    return render_template('payment.html')
 
-# @app.route("/config")
-# def get_publishable_key():
-#     stripe_config = {"publicKey": stripe_keys["publishable_key"]}
-#     return jsonify(stripe_config)
+
+@app.route("/create-checkout-session")
+def create_checkout_session():
+    domain_url = "http://127.0.0.1:5000"
+    stripe.api_key = stripe_keys["secret_key"]
+
+    try:
+        checkout_session = stripe.checkout.Session.create(
+            success_url=domain_url + "success?session_id={CHECKOUT_SESSION_ID}",
+            cancel_url=domain_url + "cancelled",
+            payment_method_types=["card"],
+            mode="payment",
+            line_items=[
+                {
+                    'price': 'price_1OHTpxAKLdt3jKp1W0zFWNKi',  # Sử dụng `price` ID của sản phẩm đã có sẵn
+                    'quantity': 1,
+                }
+            ]
+        )
+        return jsonify({"sessionId": checkout_session["id"]})
+    except Exception as e:
+        return jsonify(error=str(e)), 403
+
+
+@app.route("/success")
+def success():
+    return render_template("success.html")
+
+
+@app.route("/cancelled")
+def cancelled():
+    return render_template("cancelled.html")
+
+
+def handle_checkout_session(session):
+    print("Payment was successful.")
+    # TODO: run some custom code here
+
+
+@app.route("/config")
+def get_publishable_key():
+    stripe_config = {"publicKey": stripe_keys["publishable_key"]}
+    return jsonify(stripe_config)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
