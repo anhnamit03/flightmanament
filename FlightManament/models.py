@@ -1,4 +1,5 @@
-import flask_login
+import nullable as nullable
+from flask_login import UserMixin
 from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
 from FlightManament import db
@@ -13,57 +14,11 @@ class BaseModel(db.Model):
 
 class Airport(BaseModel):
     __tablename__ = "Airport"
-
+    sign = Column(String(5))
     name = Column(String(20), nullable=False)
     address = Column(String(100), nullable=False)
-
-    def __str__(self):
-        return self.name
-
-
-class TheFlight(BaseModel):
-    __tablename__ = "TheFlight"
-
-    to_id = Column(Integer, ForeignKey('Airport.id'), nullable=False)
-    depart_id = Column(Integer, ForeignKey('Airport.id'), nullable=False)
-    distance = Column(Float)
-
-    UniqueConstraint('to_id', 'depart_id', name='unique_to_depart_pair')
-    to = relationship('Airport', foreign_keys=[to_id], backref='to_Flight')
-    depart = relationship('Airport', foreign_keys=[depart_id], backref='depart_Flight')
-
-    def __str__(self):
-        return self.name
-
-
-class OneWayFlight(BaseModel):
-    __tablename__ = "OneWayFlight"
-    id_the_flight = Column(Integer, ForeignKey('TheFlight.id'), nullable=False)
-
-    def __str__(self):
-        return self.name
-
-
-class MultilegFlight(BaseModel):
-    __tablename__ = "MultilegFlight"
-
-
-class FlightNumber(BaseModel):
-    __tablename__ = "FlightNumber"
-    description = Column(String(50))
-
-    def __str__(self):
-        return self.description
-
-
-class Flightchedule(BaseModel):
-    __tablename__ = "Flightchedules"
-    stop_time = Column(Integer, nullable=False)
-    notes = Column(String(250))
-    id_the_flight = Column(Integer, ForeignKey('TheFlight.id'), nullable=False)
-    id_multileg_Flight = Column(Integer, ForeignKey('MultilegFlight.id'), nullable=False)
-    id_flight_number = Column(Integer, ForeignKey('FlightNumber.id'), nullable=False)
-
+    longitude = Column(Float)
+    latitude = Column(Float)
     def __str__(self):
         return self.name
 
@@ -71,11 +26,17 @@ class Flightchedule(BaseModel):
 class Flight(BaseModel):
     __tablename__ = "Flight"
     start_time = Column(DateTime, nullable=False)
-    id_plane = Column(Integer, ForeignKey('Plane.id'), nullable= False)
+    id_plane = Column(Integer, ForeignKey('Plane.id'), nullable=False)
     id_team_flight = Column(Integer, ForeignKey('TeamFlight.id'), nullable=False)
+    id_flight_route = Column(Integer, ForeignKey('FlightRoute.id'), nullable=False)
 
     def __str__(self):
         return self.name
+
+
+class FlightRouteType(BaseModel):
+    __tablename__ = "FlightRouteType"
+    description = Column(String(255))
 
 
 class Promotion(BaseModel):
@@ -89,6 +50,29 @@ class FlightRole(BaseModel):
     name = Column(String(50), nullable=False)
     description = Column(String(255))
 
+
+class FlightRoute(BaseModel):
+    __tablename__ = "FlightRoute"
+    destination = Column(Integer, ForeignKey("Airport.id"), nullable=False)
+    departure = Column(Integer, ForeignKey("Airport.id"), nullable=False)
+    id_flight_route_type = Column(Integer, ForeignKey("FlightRouteType.id"), nullable=False)
+
+    __table_args__ = (
+        UniqueConstraint('destination', 'departure', name='unique_destination_departure'),
+    )
+
+class StopPoint(BaseModel):
+    __tablename__ = "StopPoint"
+    description = Column(String(255))
+
+
+class FlightSchedule(BaseModel):
+    __tablename__ = "FlightSchedule"
+    id_stop_point = Column(Integer, ForeignKey("StopPoint.id"), nullable=False)
+    id_airport = Column(Integer, ForeignKey("Airport.id"), nullable=False)
+    id_flight_route = Column(Integer, ForeignKey("FlightRoute.id"), nullable=False)
+    time_stop = Column(Integer)
+    description = Column(String(255))
 
 class FlightRoleFlight(BaseModel):
     __tablename__ = "FlightRoleFlight"
@@ -116,7 +100,7 @@ class Plane(BaseModel):
 
 class TicketStatus(BaseModel):
     __tablename__ = "TicketStatus"
-    name = Column(String(50), nullable= False)
+    name = Column(String(50), nullable=False)
 
 
 class TicketRole(BaseModel):
@@ -153,7 +137,7 @@ class Customer(BaseModel):
     birthday = Column(String(50), nullable=False)
 
 
-class User(BaseModel,flask_login.UserMixin):
+class User(BaseModel, UserMixin):
     __tablename__ = "User"
     username = Column(String(50), nullable=False, unique=True)
     password = Column(String(50), nullable=False)

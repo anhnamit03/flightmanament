@@ -9,7 +9,6 @@ from flask import render_template, request, redirect, url_for, session, jsonify
 
 from flask_login import login_required, current_user, login_user
 
-import FlightManament
 from FlightManament import app, mail, login_manager, stripe_keys
 
 from FlightManament import app
@@ -17,42 +16,47 @@ from utils import *
 from flask_mail import Message
 from FlightManament.models import User
 
-
 stripe.api_key = stripe_keys["secret_key"]
-# @app.route('/', methods=['GET', 'POST'])
-# def home():
-#     user_info = session.get('user_info')
-#     user_name = ""
-#
-#
-#     # login wwith sso
-#     google_client_id = '1055243236583-dol1antfv33cudplah7tjb56787vefhg.apps.googleusercontent.com'
-#     redirect_uri = 'http://localhost:5000/callback_login_sso'
-#     auth_url = f'https://accounts.google.com/o/oauth2/auth?response_type=code&client_id={google_client_id}&redirect_uri={redirect_uri}&scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/contacts.readonly&access_type=online'
-#
-#     if user_info is not None:
-#         # Check if 'names' field is present and not empty
-#         if 'name' in user_info and user_info['name']:
-#             # Use the first name from the list (you may adapt this based on your needs)
-#             user_name = user_info['name']
-#
-#     return render_template("index.html", user_name=user_name, auth_url = auth_url)
 
 
-@app.route("/bookticket", methods = ['get', 'post'])
+@app.route('/', methods=['GET', 'POST'])
+def home():
+    user_info = session.get('user_info')
+    user_name = ""
+
+    # login wwith sso
+    google_client_id = '1055243236583-dol1antfv33cudplah7tjb56787vefhg.apps.googleusercontent.com'
+    redirect_uri = 'http://localhost:5000/callback_login_sso'
+    auth_url = f'https://accounts.google.com/o/oauth2/auth?response_type=code&client_id={google_client_id}&redirect_uri={redirect_uri}&scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/contacts.readonly&access_type=online'
+
+    if user_info is not None:
+        # Check if 'names' field is present and not empty
+        if 'name' in user_info and user_info['name']:
+            # Use the first name from the list (you may adapt this based on your needs)
+            user_name = user_info['name']
+
+    return render_template("index.html", user_name=user_name, auth_url=auth_url)
+
+
+@app.route("/bookticket", methods=['get', 'post'])
 def book_ticket():
     destinations = utils.get_name_airport()
     if request.method.__eq__("GET"):
         destination = request.args.get('destination')
         departure = request.args.get('departure')
         go_date = request.args.get('go_date')
-
+        list_id_flight = utils.get_flight(destination, departure, go_date)
+        list_sign = utils.get_sign(destination,departure)
+        type_route = get_type_flight_route(1)
 
     return render_template("bookticket.html",
                            destinations=destinations,
                            destination=destination,
                            departure=departure,
                            go_date=go_date,
+                           list_id_flight=list_id_flight,
+                           list_sign=list_sign,
+                           type_route=type_route,
                            )
 
 
@@ -66,7 +70,7 @@ def sale():
     return render_template("sale.html")
 
 
-#login with sso
+# login with sso
 @app.route('/login_sso')
 def login_sso():
     google_client_id = '1055243236583-dol1antfv33cudplah7tjb56787vefhg.apps.googleusercontent.com'
@@ -74,6 +78,7 @@ def login_sso():
     auth_url = f'https://accounts.google.com/o/oauth2/auth?response_type=code&client_id={google_client_id}&redirect_uri={redirect_uri}&scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/contacts.readonly&access_type=online'
 
     return f'<a href="{auth_url}">Login with Google</a>'
+
 
 @app.route('/log_out')
 def log_out():
@@ -102,7 +107,7 @@ def callback_login_sso():
     token_info = response.json()
 
     # Use the access token to get user info
-    user_info_url =  'https://www.googleapis.com/oauth2/v3/userinfo'
+    user_info_url = 'https://www.googleapis.com/oauth2/v3/userinfo'
 
     headers = {'Authorization': f'Bearer {token_info["access_token"]}'}
     user_info_response = requests.get(user_info_url, headers=headers)
@@ -148,13 +153,13 @@ def login():
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.filter_by(username=user_id).first()
+    return utils.get_user_by_id(user_id=user_id)
 
 
 @app.route('/logout')
 def logout():
     flask_login.logout_user()
-    return 'Logged out'
+    return redirect('login')
 
 
 @login_manager.unauthorized_handler
@@ -165,13 +170,13 @@ def unauthorized_handler():
 @app.route('/protected')
 @login_required
 def protected():
-    print("current_user",current_user)
+    print("current_user", current_user)
     return 'Logged in as: ' + current_user.name
 
 
 @app.route('/test')
 def test():
-    return  render_template('test.html')
+    return render_template('test.html')
 
 
 @app.route("/401")

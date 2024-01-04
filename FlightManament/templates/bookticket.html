@@ -61,66 +61,7 @@
                 <p>Thời gian đi</p>
             </div>
         </div>
-        <div class="form_group">
-            <span><i class="ri-user-line"></i></span>
-            <div class="input_content">
-                <div class="input_group hanhkhach">
-                    <div>
-                        <h5>Hành khách</h5>
-                        <i class="fa-solid fa-up-down" style="color: #000000;"></i>
-                        <ul class="list-customer">
-                            <li>
-                                <div class="psg-type">
-                                    <h3>Người lớn</h3>
-                                    <p>Người lớn(từ 12 tuổi)</p>
-                                </div>
-                                <div class="btn-customer">
-                                    <button type="button" id="minus_button_nomal"><i class="fa-solid fa-circle-minus"
-                                                                                     style="color: #1d2ad7;"></i>
-                                    </button>
-                                    <button type="button" id="quantity_nomal">0</button>
-                                    <button type="button" id="plus_button_nomal"><i class="fa-solid fa-circle-plus"
-                                                                                    style="color: #0f56d2;"></i>
-                                    </button>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="psg-type">
-                                    <h3>trẻ em</h3>
-                                    <p>trẻ em (2-12 tuổi)</p>
-                                </div>
-                                <div class="btn-customer">
-                                    <button type="button" id="minus_button_child"><i class="fa-solid fa-circle-minus"
-                                                                                     style="color: #1d2ad7;"></i>
-                                    </button>
-                                    <button type="button" id="quantity_child">0</button>
-                                    <button type="button" id="plus_button_child"><i class="fa-solid fa-circle-plus"
-                                                                                    style="color: #0f56d2;"></i>
-                                    </button>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="psg-type">
-                                    <h3>em bé</h3>
-                                    <p>em bé(dưới 12 tuổi)</p>
-                                </div>
-                                <div class="btn-customer">
-                                    <button type="button" id="minus_button_baby"><i class="fa-solid fa-circle-minus"
-                                                                                    style="color: #1d2ad7;"></i>
-                                    </button>
-                                    <button type="button" id="quantity_baby">0</button>
-                                    <button type="button" id="plus_button_baby"><i class="fa-solid fa-circle-plus"
-                                                                                   style="color: #0f56d2;"></i></button>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
 
-
-                </div>
-                <p id="quantity_passenger"></p>
-            </div>
-        </div>
 
         <button type="submit" class="btn" id="search"><i class="ri-search-line"></i></button>
 
@@ -208,6 +149,7 @@
                 </div>
 
                 <div class="card_tickets">
+
                     <div class="card_ticket">
                         <!-- // row -->
                         <div class="group-content">
@@ -243,8 +185,20 @@
                                 </div>
                             </div>
                         </div>
+                        <div style="display:block">
+                            <h3 style="text-align:center; align-items:center; color:indianred ">{{type_route}}</h3>
+                            <br>
+                            <div style="text-align:center; align-items:center;border: 2px solid #018de5; padding: 10px;">
+                                <h4 style="display:inline-flex; color:#018de5">điểm dừng 1:</h4>
+                                <span style="margin-left:150px">điểm dừng 1:</span>
+                            </div>
+                            <br>
+                            <div style="text-align:center; align-items:center;border: 2px solid #018de5; padding: 10px;">
+                                <h4 style="display:inline-flex; color:#018de5">điểm dừng 1:</h4>
+                                <span style="margin-left:150px">điểm dừng 1:</span>
+                            </div>
 
-
+                        </div>
                         <div class="itinerary-part-offer second">
 
                             <div class="offer-branch">
@@ -325,7 +279,17 @@
                                                 </ol>
                                             </li>
                                         </ol>
-                                        <button type="submit" class="btn"><i class="fa-solid fa-check"></i></button>
+                                        <br>
+                                        <button type="submit" class="btn" style="padding: 16px;
+                                                margin-left:400px;
+                                                width: 60px;
+                                                font-size: 1.5rem;
+                                                border-radius: 20px;
+                                                background-color: #018de5;
+                                                border: 1px solid #fff;
+                                                cursor: pointer;">
+                                                <i class="fa-solid fa-check"></i>
+                                        </button>
                                     </form>
 
                                 </div>
@@ -345,7 +309,8 @@
 <h1>{{go_date}}</h1>
 <h1>{{destination}}</h1>
 <h1>{{departure}}</h1>
-
+<h1>{{list_id_flight}}</h1>
+<h1>{{idsffs}}</h1>
 <script>
     var fromDateShow = document.querySelector('#destination');
     var toDateShow = document.querySelector('#departure');

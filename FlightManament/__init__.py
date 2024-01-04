@@ -25,8 +25,7 @@ cloudinary.config(
 
 
 # // config login
-login_manager = LoginManager()
-login_manager.init_app(app)
+login_manager = LoginManager(app=app)
 
 
 stripe_keys = {
