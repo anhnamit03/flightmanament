@@ -184,30 +184,50 @@ def ffgdd():
     return render_template('401.html')
 
 
-@app.route("/")
+@app.route("/payment")
 def payment():
     return render_template('payment.html')
 
 
-@app.route("/create-checkout-session")
+@app.route("/create-checkout-session", methods=['GET', 'POST'])
 def create_checkout_session():
     domain_url = "http://127.0.0.1:5000"
     stripe.api_key = stripe_keys["secret_key"]
 
     try:
-        checkout_session = stripe.checkout.Session.create(
-            success_url=domain_url + "success?session_id={CHECKOUT_SESSION_ID}",
-            cancel_url=domain_url + "cancelled",
+        # Retrieve the product details from the form or database
+        products = ['Product A', 'Product B', 'Product C']  # Replace this with your list of products
+        amount = 1000000  # Set the amount in the smallest unit of your currency (e.g., cents for USD)
+
+        # Create a PaymentIntent
+        intent = stripe.PaymentIntent.create(
+            amount=amount,
+            currency='vnd',
             payment_method_types=["card"],
-            mode="payment",
-            line_items=[
-                {
-                    'price': 'price_1OHTpxAKLdt3jKp1W0zFWNKi',  # Sử dụng `price` ID của sản phẩm đã có sẵn
-                    'quantity': 1,
-                }
-            ]
+            payment_method_data={
+                'type': 'card',
+                'card[token]': request.form['stripeToken']
+            },
+            confirmation_method='manual',  # Use manual confirmation for better control
+            confirm=True,  # Confirm the payment immediately,
+
         )
-        return jsonify({"sessionId": checkout_session["id"]})
+        return jsonify({'clientSecret': intent.client_secret})
+
+
+        # checkout_session = stripe.checkout.Session.create(
+        #     success_url=domain_url + "success?session_id={CHECKOUT_SESSION_ID}",
+        #     cancel_url=domain_url + "cancelled",
+        #     payment_method_types=["card"],
+        #     mode="payment",
+        #     line_items=[
+        #         {
+        #             'price': 'price_1OHTpxAKLdt3jKp1W0zFWNKi',  # Sử dụng `price` ID của sản phẩm đã có sẵn
+        #             'quantity': 1,
+        #         }
+        #     ]
+        # )
+        return jsonify({"sessionId": charge["id"]})
     except Exception as e:
         return jsonify(error=str(e)), 403
 
