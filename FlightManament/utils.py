@@ -5,6 +5,9 @@ import hashlib
 from datetime import datetime
 from sqlalchemy.orm import aliased
 from geopy.distance import geodesic
+from FlightManament import app, db
+from FlightManament.models import FlightRouteType
+from datetime import datetime, timedelta
 
 
 def distance(first_place, second_place):
@@ -18,11 +21,11 @@ def read_json(path):
 
 def add_user(name, password, username, **kwargs):
     password = hashlib.md5(password.strip().encode('utf-8')).hexdigest()
-    user = User(name= name.strip(),
-                username= username.strip(),
+    user = User(name=name.strip(),
+                username=username.strip(),
                 password=password,
-                email= kwargs.get('email'),
-                avatar= kwargs.get('avatar'))
+                email=kwargs.get('email'),
+                avatar=kwargs.get('avatar'))
 
     db.session.add(user)
     db.session.commit()
@@ -44,6 +47,7 @@ def get_user_by_id(user_id):
     return User.query.get(user_id)
 
 
+# Trả về danh sách chuyến bay phù hợp
 def get_flight(destination, departure, go_date):
     # Bắt đầu một phiên làm việc với cơ sở dữ liệu
     session = db.session()
@@ -84,6 +88,7 @@ def get_flight(destination, departure, go_date):
         session.close()
 
 
+# trả về kí hiệu sân bay
 def get_sign(destination, departure):
     session = db.session()
 
@@ -114,16 +119,73 @@ def get_sign(destination, departure):
         session.close()
 
 
+# trả về id thể loại chuyến bay
 def get_type_flight_route(id_flight):
     session = db.session()
 
     try:
-        # Thực hiện truy vấn để lấy thông tin từ bảng FlightRouteType
-        type_info = (
-            session.query(FlightRouteType.description)
+        # Thực hiện truy vấn để lấy id từ bảng FlightRouteType
+        type_id = (
+            session.query(FlightRouteType.id)
             .join(FlightRoute, FlightRoute.id_flight_route_type == FlightRouteType.id)
             .join(Flight, Flight.id_flight_route == FlightRoute.id)
             .filter(Flight.id == id_flight)
+            .first()
+        )
+
+        if type_id:
+            # Trả về id từ bảng FlightRouteType
+            return type_id.id
+        else:
+            return None
+
+    finally:
+        session.close()
+
+
+def check_login_customer(cccd):
+    if cccd:
+        # Sử dụng .first() để trả về bản ghi đầu tiên hoặc None nếu không tìm thấy
+        customer = Customer.query.filter(Customer.CCCD == cccd).first()
+        return customer.id
+
+
+def get_customer_by_id(user_id):
+    return Customer.query.get(user_id)
+
+
+# Trả về danh sách ghế của máy bay ứng với chuyến bay
+def get_seat_ids_by_flight_id_and_type_seat(flight_id, type_seat_id):
+    try:
+        # Lấy id_plane từ bảng Flight
+        id_plane = db.session.query(Flight.id_plane).filter(Flight.id == flight_id).scalar()
+
+        # Thực hiện truy vấn trong bảng Seat
+        seats_query = db.session.query(Seat.id).filter(Seat.id_type_seat == type_seat_id, Seat.id_plane == id_plane)
+
+        # Chuyển kết quả thành danh sách (list)
+        seat_ids_list = [seat_id[0] for seat_id in seats_query.all()]
+
+        return seat_ids_list
+
+    except Exception as e:
+        # Xử lý lỗi nếu có
+        print(f"Error: {e}")
+        return None
+    finally:
+        # Đóng phiên làm việc với cơ sở dữ liệu
+        db.session.close()
+
+
+# Trả về mô tả của thể loại chuyến bay
+def get_decription_type_flight_route(id_flight_route_type):
+    session = db.session()
+
+    try:
+        # Thực hiện truy vấn để lấy mô tả từ bảng FlightRouteType
+        type_info = (
+            session.query(FlightRouteType.description)
+            .filter(FlightRouteType.id == id_flight_route_type)
             .first()
         )
 
@@ -136,3 +198,50 @@ def get_type_flight_route(id_flight):
     finally:
         session.close()
 
+
+def get_seat_ids_by_flight_id(flight_id):
+    session = db.session()
+
+    try:
+        # Lấy thông tin về id_plane từ bảng Flight
+        id_plane = (
+            session.query(Flight.id_plane)
+            .filter(Flight.id == flight_id)
+            .scalar()
+        )
+
+        # Lấy danh sách id ghế từ bảng Seat
+        seat_ids = (
+            session.query(Seat.id)
+            .join(Plane, Plane.id == Seat.id_plane)
+            .filter(Plane.id == id_plane)
+            .all()
+        )
+
+        # Chuyển đổi danh sách kết quả từ tuple sang list
+        seat_ids_list = [seat_id[0] for seat_id in seat_ids]
+
+        return seat_ids_list
+
+    finally:
+        session.close()
+
+
+def is_greater_than_hours_from_now(input_datetime_str, hour):
+    try:
+        # Chuyển đổi chuỗi thành đối tượng datetime
+        input_datetime = datetime.strptime(input_datetime_str, "%Y-%m-%d %H:%M:%S")
+
+        # Lấy thời điểm hiện tại
+        current_time = datetime.now()
+
+        # Tính ngưỡng thời gian trước
+        threshold_time = current_time - timedelta(hours=hour)
+
+        # So sánh và trả về kết quả
+        return input_datetime > threshold_time
+
+    except ValueError:
+        # Xử lý nếu có lỗi chuyển đổi
+        print("Invalid datetime format.")
+        return False

@@ -1,0 +1,42 @@
+ <!-- Modal Login -->
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css')}}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+            <div class="form login form_login">
+                <div class="form-content">
+                    <h1 class="login_header">Đăng nhập</h1>
+                    <form method="post" action="{{ url_for('login_customer') }}">
+                        <div class="field input-field">
+                            <input type="number" placeholder="Căn cước công dân" class="input" id="cccd" name="cccd">
+                        </div>
+
+
+                        <div class="field button-field">
+                            <button type="submit">Đăng nhập</button>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="line"></div>
+                <div class="media-options">
+                    <a href="#" class="field facebook">
+                        <i class='bx bxl-facebook facebook-icon'></i>
+                        <span>Đăng nhập với Facebook</span>
+                    </a>
+                </div>
+                <div class="media-options">
+                    <a href="{{auth_url}}" class="field google">
+                        <img src="{{ url_for('static', filename='images/google.png') }}" alt="" class="google-img">
+                        <span>Đăng nhập với Google</span>
+                    </a>
+                </div>
+            </div>
