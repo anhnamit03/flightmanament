@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment Form</title>
     <script src="https://js.stripe.com/v3/"></script>
-    <style>
-        /* Add your styles for the form here */
-    </style>
+
+
+
 </head>
 <body>
 <form id="payment-form" action="/create-checkout-session" method="POST">
@@ -19,7 +19,51 @@
     <div id="card-errors" role="alert"></div>
 
     <button id="submit">Pay Now</button>
+
+
+
 </form>
+
+<!-- send push notify -->
+  <form>
+        <button id="sendMessage">Send message</button>
+    </form>
+
+<script>
+        var firebaseConfig = {
+            apiKey: 'YOUR_API_KEY',
+            authDomain: 'YOUR_AUTH_DOMAIN',
+            projectId: 'YOUR_PROJECT_ID',
+            storageBucket: 'YOUR_STORAGE_BUCKET',
+            messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
+            appId: 'YOUR_APP_ID'
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const messaging = firebase.messaging();
+
+        document.getElementById('sendMessage').addEventListener('click', function() {
+            messaging.requestPermission().then(() => {
+                return messaging.getToken();
+            }).then((token) => {
+                // Send the token to the Flask server for registration
+                fetch('/register_device', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ device_token: token }),
+                }).then(() => {
+                    alert('Device registered successfully!');
+                }).catch((error) => {
+                    console.error('Error registering device:', error);
+                });
+            }).catch((error) => {
+                console.error('Error requesting permission:', error);
+            });
+        });
+    </script>
+
 
 <script>
 var stripe = Stripe('pk_test_51OAnEvAKLdt3jKp1yBstS2h30XsynBQLsDrM9deUl0CVU1HpWUKxxhAyKMcFFCESIY3D4ooVnjgsP0bZTg6XiJCi00VWgqCJGm');

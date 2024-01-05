@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Push Notification Example</title>
+
+
+</head>
+<body>
+    <h1>Push Notification Example</h1>
+    <form action="/send_notification" method="post">
+        <label for="token">FCM Token:</label>
+        <input type="text" name="token" required>
+        <button type="submit">Send Notification</button>
+    </form>
+
+
+<!-- Firebase App (the core Firebase SDK) -->
+<script  src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
+<!-- Firebase Messaging -->
+
+<script  src="https://www.gstatic.com/firebasejs/9.0.2/firebase-messaging-compat.js"></script>
+
+<script>
+
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyB-81olDWdH2wCEla_KTHIbWlxYdBcqK6w",
+    authDomain: "flightmanagement-d989d.firebaseapp.com",
+    projectId: "flightmanagement-d989d",
+    storageBucket: "flightmanagement-d989d.appspot.com",
+    messagingSenderId: "766444659533",
+    appId: "1:766444659533:web:08aa23d67fe25bea740d04",
+    measurementId: "G-0YCW8XPV91"
+  };
+
+   // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  // Retrieve an instance of Firebase Messaging
+  const messaging = firebase.messaging();
+
+  // Get FCM token
+  messaging.getToken({ vapidKey: 'BH-86RCEKHd7GwHC1paLyUB_0C0g14WhlyNzpvvoHvz6cSRSp29ddLlIyelxFB_YXynIY5Xt3xY6b7-cdUv63S4' }).then((token) => {
+    console.log('FCM Token:', token);
+
+    // Send the token to your server using an HTTP request (e.g., fetch)
+    // Example using fetch:
+    // fetch('http://your-flask-server-url/send_notification', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/x-www-form-urlencoded',
+    //   },
+    //   body: 'token=' + token,
+    // }).then(response => {
+    //   console.log('Server Response:', response);
+    // }).catch(error => {
+    //   console.error('Error sending token to server:', error);
+    // });
+  }
+  
+  
+  ).catch((error) => {
+    console.error('Error getting token:', error);
+  });
+</script>
+
+
+</body>
+
+
+</html>

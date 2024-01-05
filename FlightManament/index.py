@@ -246,6 +246,9 @@ def create_checkout_session():
         return jsonify(error=str(e)), 403
 
 
+
+
+
 @app.route("/success")
 def success():
     return render_template("success.html")
@@ -254,6 +257,50 @@ def success():
 @app.route("/cancelled")
 def cancelled():
     return render_template("cancelled.html")
+
+
+
+@app.route('/send_noti')
+def index():
+    return render_template('send_noti.html')
+
+@app.route('/send_notification', methods=['POST'])
+def send_notification():
+    try:
+        FCM_SERVER_KEY = 'YOUR_SERVER_KEY'
+        FCM_ENDPOINT = 'https://fcm.googleapis.com/fcm/send'
+        # Get the FCM token from the request
+        token = request.form.get('token')
+
+        # Customize your notification payload
+        notification_payload = {
+            'to': token,
+            'notification': {
+                'title': 'Your Notification Title',
+                'body': 'Your Notification Body',
+                'click_action': 'FLUTTER_NOTIFICATION_CLICK'  # Adjust as needed
+            },
+            'data': {
+                'key1': 'value1',
+                'key2': 'value2'
+            }
+        }
+
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'key={FCM_SERVER_KEY}'
+        }
+
+        # Send the notification to FCM
+        response = requests.post(FCM_ENDPOINT, json=notification_payload, headers=headers)
+
+        if response.status_code == 200:
+            return jsonify({'success': True, 'message': 'Notification sent successfully'})
+        else:
+            return jsonify({'success': False, 'message': 'Failed to send notification'})
+
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)})
 
 
 def handle_checkout_session(session):

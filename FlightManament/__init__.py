@@ -34,5 +34,5 @@ stripe_keys = {
 }
 stripe.api_key = stripe_keys["secret_key"]
 
-app.config['MAIL_SENDGRID_API_KEY'] = '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'
+app.config['MAIL_SENDGRID_API_KEY'] = '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'
 mail = MailSendGrid(app)
