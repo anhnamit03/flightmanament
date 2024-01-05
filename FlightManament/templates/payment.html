@@ -1,19 +1,89 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Flask + Stripe Checkout</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Form</title>
     <script src="https://js.stripe.com/v3/"></script>
-    <script src="{{ url_for('static', filename='stripe.js') }}"></script>
-    <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
-  </head>
-  <body>
-   <section class="section">
-    <div class="container">
-      <button class="button is-primary" id="submitBtn">Purchase!</button>
+    <style>
+        /* Add your styles for the form here */
+    </style>
+</head>
+<body>
+<form id="payment-form" action="/create-checkout-session" method="POST">
+
+    <div id="card-element">
     </div>
-  </section>
-  </body>
+
+
+    <div id="card-errors" role="alert"></div>
+
+    <button id="submit">Pay Now</button>
+</form>
+
+<script>
+var stripe = Stripe('pk_test_51OAnEvAKLdt3jKp1yBstS2h30XsynBQLsDrM9deUl0CVU1HpWUKxxhAyKMcFFCESIY3D4ooVnjgsP0bZTg6XiJCi00VWgqCJGm');
+var elements = stripe.elements();
+var card = elements.create('card');
+
+card.mount('#card-element');
+
+card.addEventListener('change', function(event) {
+    var displayError = document.getElementById('card-errors');
+    if (event.error) {
+        displayError.textContent = event.error.message;
+    } else {
+        displayError.textContent = '';
+    }
+});
+
+var form = document.getElementById('payment-form');
+
+form.addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    stripe.createToken(card).then(function(result) {
+        if (result.error) {
+            var errorElement = document.getElementById('card-errors');
+            errorElement.textContent = result.error.message;
+        } else {
+            // Insert the token into the form
+            var hiddenInput = document.createElement('input');
+            hiddenInput.setAttribute('type', 'hidden');
+            hiddenInput.setAttribute('name', 'stripeToken');
+            hiddenInput.setAttribute('value', result.token.id);
+            form.appendChild(hiddenInput);
+
+            // Log hiddenInput to the console
+            console.log(hiddenInput);
+
+            // Use fetch to send data to /create-checkout-session
+            submitForm();
+        }
+    });
+});
+
+// Rename the function to avoid conflict with the outer form variable
+function submitForm() {
+    var formData = new FormData(document.getElementById('payment-form'));
+
+    fetch('/create-checkout-session', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+        // Handle the success response as needed
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        // Handle the error as needed
+    });
+}
+
+
+</script>
+
+</body>
 </html>

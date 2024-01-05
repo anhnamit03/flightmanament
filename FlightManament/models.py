@@ -1,4 +1,4 @@
-import nullable as nullable
+
 from flask_login import UserMixin
 from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
