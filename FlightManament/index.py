@@ -47,7 +47,8 @@ def book_ticket():
         go_date = request.args.get('go_date')
         list_id_flight = utils.get_flight(destination, departure, go_date)
         list_sign = utils.get_sign(destination,departure)
-        type_route = get_type_flight_route(1)
+        type_route = get_type_flight_route(3)
+        seat = utils.get_seats_by_flight_id_and_type_seat(1,2)
 
     return render_template("bookticket.html",
                            destinations=destinations,
@@ -57,6 +58,7 @@ def book_ticket():
                            list_id_flight=list_id_flight,
                            list_sign=list_sign,
                            type_route=type_route,
+                           seat=seat,
                            )
 
 
@@ -151,9 +153,28 @@ def login():
     return render_template("login.html", error_msg=error_msg)
 
 
+@app.route("/login_customer", methods=["GET", "POST"])
+def login_customer():
+    name = ""
+    error_msg = ""
+    if request.method == "POST":
+        cccd = request.form.get('cccd')
+        customer = utils.check_login_customer(cccd)
+        if customer:
+            login_user(customer=customer)
+            return redirect(url_for('home'))
+        else:
+            error_msg = "Bạn chưa sử dụng dịch vụ của chúng tôi"
+
+    return render_template("logincustomer.html", error_msg=error_msg)
+
+
 @login_manager.user_loader
 def load_user(user_id):
-    return utils.get_user_by_id(user_id=user_id)
+        if utils.get_user_by_id(user_id=user_id):
+            return utils.get_user_by_id(user_id=user_id)
+        else:
+            return utils.get_customer_by_id(user_id=user_id)
 
 
 @app.route('/logout')
