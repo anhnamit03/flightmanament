@@ -5,69 +5,159 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Push Notification Example</title>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-app-compat.min.js" integrity="sha512-LvcOLc9ElfeSREuvbKtaUKCB0hn6mrvqqcr9Wt8Hfu+wp5/v8m9n1IxmM06gYW2Y9CchN3xZnuUuwO1fEUJvxw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-messaging-compat.min.js" integrity="sha512-9YpVUQ12asTKlN6l5/CaI++wZKi1c+SPsgTn7LUi9TknREojnPvLobe8qjxEI1lrhLYLpEgnVeonMme7Ld++3Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+
+
+
+  <script src="https://www.google.com/recaptcha/enterprise.js?render=6LelnEYpAAAAAN5Rv8egO0dM9AZhIqWyShglphY9"></script>
+  <script src='https://www.google.com/recaptcha/api.js'></script>
+
+
+
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/firebase-messaging-sw.js')
+          .then((registration) => {
+            console.log('ServiceWorker registration successful:', registration);
+          })
+          .catch((error) => {
+            console.error('ServiceWorker registration failed:', error);
+          });
+      }
+    </script>
+
 
 </head>
+
 <body>
-    <h1>Push Notification Example</h1>
-    <form action="/send_notification" method="post">
-        <label for="token">FCM Token:</label>
-        <input type="text" name="token" required>
-        <button type="submit">Send Notification</button>
-    </form>
 
 
-<!-- Firebase App (the core Firebase SDK) -->
-<script  src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
-<!-- Firebase Messaging -->
 
-<script  src="https://www.gstatic.com/firebasejs/9.0.2/firebase-messaging-compat.js"></script>
+
+
 
 <script>
-
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyB-81olDWdH2wCEla_KTHIbWlxYdBcqK6w",
-    authDomain: "flightmanagement-d989d.firebaseapp.com",
-    projectId: "flightmanagement-d989d",
-    storageBucket: "flightmanagement-d989d.appspot.com",
-    messagingSenderId: "766444659533",
-    appId: "1:766444659533:web:08aa23d67fe25bea740d04",
-    measurementId: "G-0YCW8XPV91"
-  };
-
-   // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-
-  // Retrieve an instance of Firebase Messaging
-  const messaging = firebase.messaging();
-
-  // Get FCM token
-  messaging.getToken({ vapidKey: 'BH-86RCEKHd7GwHC1paLyUB_0C0g14WhlyNzpvvoHvz6cSRSp29ddLlIyelxFB_YXynIY5Xt3xY6b7-cdUv63S4' }).then((token) => {
-    console.log('FCM Token:', token);
-
-    // Send the token to your server using an HTTP request (e.g., fetch)
-    // Example using fetch:
-    // fetch('http://your-flask-server-url/send_notification', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/x-www-form-urlencoded',
-    //   },
-    //   body: 'token=' + token,
-    // }).then(response => {
-    //   console.log('Server Response:', response);
-    // }).catch(error => {
-    //   console.error('Error sending token to server:', error);
-    // });
+window.addEventListener('mouseover', initLandbot, { once: true });
+window.addEventListener('touchstart', initLandbot, { once: true });
+var myLandbot;
+function initLandbot() {
+  if (!myLandbot) {
+    var s = document.createElement('script');s.type = 'text/javascript';s.async = true;
+    s.addEventListener('load', function() {
+      var myLandbot = new Landbot.Livechat({
+        configUrl: 'https://storage.googleapis.com/landbot.online/v3/H-2083462-1A6QM64FZ1FKDIBJ/index.json',
+      });
+    });
+    s.src = 'https://cdn.landbot.io/landbot-3/landbot-3.0.0.js';
+    var x = document.getElementsByTagName('script')[0];
+    x.parentNode.insertBefore(s, x);
   }
-  
-  
-  ).catch((error) => {
-    console.error('Error getting token:', error);
-  });
+}
+</script>
+<!--chat box-->
+
+
+
+<!--<h1>Push Notification Example</h1>-->
+<!--<form action="/send_notification" method="post">-->
+<!--    <label for="token">FCM Token:</label>-->
+<!--    <input type="text" name="token" required>-->
+<!--    <button type="submit">Send Notification</button>-->
+<!--</form>-->
+
+
+
+<form id="myForm" action="your_form_action_url" method="POST">
+    <!-- Replace with your own reCAPTCHA sitekey -->
+    <div class="g-recaptcha" data-sitekey="6LeVETMnAAAAAF53N3_AWXSi5yRiMkFGsAGBm4gQ" data-callback="onRecaptchaSuccess"></div>
+    <br/>
+    <!-- Hidden input field to store reCAPTCHA token -->
+    <input type="hidden" id="recaptchaToken" name="recaptchaToken" value="">
+    <input type="submit" value="Submit">
+</form>
+
+
+<!--// button send noti-->
+
+<button id="sendNotificationButton" onclick="sendNoti()">Send Notification</button>
+
+
+<script>
+    function onRecaptchaSuccess(response) {
+        // Store the reCAPTCHA token in the hidden input field
+        document.getElementById("recaptchaToken").value = response;
+
+        // here token
+        console.log(response)
+    }
+</script>
+
+<script type="text/javascript">
+  var onloadCallback = function() {
+  console.log("capcha ready")
+  };
 </script>
 
 
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+    async defer>
+</script>
+
+
+
+<!--handle push notify-->
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyB-81olDWdH2wCEla_KTHIbWlxYdBcqK6w",
+        authDomain: "flightmanagement-d989d.firebaseapp.com",
+        projectId: "flightmanagement-d989d",
+        storageBucket: "flightmanagement-d989d.appspot.com",
+        messagingSenderId: "766444659533",
+        appId: "1:766444659533:web:08aa23d67fe25bea740d04",
+        measurementId: "G-0YCW8XPV91"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+
+    // Request permission and get the token
+    const messaging = firebase.messaging(app);
+
+    console.log(messaging);
+
+
+ function sendNoti() {
+        messaging.getToken()
+            .then((token) => {
+                console.log('FCM Token:', token);
+                // Now you can use this token to send push notifications to this device
+                fetch('/send_notification', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ token: token }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Notification response:', data);
+                    // Handle the response as needed
+                })
+                .catch(error => {
+                    console.error('Error sending notification:', error);
+                    // Handle the error as needed
+                });
+            })
+            .catch((error) => {
+                console.error('Error obtaining FCM token:', error);
+            });
+    }
+
+</script>
+
 </body>
-
-
 </html>
