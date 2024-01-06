@@ -17,6 +17,7 @@ from FlightManament import app
 from utils import *
 from flask_mail import Message
 from FlightManament.models import User
+import jwt
 
 stripe.api_key = stripe_keys["secret_key"]
 
@@ -118,6 +119,23 @@ def callback_login_sso():
 
 # end region
 
+def verify_captcha_token(token):
+    recaptcha_secret_key = '6LeVETMnAAAAALGi8Z7sSvQ9HM_GkMD7wQUU2ZLG'  # Replace with your actual secret key
+    recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify'
+    data = {
+        'secret': recaptcha_secret_key,
+        'response': token
+    }
+    response = requests.post(recaptcha_url, data=data)
+    result = response.json()
+
+    # Check the result from the captcha verification
+    if result['success']:
+        # Captcha verification successful, continue processing
+        return True
+    else:
+        # Captcha verification failed, handle accordingly
+        return False
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -138,6 +156,15 @@ def login():
     if request.method == "POST":
         username = request.form.get('username')
         password = request.form.get('password')
+        recaptcha_token = request.form.get('recaptchaToken')
+
+        # // veryfy capcha
+        if not recaptcha_token or not verify_captcha_token(recaptcha_token):
+            return render_template('401.html')
+
+
+
+
         user = utils.check_login(username=username, password=password)
         if user:
             login_user(user=user)

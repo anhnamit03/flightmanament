@@ -15,37 +15,56 @@
   <script src="https://www.google.com/recaptcha/enterprise.js?render=6LelnEYpAAAAAN5Rv8egO0dM9AZhIqWyShglphY9"></script>
   <script src='https://www.google.com/recaptcha/api.js'></script>
 
+<!-- check recapcha is checked-->
+ <script>
+     function onSubmitForm(event) {
+
+                event.preventDefault();
+
+                var recaptchaToken = document.getElementById("recaptchaToken").value;
+
+                if (!recaptchaToken) {
+                    alert("Please complete the reCAPTCHA verification.");
+                    return;
+                }
+
+                document.getElementById("loginForm").submit();
+            }
+</script>
 
 
             <div class="form login form_login">
                 <div class="form-content">
                     <h1 class="login_header">Đăng nhập</h1>
-                    <form method="post" action="{{ url_for('login') }}">
-                        <div class="field input-field">
-                            <input type="text" placeholder="Tài khoản" class="input" id="username" name="username">
-                        </div>
+<form method="post" action="{{ url_for('login') }}" id="loginForm" onsubmit="onSubmitForm(event)">
+        <div class="field input-field">
+            <input type="text" placeholder="Tài khoản" class="input" id="username" name="username">
+        </div>
 
-                        <div class="field input-field">
-                            <input type="password" placeholder="Mật khẩu" class="password" id="password" name="password">
-                            <i class='bx bx-hide eye-icon'></i>
-                        </div>
+        <div class="field input-field">
+            <input type="password" placeholder="Mật khẩu" class="password" id="password" name="password">
+            <i class='bx bx-hide eye-icon'></i>
+        </div>
 
-                        <div class="media-options">
-                            <!-- Replace with your own reCAPTCHA sitekey -->
-                            <div class="g-recaptcha" data-sitekey="6LeVETMnAAAAAF53N3_AWXSi5yRiMkFGsAGBm4gQ" data-callback="onRecaptchaSuccess"></div>
-                            <br/>
-                            <!-- Hidden input field to store reCAPTCHA token -->
-                            <input type="hidden" id="recaptchaToken" name="recaptchaToken" value="">
-                        </div>
+        <div class="media-options">
+            <!-- Replace with your own reCAPTCHA sitekey -->
+            <div class="g-recaptcha" data-sitekey="6LeVETMnAAAAAF53N3_AWXSi5yRiMkFGsAGBm4gQ" data-callback="onRecaptchaSuccess"></div>
+            <br />
+            <!-- Hidden input field to store reCAPTCHA token -->
+            <input type="hidden" id="recaptchaToken" name="recaptchaToken" value="">
+        </div>
 
-                        <div class="form-link">
-                            <a href="#" class="forgot-pass">Quên mật khẩu?</a>
-                        </div>
+        <div class="form-link">
+            <a href="#" class="forgot-pass">Quên mật khẩu?</a>
+        </div>
 
-                        <div class="field button-field">
-                            <button type="submit">Đăng nhập</button>
-                        </div>
-                    </form>
+        <div class="field button-field">
+            <!-- Use type="submit" for form submission -->
+            <button type="submit">Đăng nhập</button>
+        </div>
+    </form>
+
+
                     <div class="form-link">
                         <span>Bạn chưa có tài khoản? <a href="./signup.html" class="link signup-link">Đăng ký ngay</a></span>
                     </div>
@@ -67,6 +86,27 @@
 
 
             </div>
+
+
+<script type="text/javascript">
+  var onloadCallback = function() {
+  console.log("capcha ready")
+  };
+</script>
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+    async defer>
+</script>
+
+<script>
+    function onRecaptchaSuccess(response) {
+        // Store the reCAPTCHA token in the hidden input field
+        document.getElementById("recaptchaToken").value = response;
+
+        // here token
+        console.log(response)
+    }
+</script>
+
 
 
 
