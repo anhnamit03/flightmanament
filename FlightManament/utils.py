@@ -10,15 +10,6 @@ from FlightManament.models import FlightRouteType
 from datetime import datetime, timedelta
 
 
-def distance(first_place, second_place):
-    return geodesic(first_place, second_place)
-
-
-def read_json(path):
-    with open(path, 'r') as f:
-        return json.load(f)
-
-
 def add_user(name, password, username, **kwargs):
     password = hashlib.md5(password.strip().encode('utf-8')).hexdigest()
     user = User(name=name.strip(),
@@ -88,61 +79,6 @@ def get_flight(destination, departure, go_date):
         session.close()
 
 
-# trả về kí hiệu sân bay
-def get_sign(destination, departure):
-    session = db.session()
-
-    try:
-        # Sử dụng các alias để tham chiếu đến các bảng khi cần thiết
-        destination_alias = aliased(Airport, name="destination_airport")
-        departure_alias = aliased(Airport, name="departure_airport")
-
-        # Thực hiện truy vấn để lấy thông tin từ bảng Airport cho cả destination và departure
-        route_info = (
-            session.query(
-                destination_alias.sign.label("destination_sign"),
-                departure_alias.sign.label("departure_sign")
-            )
-            .filter(destination_alias.name == destination)
-            .filter(departure_alias.name == departure)
-            .first()
-        )
-
-        if route_info:
-            # Chuyển đổi kết quả thành tuple ("fff", "ttt")
-            result_tuple = (route_info.destination_sign, route_info.departure_sign)
-            return result_tuple
-        else:
-            return None
-
-    finally:
-        session.close()
-
-
-# trả về id thể loại chuyến bay
-def get_type_flight_route(id_flight):
-    session = db.session()
-
-    try:
-        # Thực hiện truy vấn để lấy id từ bảng FlightRouteType
-        type_id = (
-            session.query(FlightRouteType.id)
-            .join(FlightRoute, FlightRoute.id_flight_route_type == FlightRouteType.id)
-            .join(Flight, Flight.id_flight_route == FlightRoute.id)
-            .filter(Flight.id == id_flight)
-            .first()
-        )
-
-        if type_id:
-            # Trả về id từ bảng FlightRouteType
-            return type_id.id
-        else:
-            return None
-
-    finally:
-        session.close()
-
-
 def check_login_customer(cccd):
     if cccd:
         # Sử dụng .first() để trả về bản ghi đầu tiên hoặc None nếu không tìm thấy
@@ -156,75 +92,26 @@ def get_customer_by_id(user_id):
 
 # Trả về danh sách ghế của máy bay ứng với chuyến bay
 def get_seat_ids_by_flight_id_and_type_seat(flight_id, type_seat_id):
-    try:
-        # Lấy id_plane từ bảng Flight
-        id_plane = db.session.query(Flight.id_plane).filter(Flight.id == flight_id).scalar()
+    with app.app_context():
+        try:
+            # Lấy id_plane từ bảng Flight
+            id_plane = db.session.query(Flight.id_plane).filter(Flight.id == flight_id).scalar()
 
-        # Thực hiện truy vấn trong bảng Seat
-        seats_query = db.session.query(Seat.id).filter(Seat.id_type_seat == type_seat_id, Seat.id_plane == id_plane)
+            # Thực hiện truy vấn trong bảng Seat
+            seats_query = db.session.query(Seat.id).filter(Seat.id_type_seat == type_seat_id, Seat.id_plane == id_plane)
 
-        # Chuyển kết quả thành danh sách (list)
-        seat_ids_list = [seat_id[0] for seat_id in seats_query.all()]
+            # Chuyển kết quả thành danh sách (list)
+            seat_ids_list = [seat_id[0] for seat_id in seats_query.all()]
 
-        return seat_ids_list
+            return seat_ids_list
 
-    except Exception as e:
-        # Xử lý lỗi nếu có
-        print(f"Error: {e}")
-        return None
-    finally:
-        # Đóng phiên làm việc với cơ sở dữ liệu
-        db.session.close()
-
-
-# Trả về mô tả của thể loại chuyến bay
-def get_decription_type_flight_route(id_flight_route_type):
-    session = db.session()
-
-    try:
-        # Thực hiện truy vấn để lấy mô tả từ bảng FlightRouteType
-        type_info = (
-            session.query(FlightRouteType.description)
-            .filter(FlightRouteType.id == id_flight_route_type)
-            .first()
-        )
-
-        if type_info:
-            # Trả về mô tả từ bảng FlightRouteType
-            return type_info.description
-        else:
+        except Exception as e:
+            # Xử lý lỗi nếu có
+            print(f"Error: {e}")
             return None
-
-    finally:
-        session.close()
-
-
-def get_seat_ids_by_flight_id(flight_id):
-    session = db.session()
-
-    try:
-        # Lấy thông tin về id_plane từ bảng Flight
-        id_plane = (
-            session.query(Flight.id_plane)
-            .filter(Flight.id == flight_id)
-            .scalar()
-        )
-
-        # Lấy danh sách id ghế từ bảng Seat
-        seat_ids = (
-            session.query(Seat.id)
-            .join(Plane, Plane.id == Seat.id_plane)
-            .filter(Plane.id == id_plane)
-            .all()
-        )
-
-        # Chuyển đổi danh sách kết quả từ tuple sang list
-        seat_ids_list = [seat_id[0] for seat_id in seat_ids]
-
-        return seat_ids_list
-
-    finally:
-        session.close()
+        finally:
+            # Đóng phiên làm việc với cơ sở dữ liệu
+            db.session.close()
 
 
 def is_greater_than_hours_from_now(input_datetime_str, hour):
@@ -245,3 +132,296 @@ def is_greater_than_hours_from_now(input_datetime_str, hour):
         # Xử lý nếu có lỗi chuyển đổi
         print("Invalid datetime format.")
         return False
+
+
+# Trả về danh sách các ghế dẫ mua vé
+def get_the_list_of_reserved_seats(id_flight):
+    with app.app_context():
+        try:
+            # Lấy danh sách id_seat từ bảng Ticket dựa trên id_flight
+            seat_ids = Ticket.query.filter(Ticket.id_flight == id_flight).with_entities(Ticket.id_seat).all()
+
+            # Chuyển kết quả thành danh sách (list)
+            seat_ids_list = [seat_id[0] for seat_id in seat_ids]
+
+            return seat_ids_list
+
+        except Exception as e:
+            # Xử lý lỗi nếu có
+            print(f"Error: {e}")
+            return None
+        finally:
+            # Đóng phiên làm việc với cơ sở dữ liệu
+            db.session.close()
+
+
+# Lấy ra số tiền cho thể loại cụ thể
+def get_value_by_id_type_seat(id_type_seat):
+    with app.app_context():
+        try:
+            # Lấy giá trị từ bảng TypeSeat dựa trên id_type_seat
+            value = TypeSeat.query.filter(TypeSeat.id == id_type_seat).value(TypeSeat.value)
+
+            return value
+
+        except Exception as e:
+            # Xử lý lỗi nếu có
+            print(f"Error: {e}")
+            return None
+        finally:
+            # Đóng phiên làm việc với cơ sở dữ liệu
+            db.session.close()
+
+
+#  Tính giá cho 1 vé
+def calculate_for_a_ticket(length, price):
+    return length * price
+
+
+# Trả về tuyến bay tương ứng
+def get_flight_route_id_by_flight_id(id_flight):
+    with app.app_context():
+        try:
+            # Lấy id_flight_route từ bảng Flight dựa trên id_flight
+            flight_route_id = db.session.query(Flight.id_flight_route).filter(Flight.id == id_flight).scalar()
+
+            return flight_route_id
+
+        except Exception as e:
+            # Xử lý lỗi nếu có
+            print(f"Error: {e}")
+            return None
+        finally:
+            # Đóng phiên làm việc với cơ sở dữ liệu
+            db.session.close()
+
+
+def get_airport_by_id(id_airport):
+    with app.app_context():
+        try:
+            # Lấy đối tượng Airport từ bảng Airport dựa trên id_airport
+            airport = db.session.query(Airport).filter(Airport.id == id_airport).first()
+
+            return airport
+
+        except Exception as e:
+            # Xử lý lỗi nếu có
+            print(f"Error: {e}")
+            return None
+        finally:
+            # Đóng phiên làm việc
+            db.session.close()
+
+
+def get_airplane_by_id(id_airplane):
+    with app.app_context():
+        try:
+            # Lấy đối tượng Airport từ bảng Airport dựa trên id_airport
+            plane = db.session.query(Plane).filter(Airport.id == id_airplane).first()
+
+            return plane
+
+        except Exception as e:
+            # Xử lý lỗi nếu có
+            print(f"Error: {e}")
+            return None
+        finally:
+            # Đóng phiên làm việc
+            db.session.close()
+
+
+def distance_between_airport(airport_first_place, airport_second_place):
+    # Kiểm tra xem có đối tượng sân bay hay không
+    if airport_first_place and airport_second_place:
+        # Lấy tọa độ của cả hai sân bay
+        coordinates_first_place = (airport_first_place.longitude, airport_first_place.latitude)
+        coordinates_second_place = (airport_second_place.longitude, airport_second_place.latitude)
+
+        # Tính khoảng cách bằng Geopy
+        distance = geodesic(coordinates_first_place, coordinates_second_place).km
+        return distance
+    else:
+        print("Error: Invalid airport objects.")
+        return None
+
+
+def get_all_type_seat_ids():
+    with app.app_context():
+        try:
+            # Lấy danh sách id của bảng TypeSeat
+            type_seat_ids = db.session.query(TypeSeat.id).all()
+
+            # Chuyển kết quả thành danh sách (list)
+            type_seat_ids_list = [type_seat_id[0] for type_seat_id in type_seat_ids]
+
+            return type_seat_ids_list
+
+        except Exception as e:
+            # Xử lý lỗi nếu có
+            print(f"Error: {e}")
+            return None
+        finally:
+            # Đóng phiên làm việc với cơ sở dữ liệu
+            db.session.close()
+
+
+def calculate_length_flight(destination, departure, flight_schedules):
+    length = 0
+
+    if flight_schedules == None:
+        length = distance_between_airport(destination, departure)
+    elif len(flight_schedules) == 1:
+        length = distance_between_airport(destination, get_airport_by_id(flight_schedules)[0].id_airport) \
+                 + distance_between_airport(departure, get_airport_by_id(flight_schedules)[0].id_airport)
+    else:
+        length = distance_between_airport(get_airport_by_id(flight_schedules[1].id_airport),
+                                          get_airport_by_id(flight_schedules[0].id_airport))
+        for i in range(len(flight_schedules)):
+
+            if flight_schedules[i].id_stop_point == 1:
+                length += distance_between_airport(destination, get_airport_by_id(flight_schedules[i].id_airport))
+            if flight_schedules[i].id_stop_point == 2:
+                length += distance_between_airport(departure, get_airport_by_id(flight_schedules[i].id_airport))
+        return length
+
+
+def get_flight_route_by_id(id_flight_router):
+    with app.app_context():
+        return FlightRoute.query.get(id_flight_router)
+
+def get_type_flight_description(id_type_flight):
+    with app.app_context():
+        return FlightRouteType.query.get(id_type_flight).description
+
+
+def get_flight_schedules_by_route_id(id_flight_route):
+    with app.app_context():
+        return FlightSchedule.query.filter_by(id_flight_route=id_flight_route).all()
+
+
+def get_stop_times(flight_schedules):
+    stop_time = 0
+    if flight_schedules:
+        for flight_schedule in flight_schedules:
+            stop_time += flight_schedule.time_stop
+    return stop_time
+
+
+def get_flight_by_id(id_flight):
+    with app.app_context():
+        return db.session.query(Flight).filter(Flight.id == id_flight).first()
+
+
+def extract_hour_minute(datetime_str):
+    try:
+        hour_minute_str = datetime_str.strftime("%H:%M")
+
+        return hour_minute_str
+
+    except ValueError:
+        # Xử lý nếu có lỗi chuyển đổi
+        print("Invalid datetime format.")
+        return None
+
+def convert_minutes_to_hours_and_minutes(minutes):
+    # Tính số giờ và số phút
+    hours = minutes // 60
+    remaining_minutes = minutes % 60
+
+    # Tạo chuỗi kết quả
+    result_str = f"{hours} giờ {remaining_minutes} phút"
+
+    return result_str
+
+
+def calculate_end_time(start_time, time_fly):
+    # Chuyển đổi thời gian bắt đầu từ chuỗi thành đối tượng datetime
+    start_datetime = datetime.strptime(start_time, "%H:%M")
+
+    # Tính thời gian bay thành đối tượng timedelta
+    fly_duration = timedelta(minutes=time_fly)
+
+    # Tính thời gian kết thúc bằng cách cộng thời gian bắt đầu và thời gian bay
+    end_datetime = start_datetime + fly_duration
+
+    # Chuyển đối tượng datetime thành chuỗi định dạng giờ:phút
+    end_time_str = end_datetime.strftime("%H:%M")
+
+    return end_time_str
+
+
+def get_ticketrole_values():
+    with app.app_context():
+        try:
+            # Lấy danh sách giá trị từ cột 'value' trong bảng 'ticketrole'
+            values = db.session.query(TicketRole.value).all()
+
+            # Chuyển đổi kết quả từ list của các tuple thành list của các giá trị
+            values_list = [value[0] for value in values]
+
+            return values_list
+
+        except Exception as e:
+            # Xử lý lỗi nếu có
+            print(f"Error: {e}")
+            return None
+        finally:
+            # Đóng phiên làm việc
+            db.session.close()
+# Function cho việc đặt vé
+def reder_interface_for_book_ticket_customer(id_flight):
+
+    id_flight_router = get_flight_route_id_by_flight_id(id_flight)
+    flight_router = get_flight_route_by_id(id_flight_router)
+    flight = get_flight_by_id(id_flight)
+    destination = get_airport_by_id(flight_router.destination)
+    departure = get_airport_by_id(flight_router.departure)
+    flight_schedules = get_flight_schedules_by_route_id(id_flight_router)
+    stop_time = get_stop_times(flight_schedules)
+    list_seat_rank_1 = get_seat_ids_by_flight_id_and_type_seat(id_flight, 1)
+    list_seat_rank_2 = get_seat_ids_by_flight_id_and_type_seat(id_flight, 2)
+    list_seated = get_the_list_of_reserved_seats(id_flight)
+    length = calculate_length_flight(destination, departure, flight_schedules)
+    plane = get_airplane_by_id(flight.id_plane)
+    price_seat_rank_2 = int(get_value_by_id_type_seat(1) * length)
+    price_seat_rank_1 = int(get_value_by_id_type_seat(2) * length)
+    start_time = extract_hour_minute(flight.start_time)
+    all_time_fly = convert_minutes_to_hours_and_minutes(stop_time+int(length/plane.flight_speed*60))
+    end_time = calculate_end_time(start_time,stop_time+int(length/plane.flight_speed*60))
+    type_flight = get_type_flight_description(flight_router.id_flight_route_type)
+    stop_point_1 = None
+    stop_point_2 = None
+
+
+    for schedule in flight_schedules:
+        if schedule.id_stop_point == 1:
+            stop_point_1 = get_airport_by_id(schedule.id_airport).name
+        if schedule.id_stop_point == 2:
+            stop_point_2 = get_airport_by_id(schedule.id_airport).name
+
+    list_stop_points = [stop_point_1, stop_point_2]
+    class info_book_ticket(object):
+        def __init__(self,start_time, destination_sign, departure_sign, all_time_fly,
+                     end_time,list_stop_points, list_seat_rank_1, list_seat_rank_2, price_seat_rank_1,
+                     price_seat_rank_2,list_seated,type_flight):
+            self.start_time = start_time
+            self.destination_sign = destination_sign
+            self.departure_sign = departure_sign
+            self.all_time_fly =all_time_fly
+            self.end_time = end_time
+            self.list_stop_points = list_stop_points
+            self.list_seat_rank_1 = list_seat_rank_1
+            self.list_seat_rank_2 = list_seat_rank_2
+            self.price_seat_rank_1 = price_seat_rank_1
+            self.price_seat_rank_2 = price_seat_rank_2
+            self.list_seated = list_seated
+            self.type_flight = type_flight
+
+
+    book_ticket_info = info_book_ticket(start_time, destination.sign, departure.sign, all_time_fly,
+                     end_time,list_stop_points, list_seat_rank_1, list_seat_rank_2, price_seat_rank_1,
+                     price_seat_rank_2,list_seated,type_flight)
+    return book_ticket_info
+
+
+

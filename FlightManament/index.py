@@ -26,11 +26,19 @@ def home():
 
 @app.route("/bookticket", methods=['get', 'post'])
 def book_ticket():
+
     destinations = utils.get_name_airport()
     if request.method.__eq__("GET"):
         destination = request.args.get('destination')
         departure = request.args.get('departure')
         go_date = request.args.get('go_date')
+        list_flight_id= utils.get_flight(destination, departure, go_date)
+        all_flight = []  # Khởi tạo danh sách trống
+        if list_flight_id:
+            for flight_id in list_flight_id:
+                flight_info = utils.reder_interface_for_book_ticket_customer(flight_id)
+                if flight_info:
+                    all_flight.append(flight_info)
 
 
     return render_template("bookticket.html",
@@ -38,6 +46,8 @@ def book_ticket():
                            destination=destination,
                            departure=departure,
                            go_date=go_date,
+                           all_flight=all_flight,
+                           list_flight_id=list_flight_id
 
                            )
 
@@ -246,9 +256,6 @@ def create_checkout_session():
         return jsonify(error=str(e)), 403
 
 
-
-
-
 @app.route("/success")
 def success():
     return render_template("success.html")
@@ -259,10 +266,10 @@ def cancelled():
     return render_template("cancelled.html")
 
 
-
 @app.route('/send_noti')
 def index():
     return render_template('send_noti.html')
+
 
 @app.route('/send_notification', methods=['POST'])
 def send_notification():
@@ -301,6 +308,7 @@ def send_notification():
 
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)})
+
 
 
 def handle_checkout_session(session):

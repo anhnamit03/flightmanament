@@ -149,38 +149,39 @@
                 </div>
 
                 <div class="card_tickets">
+                    {% for flight in all_flight %}
 
                     <div class="card_ticket">
                         <!-- // row -->
                         <div class="group-content">
                             <div class="card-content">
                                 <div class=" from">
-                                    <h3 class="time_from">05:30</h3>
-                                    <h4 class="sign_from">SGN</h4>
+                                    <h3 class="time_from">{{ flight.start_time}}</h3>
+                                    <h4 class="sign_from">{{ flight.destination_sign }}</h4>
                                 </div>
 
                                 <div class=" center">
                                     <i class="fa-solid fa-plane"></i>
-                                    <h5 class="time_all">2 giờ 15 phút</h5>
+                                    <h5 class="time_all">{{ flight.all_time_fly }}</h5>
                                 </div>
 
                                 <div class=" to">
-                                    <h3 class="time_to">07:30</h3>
-                                    <h4 class="sign_to">HAN</h4>
+                                    <h3 class="time_to">{{ flight.end_time }}</h3>
+                                    <h4 class="sign_to">{{ flight.departure_sign }}</h4>
                                 </div>
                             </div>
 
 
                             <div class=" prices">
                                 <div class="price_1">
-                                    <a href="#">2.000.000 VNĐ</a>
+                                    <a href="#" class="price">{{ flight.price_seat_rank_1 }} VNĐ</a>
                                     <i class="fa-solid fa-chevron-down"></i>
 
 
                                 </div>
 
                                 <div class="price_2">
-                                    <a href="#">4.000.000 VNĐ</a>
+                                    <a href="#" class="price">{{ flight.price_seat_rank_2 }} VNĐ</a>
                                     <i class="fa-solid fa-chevron-down"></i>
                                 </div>
                             </div>
@@ -190,17 +191,19 @@
 
                             <div class="offer-branch">
                                  <div style="display:block; ">
-                            <h3 style="text-align:center; align-items:center; color:indianred ">{{type_route}}</h3>
+                            <h3 style="text-align:center; align-items:center; color:indianred ">{{flight.type_flight}}</h3>
                             <br>
+
+                                     {% for i in range(flight.list_stop_points|length) %}
+
                             <div style="text-align:center; align-items:center;border: 2px solid #018de5; padding: 10px;">
-                                <h4 style="display:inline-flex; color:#018de5">điểm dừng 1:</h4>
-                                <span style="margin-left:150px">điểm dừng 1:</span>
+                                <h4 style="display:inline-flex; color:#018de5">điểm dừng {{  i+1 }}:</h4>
+                                <span style="margin-left:150px">{{ flight.list_stop_points[i] }}</span>
                             </div>
-                            <br>
-                            <div style="text-align:center; align-items:center;border: 2px solid #018de5; padding: 10px;">
-                                <h4 style="display:inline-flex; color:#018de5">điểm dừng 1:</h4>
-                                <span style="margin-left:150px">điểm dừng 1:</span>
-                            </div>
+
+                                     {% endfor %}
+
+
 
                         </div>
 
@@ -296,6 +299,7 @@
                             </div>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
 
             </div>
@@ -303,13 +307,9 @@
     </div>
 </div>
 </div>
-<h1>{{seat}}</h1>
-<h1>{{quantity}}</h1>
-<h1>{{go_date}}</h1>
-<h1>{{destination}}</h1>
-<h1>{{departure}}</h1>
-<h1>{{list_id_flight}}</h1>
-<h1>{{idsffs}}</h1>
+<h1>{{all_flight}}</h1>
+<h1>{{list_flight_id}}</h1>
+
 <script>
     var fromDateShow = document.querySelector('#destination');
     var toDateShow = document.querySelector('#departure');
@@ -360,6 +360,7 @@
             });
         });
     });
+
 </script>
 <script src="{{ url_for('static', filename='javascript/bookticket.js')}}"></script>
 

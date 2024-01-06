@@ -53,13 +53,14 @@ DROP TABLE IF EXISTS `customer`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `customer` (
   `name` varchar(255) DEFAULT NULL,
-  `CCCD` varchar(12) DEFAULT NULL,
+  `CCCD` varchar(12) NOT NULL,
   `gender` tinyint(1) DEFAULT NULL,
   `phone` varchar(10) NOT NULL,
   `email` varchar(50) NOT NULL,
   `birthday` varchar(50) NOT NULL,
   `id` int NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `CCCD` (`CCCD`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -114,6 +115,7 @@ DROP TABLE IF EXISTS `flightrole`;
 CREATE TABLE `flightrole` (
   `name` varchar(50) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
+  `value` int DEFAULT NULL,
   `id` int NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -138,7 +140,6 @@ DROP TABLE IF EXISTS `flightroleflight`;
 CREATE TABLE `flightroleflight` (
   `id_flight_role` int NOT NULL,
   `id_flight` int NOT NULL,
-  `notes` varchar(50) DEFAULT NULL,
   `id` int NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
   KEY `id_flight_role` (`id_flight_role`),
@@ -253,6 +254,7 @@ DROP TABLE IF EXISTS `plane`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `plane` (
   `aircraft_license_plate` varchar(7) NOT NULL,
+  `flight_speed` int DEFAULT NULL,
   `id` int NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -468,6 +470,7 @@ DROP TABLE IF EXISTS `ticketrole`;
 CREATE TABLE `ticketrole` (
   `name` varchar(50) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
+  `value` int DEFAULT NULL,
   `id` int NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -492,7 +495,6 @@ DROP TABLE IF EXISTS `ticketroleticket`;
 CREATE TABLE `ticketroleticket` (
   `id_ticket_role` int NOT NULL,
   `id_ticket` int NOT NULL,
-  `notes` varchar(50) DEFAULT NULL,
   `id` int NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
   KEY `id_ticket_role` (`id_ticket_role`),
@@ -605,4 +607,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-01-03 18:35:36
+-- Dump completed on 2024-01-06 16:40:45

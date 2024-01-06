@@ -49,6 +49,7 @@ class FlightRole(BaseModel):
     __tablename__ = "FlightRole"
     name = Column(String(50), nullable=False)
     description = Column(String(255))
+    value = Column(Integer)
 
 
 class FlightRoute(BaseModel):
@@ -74,11 +75,13 @@ class FlightSchedule(BaseModel):
     time_stop = Column(Integer)
     description = Column(String(255))
 
+
+
 class FlightRoleFlight(BaseModel):
     __tablename__ = "FlightRoleFlight"
     id_flight_role = Column(Integer, ForeignKey('FlightRole.id'), nullable=False)
     id_flight = Column(Integer, ForeignKey("Flight.id"), nullable=False)
-    notes = Column(String(50))
+
 
 
 class TypeSeat(BaseModel):
@@ -96,6 +99,7 @@ class Seat(BaseModel):
 class Plane(BaseModel):
     __tablename__ = "Plane"
     aircraft_license_plate = Column(String(7), nullable=False)
+    flight_speed = Column(Integer)
 
 
 class TicketStatus(BaseModel):
@@ -107,13 +111,14 @@ class TicketRole(BaseModel):
     __tablename__ = "TicketRole"
     name = Column(String(50), nullable=False)
     description = Column(String(255))
+    value = Column(Integer)
 
 
 class TicketRoleTicket(BaseModel):
     __tablename__ = "TicketRoleTicket"
     id_ticket_role = Column(Integer, ForeignKey("TicketRole.id"), nullable=False)
     id_ticket = Column(Integer, ForeignKey("Ticket.id"), nullable=False)
-    notes = Column(String(50))
+
 
 
 class Ticket(BaseModel):
