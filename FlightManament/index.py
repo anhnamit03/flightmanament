@@ -1,11 +1,13 @@
 import math
+import time
+
 import cloudinary.uploader
 import flask
 import flask_login
 import stripe
 import utils
 import requests
-from flask import render_template, request, redirect, url_for, session, jsonify
+from flask import render_template, request, redirect, url_for, session, jsonify, Response
 
 from flask_login import login_required, current_user, login_user
 
@@ -271,25 +273,36 @@ def cancelled():
 def index():
     return render_template('send_noti.html')
 
+@app.route('/firebase-messaging-sw.js')
+def firebase_messaging_sw():
+    # Assuming 'firebase-messaging-sw.js' is in the 'static' folder
+    with open('static/firebase-messaging-sw.js', 'r') as file:
+        content = file.read()
+    response = Response(content, content_type='application/javascript')
+    return response
+
 @app.route('/send_notification', methods=['POST'])
 def send_notification():
     try:
-        FCM_SERVER_KEY = 'YOUR_SERVER_KEY'
+        FCM_SERVER_KEY = 'AAAAsnOpY00:APA91bGP21V5yJ_tcs3ZiSy-zrAwSBth0DXW8UsMMU9vNLxJpx8PGc99FOJIm62rneze1Bu5o2KtSeehKZAZki8Xpky4n5Jcjc2K7xVn-PlVwaN56bDGRlt2EDNMKuxBnwrpcId4Zzbs'
         FCM_ENDPOINT = 'https://fcm.googleapis.com/fcm/send'
         # Get the FCM token from the request
-        token = request.form.get('token')
+        token = request.json.get('token')
 
         # Customize your notification payload
         notification_payload = {
             'to': token,
             'notification': {
-                'title': 'Your Notification Title',
-                'body': 'Your Notification Body',
+                'title': 'Bạn đã đặt hàng thành công',
+                'body': 'Bạn đã đặt hàng thành công vui lòng vào email để kiểm tra',
                 'click_action': 'FLUTTER_NOTIFICATION_CLICK'  # Adjust as needed
             },
             'data': {
-                'key1': 'value1',
-                'key2': 'value2'
+                'title': 'Bạn đã đặt hàng thành công',
+                'body': 'Bạn đã đặt hàng thành công vui lòng vào email để kiểm tra',
+                'icon': 'https://www.honda.com.vn/o-to/san-pham/honda-city/assets/imgs/message/bg_popup.jpg',
+                'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+
             }
         }
 
@@ -298,8 +311,10 @@ def send_notification():
             'Authorization': f'key={FCM_SERVER_KEY}'
         }
 
-        # Send the notification to FCM
+        print('FCM Response:', token)
+
         response = requests.post(FCM_ENDPOINT, json=notification_payload, headers=headers)
+        print('FCM Response:', response.text)
 
         if response.status_code == 200:
             return jsonify({'success': True, 'message': 'Notification sent successfully'})
