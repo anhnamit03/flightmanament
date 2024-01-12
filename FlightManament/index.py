@@ -1,5 +1,6 @@
 import math
 import time
+import pickle
 
 import cloudinary.uploader
 import flask
@@ -29,29 +30,31 @@ def home():
 
 @app.route("/bookticket", methods=['get', 'post'])
 def book_ticket():
-
+    all_flight = []  # Khởi tạo danh sách trống
     destinations = utils.get_name_airport()
     if request.method.__eq__("GET"):
         destination = request.args.get('destination')
         departure = request.args.get('departure')
         go_date = request.args.get('go_date')
-        list_flight_id= utils.get_flight(destination, departure, go_date)
-        all_flight = []  # Khởi tạo danh sách trống
-        if list_flight_id:
-            for flight_id in list_flight_id:
-                flight_info = utils.reder_interface_for_book_ticket_customer(flight_id)
-                if flight_info:
-                    all_flight.append(flight_info)
+        if destination and departure and go_date:
+            list_flight_id= utils.get_flight(destination, departure, go_date)
 
-
+            if list_flight_id:
+                for flight_id in list_flight_id:
+                    flight_info = utils.reder_interface_for_book_ticket_customer(flight_id)
+                    if flight_info:
+                        all_flight.append(flight_info)
+    list_seat = []
+    if request.method.__eq__("POST"):
+        session["list_seat"] = request.form.getlist('seat')
+        session['selected_flight_id'] = request.form.get('id_flight')
+        return redirect(url_for('test'))
     return render_template("bookticket.html",
                            destinations=destinations,
                            destination=destination,
                            departure=departure,
                            go_date=go_date,
                            all_flight=all_flight,
-                           list_flight_id=list_flight_id
-
                            )
 
 
@@ -229,7 +232,11 @@ def protected():
 
 @app.route('/test')
 def test():
-    return render_template('test.html')
+    selected_flight_id = session.get('selected_flight_id')
+    flight_info = utils.reder_interface_for_book_ticket_customer(selected_flight_id)
+    value_from_session = session.get('list_seat')
+    a =  type(flight_info.list_seat_rank_1)
+    return render_template('test.html',value_from_session=value_from_session, flight_info=flight_info, a=a)
 
 
 @app.route("/401")
@@ -363,6 +370,19 @@ def handle_checkout_session(session):
 def get_publishable_key():
     stripe_config = {"publicKey": stripe_keys["publishable_key"]}
     return jsonify(stripe_config)
+
+
+@app.route("/forme")
+def forme():
+    return render_template("forme.html")
+
+
+
+@app.route("/hrmcheck")
+def hrmcheck():
+    list_role =  utils.get_all_roles()
+    team_flight = utils.get_all_team_flight()
+    return render_template("hr_manager.html",list_role=list_role, team_flight=team_flight)
 
 
 if __name__ == "__main__":

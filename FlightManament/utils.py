@@ -8,6 +8,10 @@ from geopy.distance import geodesic
 from FlightManament import app, db
 from FlightManament.models import FlightRouteType
 from datetime import datetime, timedelta
+from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy import and_
+from sqlalchemy import func
+
 
 
 def add_user(name, password, username, **kwargs):
@@ -38,45 +42,57 @@ def get_user_by_id(user_id):
     return User.query.get(user_id)
 
 
-# Trả về danh sách chuyến bay phù hợp
-def get_flight(destination, departure, go_date):
-    # Bắt đầu một phiên làm việc với cơ sở dữ liệu
-    session = db.session()
-
-    try:
-        # Lấy thông tin về bảng FlightRoute
-        destination_alias = aliased(Airport)
-        departure_alias = aliased(Airport)
-
-        flight_route_info = (
-            session.query(FlightRoute.id)
-            .join(destination_alias, FlightRoute.destination == destination_alias.id)
-            .join(departure_alias, FlightRoute.departure == departure_alias.id)
-            .filter(destination_alias.name == destination)
-            .filter(departure_alias.name == departure)
-            .first()
-        )
-
-        if not flight_route_info:
-            # Không tìm thấy chuyến bay với các điều kiện đã cho
+def get_airport_id_by_name(name):
+    with app.app_context():
+        airport = Airport.query.filter_by(name=name).first()
+        if airport:
+            return airport.id
+        else:
+            # Xử lý trường hợp không tìm thấy sân bay, ví dụ: trả về một giá trị mặc định hoặc nâng cao một ngoại lệ.
             return None
 
-        # Chuyển đổi go_date thành định dạng DateTime
-        go_date = datetime.strptime(go_date, '%Y-%m-%d')
+def get_flight_route_id_by_two_airport(destination_id, departure_id):
+    with app.app_context():
+        try:
+            route_list = FlightRoute.query.filter(and_(FlightRoute.destination == destination_id, FlightRoute.departure == departure_id)).all()
+            return [route.id for route in route_list]
+        except NoResultFound:
+            # Handle the case when no route with the given airports is found
+            return None
 
-        # Lấy thông tin về bảng Flight
-        flight_id = (
-            session.query(Flight.id)
-            .filter(Flight.id_flight_route == flight_route_info.id)
-            .filter(Flight.start_time >= go_date)
-            .first()
-        )
+def get_flight_id_by_route_and_start_time(route_id, start_time_str):
+    with app.app_context():
+        try:
+            # Convert string start_time to datetime object
+            start_time_date = datetime.strptime(start_time_str, "%Y-%m-%d").date()
 
-        return flight_id
+            # Fetch flights that match the route_id and have the same date part in start_time
+            flight_list = Flight.query.filter(
+                and_(
+                    Flight.id_flight_route == route_id,
+                    func.date(Flight.start_time) == start_time_date
+                )
+            ).all()
 
-    finally:
-        # Đảm bảo đóng phiên làm việc với cơ sở dữ liệu sau khi sử dụng xong
-        session.close()
+            return [flight.id for flight in flight_list]
+        except NoResultFound:
+            # Handle the case when no route with the given airports is found
+            return None
+
+# Trả về danh sách chuyến bay phù hợp
+def get_flight(destination, departure, go_date):
+    destination_id = get_airport_id_by_name(destination)
+    departure_id = get_airport_id_by_name(departure)
+    list_routes = get_flight_route_id_by_two_airport(destination_id, departure_id)
+
+    # Initialize an empty list to accumulate flight IDs
+    list_id_flight = []
+
+    for route in list_routes:
+        # Extend the list with flight IDs for the current route
+        list_id_flight.extend(get_flight_id_by_route_and_start_time(route, go_date))
+
+    return list_id_flight
 
 
 def check_login_customer(cccd):
@@ -218,7 +234,6 @@ def get_airplane_by_id(id_airplane):
         try:
             # Lấy đối tượng Airport từ bảng Airport dựa trên id_airport
             plane = db.session.query(Plane).filter(Airport.id == id_airplane).first()
-
             return plane
 
         except Exception as e:
@@ -368,6 +383,27 @@ def get_ticketrole_values():
         finally:
             # Đóng phiên làm việc
             db.session.close()
+
+
+class info_book_ticket(object):
+    def __init__(self,start_time, destination_sign, departure_sign, all_time_fly,
+                end_time,list_stop_points, list_seat_rank_1, list_seat_rank_2, price_seat_rank_1,
+                price_seat_rank_2,list_seated,type_flight,id_flight):
+        self.start_time = start_time
+        self.destination_sign = destination_sign
+        self.departure_sign = departure_sign
+        self.all_time_fly =all_time_fly
+        self.end_time = end_time
+        self.list_stop_points = list_stop_points
+        self.list_seat_rank_1 = list_seat_rank_1
+        self.list_seat_rank_2 = list_seat_rank_2
+        self.price_seat_rank_1 = price_seat_rank_1
+        self.price_seat_rank_2 = price_seat_rank_2
+        self.list_seated = list_seated
+        self.type_flight = type_flight
+        self.id_flight = id_flight
+
+
 # Function cho việc đặt vé
 def reder_interface_for_book_ticket_customer(id_flight):
 
@@ -400,28 +436,35 @@ def reder_interface_for_book_ticket_customer(id_flight):
             stop_point_2 = get_airport_by_id(schedule.id_airport).name
 
     list_stop_points = [stop_point_1, stop_point_2]
-    class info_book_ticket(object):
-        def __init__(self,start_time, destination_sign, departure_sign, all_time_fly,
-                     end_time,list_stop_points, list_seat_rank_1, list_seat_rank_2, price_seat_rank_1,
-                     price_seat_rank_2,list_seated,type_flight):
-            self.start_time = start_time
-            self.destination_sign = destination_sign
-            self.departure_sign = departure_sign
-            self.all_time_fly =all_time_fly
-            self.end_time = end_time
-            self.list_stop_points = list_stop_points
-            self.list_seat_rank_1 = list_seat_rank_1
-            self.list_seat_rank_2 = list_seat_rank_2
-            self.price_seat_rank_1 = price_seat_rank_1
-            self.price_seat_rank_2 = price_seat_rank_2
-            self.list_seated = list_seated
-            self.type_flight = type_flight
+
 
 
     book_ticket_info = info_book_ticket(start_time, destination.sign, departure.sign, all_time_fly,
                      end_time,list_stop_points, list_seat_rank_1, list_seat_rank_2, price_seat_rank_1,
-                     price_seat_rank_2,list_seated,type_flight)
+                     price_seat_rank_2,list_seated,type_flight,flight.id)
     return book_ticket_info
 
+
+def get_all_roles():
+    with app.app_context():
+        roles = Role.query.all()
+        roles_list = [role.__dict__ for role in roles]
+        roles_list = [{key: value for key, value in role.items() if key != '_sa_instance_state'} for role in roles_list]
+        return roles_list
+        db.session.close()
+
+
+def get_all_team_flight():
+    with app.app_context():
+        roles = TeamFlight.query.all()
+        team_flight = [team.__dict__ for team in roles]
+        team_flight = [{key: value for key, value in team.items() if key != '_sa_instance_state'} for team in team_flight]
+        return team_flight
+        db.session.close()
+
+
+if __name__ == '__main__':
+    print(get_all_roles())
+    print(reder_interface_for_book_ticket_customer(1).id_flight)
 
 

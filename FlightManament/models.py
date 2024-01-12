@@ -132,7 +132,7 @@ class Ticket(BaseModel):
     employee_responsible = Column(ForeignKey("User.id"))
 
 
-class Customer(BaseModel, UserMixin):
+class Customer(BaseModel):
     __tablename__ = "Customer"
     name = Column(String(255))
     CCCD = Column(String(12), default=None, nullable=False, unique=True)

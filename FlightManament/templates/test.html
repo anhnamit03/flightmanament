@@ -1,43 +1,59 @@
-<!DOCTYPE html>
-<html lang="vn">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-      {% block title %}{% endblock %}
-    </title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/default.css')}}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css')}}">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='images/Icon.png')}}" type="image/x-icon">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/cardticket.css') }}">
+<section class="articles">
+{% for item in value_from_session %}
+  <article>
+    <div class="article-wrapper">
+      <div class="article-body">
+        <h2>ID chuyến bay:{{ flight_info.id_flight}}</h2>
+          {% if item|int in flight_info.list_seat_rank_1 %}
+            <h3>Thể loại vé: <span>Thương gia</span></h3>
+            <h3>Tiền vé: <span>{{ "{:,.1f}".format(flight_info.price_seat_rank_1) }} VNĐ</span></h3>
+          {% else %}
+            <h3>Thể loại vé: <span>Phổ thông</span></h3>
+            <h3>Tiền vé: <span>{{ "{:,.1f}".format(flight_info.price_seat_rank_2) }} VNĐ</span></h3>
+          {% endif %}
+        <p>Số ghế:{{ item }} </p>
+         <div class="field input-field">
+            <input type="text" placeholder="Họ Và Tên" class="input" id="{{item}}" name="username">
+        </div>
+        <div class="field input-field">
+            <input type="text" placeholder="Số căn cước" class="input" id="cccd" name="username">
+        </div>
+        <div class="field input-field gender">
+            <input type="number" placeholder="Giới Tính" class="input" id="gender" name="username">
+        </div>
+        <div class="field input-field">
+            <input type="text" placeholder="Số điện thoại" class="input" id="phone" name="username">
+        </div>
+        <div class="field input-field">
+            <input type="email" placeholder="Email" class="input" id="email" name="username">
+        </div>
+        <div class="field input-field">
+            <input type="date" placeholder="Ngày Sinh" class="input" id="birday" name="username">
+        </div>
+      </div>
+    </div>
+  </article>
+{% endfor %}
+<button type="submit" class="btn" style="padding: 16px;
+                                                margin-left:1000px;
+                                                width: 160px;
+                                                border-radius: 20px;
+                                                font-size: 1.5rem;
+                                                text-align: center;
+                                                align-items: center;
+                                                background-color: red;
+                                                border: 1px solid #fff;
+                                                color:white;
+                                                cursor: pointer;">
+    Thanh toán
+</button>
 
-    {% block css %}{% endblock %}
-    {% block js %}{% endblock %}
-</head>
-<body>
-    {% block header %}
-        {% include "layout/header.html" %}
-    {% endblock %}
 
 
-    {% block content %}
-    {% endblock %}
 
 
-    {% block footer %}
-        {% include "layout/footer.html" %}
-    {% endblock %}
 
-</body>
-<script src="{{ url_for('static', filename='javascript/home.js')}}"></script>
-</html>
+
+
+</section>

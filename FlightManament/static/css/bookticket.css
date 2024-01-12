@@ -579,21 +579,12 @@ ol {
 
 .row {}
 
-.seats {
 
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-}
 
 .seat{
-  width:20px;
-  margin-left:30px;
-  display: flex;
-  flex: 0 0 14.28571428571429%;
-  padding: 5px;
-  position: relative;
+  width:50px;
+    height:100px
+
 }
 
 .seat:nth-child(3) {
@@ -746,3 +737,25 @@ ol {
 }
 
 
+   .seat-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+  .seatnam {
+    height:60px;
+    align-items: center;
+    text-align:center;
+    width: 10%; /* 25% width để có 4 div trên cùng một dòng */box-sizing: border-box; /* Đảm bảo padding và border không làm tăng kích thước thực của phần tử */
+    padding: 10px; /* Thêm padding nếu cần */
+    margin-right: 5%;
+    margin-left: 5%; /* Thêm margin giữa các div */
+}
+.seatnam .book{
+    display: block;
+    background-color:blue;
+    width: 50px;
+    height: 30px;
+    color: white
+
+}

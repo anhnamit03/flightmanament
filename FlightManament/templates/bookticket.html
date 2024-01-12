@@ -150,13 +150,12 @@
 
                 <div class="card_tickets">
                     {% for flight in all_flight %}
-
                     <div class="card_ticket">
                         <!-- // row -->
                         <div class="group-content">
                             <div class="card-content">
                                 <div class=" from">
-                                    <h3 class="time_from">{{ flight.start_time}}</h3>
+                                    <h3 class="time_from">{{ flight.start_time }}</h3>
                                     <h4 class="sign_from">{{ flight.destination_sign }}</h4>
                                 </div>
 
@@ -174,14 +173,14 @@
 
                             <div class=" prices">
                                 <div class="price_1">
-                                    <a href="#" class="price">{{ flight.price_seat_rank_1 }} VNĐ</a>
+                                    <a href="#" class="price">{{ "{:,.1f}".format(flight.price_seat_rank_2) }} VNĐ</a>
                                     <i class="fa-solid fa-chevron-down"></i>
 
 
                                 </div>
 
                                 <div class="price_2">
-                                    <a href="#" class="price">{{ flight.price_seat_rank_2 }} VNĐ</a>
+                                    <a href="#" class="price">{{ "{:,.1f}".format(flight.price_seat_rank_1) }} VNĐ</a>
                                     <i class="fa-solid fa-chevron-down"></i>
                                 </div>
                             </div>
@@ -250,38 +249,62 @@
 
                                 <div class="extand-ticket">
 
-                                    <form>
-                                        <ol class="cabin fuselage">
+                                    <form action="{{ url_for('book_ticket') }}" method="post" enctype="multipart/form-data">
+                                        <div class="seat-container">
+                                            {% for item in flight.list_seat_rank_1 %}
+                                                {% if item not in flight.list_seated %}
+                                                    <div class="seatnam">
+                                                        <li class="seat">
+                                                            <input type="checkbox" id="{{ item }}" value="{{ item }}" name="seat"  />
+                                                            <label for="{{ item }}">{{item}}</label>
+                                                        </li>
+                                                    </div>
+                                                {% else %}
+                                                    <div class="seatnam ">
+                                                            <div class="book">{{item}}
+                                                            </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                            <div class="cc"style=" display:block;
+                                                width: 100%;
+                                                height:30px;
+                                                background-color:yellowgreen;
+                                                text-align:center;
+                                                color:orangered"
+                                                >
+                                                Đây là ghế hạng 2
+                                            </div>
+                                            {% for item in flight.list_seat_rank_2 %}
+                                                {% if item not in flight.list_seated %}
+                                                    <div class="seatnam">
+                                                        <li class="seat">
+                                                            <input type="checkbox" id="{{item}}" value="{{ item }}" name="seat"/>
+                                                            <label for="{{item}}">{{item}}</label>
+                                                        </li>
+                                                    </div>
+                                                {% else %}
+                                                    <div class="seatnam ">
+                                                            <div class="book">{{item}}
+                                                            </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                             <div class="cc"style=" display:block;
+                                                width: 100%;
+                                                height:30px;
+                                                background-color:yellowgreen;
+                                                text-align:center;
+                                                color:orangered"
+                                                >
+                                                Đây là ghế hạng 1
+                                            </div>
 
-                                            <li class="row row--2">
-                                                <ol class="seats" type="A">
-                                                    <li class="seat">
-                                                        <input type="checkbox" id="1"/>
-                                                        <label for="1">1</label>
-                                                    </li>
-                                                    <li class="seat select">
-                                                        <div class="selectd">2</div>
-                                                    </li>
-                                                    <li class="seat">
-                                                        <input type="checkbox" id="3"/>
-                                                        <label for="3">3</label>
-                                                    </li>
-                                                    <li class="seat">
-                                                        <input type="checkbox" id="4"/>
-                                                        <label for="4">4</label>
-                                                    </li>
-                                                    <li class="seat">
-                                                        <input type="checkbox" id="5"/>
-                                                        <label for="5">5</label>
-                                                    </li>
-                                                    <li class="seat">
-                                                        <input type="checkbox" id="6"/>
-                                                        <label for="6">6</label>
-                                                    </li>
-                                                </ol>
-                                            </li>
-                                        </ol>
+                                        </div>
                                         <br>
+                                        <input type="hidden" name="id_flight" value="{{ flight.id_flight }}" id="id_flight">
+
+
                                         <button type="submit" class="btn" style="padding: 16px;
                                                 margin-left:400px;
                                                 width: 60px;
@@ -299,6 +322,7 @@
                             </div>
                         </div>
                     </div>
+
                     {% endfor %}
                 </div>
 
@@ -306,9 +330,8 @@
         </div>
     </div>
 </div>
+
 </div>
-<h1>{{all_flight}}</h1>
-<h1>{{list_flight_id}}</h1>
 
 <script>
     var fromDateShow = document.querySelector('#destination');
@@ -360,6 +383,7 @@
             });
         });
     });
+
 
 </script>
 <script src="{{ url_for('static', filename='javascript/bookticket.js')}}"></script>
