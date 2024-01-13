@@ -1,0 +1,228 @@
+{% extends "layout/base.html" %}
+
+{% block title %}SN AIRLINE - Kết nối giấc mơ và điểm đến của bạn{% endblock %}
+{% block css %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/flightmanager.css')}}">
+{% endblock %}
+{% block js %}
+
+<script>
+    var checkbox = document.getElementById('2')
+
+    checkbox.disabled = true;
+
+</script>
+{% endblock %}
+{% block content %}
+
+<br><br><br><br><br>
+
+<!-- Booking Tickets -->
+<div class="booking_ticket">
+    <div class="grid">
+        <div class="row_grid">
+
+
+            <div class="col_12">
+
+
+            <div class="card_ticket">
+                <!-- // row -->
+                <div class="group-content price_1 ">
+                    <div class="card-content">
+                        <div class=" from">
+                            <h3 class="time_from">ID: 1</h3>
+                        </div>
+                         <div class=" from">
+                            <h3 class="time_from">SGN</h3>
+
+                        </div>
+
+                        <div class=" center">
+                            <i class="fa-solid fa-plane"></i>
+
+                        </div>
+
+                        <div class=" to">
+
+                            <h3 class="sign_to">HAN</h3>
+                        </div>
+                        <div class=" to">
+                            <h3 class="time_to">Ngày bay: 2024-01-30</h3>
+
+                        </div>
+                        <div class=" to">
+                            <h3 class="time_to">Giờ bay:  08:00</h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class=" prices">
+                        <div class="price_1" >
+                            <a href="#">Thông tin chi tiết</a>
+                            <i class="fa-solid fa-chevron-down"></i>
+
+
+                        </div>
+
+                        <div class="price_2" style="display:None">
+                            <a href="#"></a>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+                <div class="itinerary-part-offer">
+                    <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Chi tiết chuyến bay</h1>
+                        </div>
+
+
+                        <div class="extand-ticket">
+                            <ul>
+                                <li>
+                                    Thể loại chuyến bay: chuyến bay không điểm dừng
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không bao gồm hành lý ký gửi
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Thay đổi mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
+                                    Không được phép đổi chuyến tại sân bay
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
+                                    Hoàn/hủy vé mất phí
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
+                                    Tích lũy 10% số dặm
+                                </li>
+                                <li>
+                                    <a href="#">XEM CHI TIẾT</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                                        <div class="offer-branch">
+                        <div class="content-header">
+                            <h1>Sửa chuyến bay</h1>
+                        </div>
+
+
+                        <div class="extand-ticket">
+                           <form>
+                                <div style="height:30px">
+                                    <label for="name" class="form__label">Name </label>
+                                  <input type="text" placeholder="Name" class="form__input" id="name"  style="height:30px;width:70%"/>
+
+                              </div>
+                               <br />
+                                 <div style="height:30px">
+                                    <label for="name" class="form__label">Name </label>
+                                  <input type="text" placeholder="Name" class="form__input" id="name"  style="height:30px;width:70%"/>
+
+                              </div>
+                               <br />
+                                 <div style="height:30px">
+                                    <label for="name" class="form__label">Name </label>
+                                  <input type="text" placeholder="Name" class="form__input" id="name"  style="height:30px;width:70%"/>
+
+                              </div>
+                               <br />
+                                 <div style="height:30px">
+                                    <label for="name" class="form__label">Name </label>
+                                  <input type="text" placeholder="Name" class="form__input" id="name"  style="height:30px;width:70%"/>
+
+                              </div>
+                               <br />
+
+
+
+
+
+                           </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+</div>
+
+<script>
+    var fromDateShow = document.querySelector('#destination');
+    var toDateShow = document.querySelector('#departure');
+    var placeArray = [];
+    var destinations = {{ destinations | tojson }};
+
+    var fromDateOptions = '<option></option>';
+    destinations.forEach((destination) => {
+        fromDateOptions += `<option>${destination}</option>`;
+
+    });
+
+    fromDateShow.innerHTML = fromDateOptions;
+
+    fromDateShow.addEventListener("change", function () {
+        var selectedValue = this.value;
+
+        var departures = destinations.filter(function(item) {
+            return item !== selectedValue;
+        });
+
+
+        var toDateOptions = '<option></option>';
+        departures.forEach((departure) => {
+            toDateOptions += `<option>${departure}</option>`;
+
+        });
+        toDateShow.innerHTML = toDateOptions;
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("quantity_child").addEventListener("click", function() {
+            var quantityValue = document.getElementById("quantity_child").innerText;
+
+            fetch("/book_ticket", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ "quantity": quantityValue })
+            })
+                .then(response => response.json())
+                .then(data => {
+                console.log(data);
+            })
+                .catch(error => {
+                console.error("Error:", error);
+            });
+        });
+    });
+
+
+</script>
+<script src="{{ url_for('static', filename='javascript/flightmanager.js')}}"></script>
+
+{% endblock %}
+

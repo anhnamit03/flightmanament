@@ -320,7 +320,7 @@
 
 .card_ticket .prices{
     display: flex;
-    width: 55%;
+    margin-left:100px;
 }
 
 .card_ticket .prices div a{
@@ -338,7 +338,7 @@
 .card-content{
     display: flex;
     justify-content: space-between;
-    width: 45%;
+    width: 75%;
 }
 .prices div{
 
@@ -352,19 +352,18 @@
 
 }
 .price_1{
-    width: 50%;
     background-color:#beddf0;
     border: 1px solid #0a9af3;
 }
 .price_2{
     background-color:#fbf9e4;
     border:1px solid #e3dd99;
-    width: 50%
+
 }
 .offer-branch {
     display: flex;
     flex-direction: column;
-    width: 25%;
+    width: 50%;
     border: 1px solid #c8c8c8;
     border-radius: 4px;
 }
