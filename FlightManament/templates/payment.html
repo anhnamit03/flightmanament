@@ -1,133 +1,152 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Form</title>
-    <script src="https://js.stripe.com/v3/"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/cardticket.css') }}">
+
+<script src="https://js.stripe.com/v3/"></script>
+
+<section class="articles payment_box_container">
+    <form id="payment-form" action="/create-checkout-session" method="POST">
+
+        <article>
+            <div class="article-wrapper">
+                <div class="article-body">
+                    <div class="field">
+                        <h1>Nhập Thông Tin Thanh Toán</h1>
+                    </div>
+
+                    <div class="field input-field">
+                        <input type="text" placeholder="Họ Và Tên" class="input" id="name" name="name" required>
+                    </div>
+                    <div class="field input-field">
+                        <input type="text" placeholder="Số căn cước" class="input" id="cccd" name="identityNumber"
+                               required>
+                    </div>
+                    <div class="field input-field gender">
+                        <input type="number" placeholder="Giới Tính" class="input" id="gender" name="gender" required>
+                    </div>
+                    <div class="field input-field">
+                        <input type="text" placeholder="Số điện thoại" class="input" id="phone" name="numberPhone"
+                               required>
+                    </div>
+                    <div class="field input-field">
+                        <input type="email" placeholder="Email" class="input" id="email" name="email" required>
+                    </div>
+                    <div class="field input-field">
+                        <input type="date" placeholder="Ngày Sinh" class="input" id="birday" name="birthDay" required>
+                    </div>
+
+                    <!--           card -->
+                    <div id="card-element">
+                    </div>
 
 
+                    <div id="card-errors" role="alert"></div>
 
-</head>
-<body>
-<form id="payment-form" action="/create-checkout-session" method="POST">
+                    <!-- Button and spinner elements -->
+                    <button id="submit" onclick="showSpinner()">Thanh Toán</button>
 
-    <div id="card-element">
-    </div>
+                    <div id="spinner" class="spinner"></div>
 
-
-    <div id="card-errors" role="alert"></div>
-
-    <button id="submit">Pay Now</button>
+                </div>
+            </div>
+        </article>
 
 
-
-</form>
-
-<!-- send push notify -->
-  <form>
-        <button id="sendMessage">Send message</button>
     </form>
+</section>
 
 <script>
-        var firebaseConfig = {
-            apiKey: 'YOUR_API_KEY',
-            authDomain: 'YOUR_AUTH_DOMAIN',
-            projectId: 'YOUR_PROJECT_ID',
-            storageBucket: 'YOUR_STORAGE_BUCKET',
-            messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
-            appId: 'YOUR_APP_ID'
-        };
+    var stripe = Stripe('pk_test_51OAnEvAKLdt3jKp1yBstS2h30XsynBQLsDrM9deUl0CVU1HpWUKxxhAyKMcFFCESIY3D4ooVnjgsP0bZTg6XiJCi00VWgqCJGm');
+    var elements = stripe.elements();
+    var card = elements.create('card');
 
-        firebase.initializeApp(firebaseConfig);
-        const messaging = firebase.messaging();
+    card.mount('#card-element');
 
-        document.getElementById('sendMessage').addEventListener('click', function() {
-            messaging.requestPermission().then(() => {
-                return messaging.getToken();
-            }).then((token) => {
-                // Send the token to the Flask server for registration
-                fetch('/register_device', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ device_token: token }),
-                }).then(() => {
-                    alert('Device registered successfully!');
-                }).catch((error) => {
-                    console.error('Error registering device:', error);
-                });
-            }).catch((error) => {
-                console.error('Error requesting permission:', error);
-            });
-        });
-    </script>
-
-
-<script>
-var stripe = Stripe('pk_test_51OAnEvAKLdt3jKp1yBstS2h30XsynBQLsDrM9deUl0CVU1HpWUKxxhAyKMcFFCESIY3D4ooVnjgsP0bZTg6XiJCi00VWgqCJGm');
-var elements = stripe.elements();
-var card = elements.create('card');
-
-card.mount('#card-element');
-
-card.addEventListener('change', function(event) {
-    var displayError = document.getElementById('card-errors');
-    if (event.error) {
-        displayError.textContent = event.error.message;
-    } else {
-        displayError.textContent = '';
-    }
-});
-
-var form = document.getElementById('payment-form');
-
-form.addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent the default form submission
-
-    stripe.createToken(card).then(function(result) {
-        if (result.error) {
-            var errorElement = document.getElementById('card-errors');
-            errorElement.textContent = result.error.message;
+    card.addEventListener('change', function(event) {
+        var displayError = document.getElementById('card-errors');
+        if (event.error) {
+            displayError.textContent = event.error.message;
         } else {
-            // Insert the token into the form
-            var hiddenInput = document.createElement('input');
-            hiddenInput.setAttribute('type', 'hidden');
-            hiddenInput.setAttribute('name', 'stripeToken');
-            hiddenInput.setAttribute('value', result.token.id);
-            form.appendChild(hiddenInput);
-
-            // Log hiddenInput to the console
-            console.log(hiddenInput);
-
-            // Use fetch to send data to /create-checkout-session
-            submitForm();
+            displayError.textContent = '';
         }
     });
-});
 
-// Rename the function to avoid conflict with the outer form variable
-function submitForm() {
-    var formData = new FormData(document.getElementById('payment-form'));
+    var form = document.getElementById('payment-form');
 
-    fetch('/create-checkout-session', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-        // Handle the success response as needed
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-        // Handle the error as needed
+    form.addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        stripe.createToken(card).then(function(result) {
+            if (result.error) {
+                var errorElement = document.getElementById('card-errors');
+                errorElement.textContent = result.error.message;
+            } else {
+                // Insert the token into the form
+                var hiddenInput = document.createElement('input');
+                hiddenInput.setAttribute('type', 'hidden');
+                hiddenInput.setAttribute('name', 'stripeToken');
+                hiddenInput.setAttribute('value', result.token.id);
+                form.appendChild(hiddenInput);
+
+                // Log hiddenInput to the console
+                console.log(hiddenInput);
+
+                // Use fetch to send data to /create-checkout-session
+                submitForm();
+            }
+        });
     });
-}
+
+    // Rename the function to avoid conflict with the outer form variable
+    function submitForm() {
+        var formData = new FormData(document.getElementById('payment-form'));
+
+        fetch('/create-checkout-session', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+
+          console.log('log:', data);
+
+            if (data.clientSecret) {
+                console.log("ok");
+                // Redirect to "/success"
+                window.location.href = '/success';
+            }else
+            {
+                console.log("error");
+                window.location.href = '/cancelled';
+            }
+
+
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            // Handle the error as needed
+        });
+    }
 
 
 </script>
 
-</body>
-</html>
+<script>
+    function showSpinner() {
+
+  var button = document.getElementById('submit');
+  var spinner = document.getElementById('spinner');
+
+
+  button.style.display = 'none';
+  spinner.style.display = 'block';
+
+
+  setTimeout(function() {
+
+    spinner.style.display = 'none';
+    button.style.display = 'block';
+  }, 3000);
+}
+
+</script>
+
+

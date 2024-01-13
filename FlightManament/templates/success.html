@@ -1,19 +1,86 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Flask + Stripe Checkout</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
-    <script src="https://js.stripe.com/v3/"></script>
-    <script src="{{ url_for('static', filename='stripe.js') }}"></script>
-    <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
-  </head>
-  <body>
-   <section class="section">
-    <div class="container">
-      <p>Your payment succeeded.</p>
-    </div>
-  </section>
-  </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Push Notification Example</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-app-compat.min.js" integrity="sha512-LvcOLc9ElfeSREuvbKtaUKCB0hn6mrvqqcr9Wt8Hfu+wp5/v8m9n1IxmM06gYW2Y9CchN3xZnuUuwO1fEUJvxw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-messaging-compat.min.js" integrity="sha512-9YpVUQ12asTKlN6l5/CaI++wZKi1c+SPsgTn7LUi9TknREojnPvLobe8qjxEI1lrhLYLpEgnVeonMme7Ld++3Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/firebase-messaging-sw.js')
+          .then((registration) => {
+            console.log('ServiceWorker registration successful:', registration);
+          })
+          .catch((error) => {
+            console.error('ServiceWorker registration failed:', error);
+          });
+      }
+    </script>
+</head>
+
+<body>
+
+
+
+
+
+
+
+
+
+
+<h1>Chúc mừng bạn đã thanh toán thành công </h1>
+
+<!--handle push notify-->
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyB-81olDWdH2wCEla_KTHIbWlxYdBcqK6w",
+        authDomain: "flightmanagement-d989d.firebaseapp.com",
+        projectId: "flightmanagement-d989d",
+        storageBucket: "flightmanagement-d989d.appspot.com",
+        messagingSenderId: "766444659533",
+        appId: "1:766444659533:web:08aa23d67fe25bea740d04",
+        measurementId: "G-0YCW8XPV91"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+
+    // Request permission and get the token
+    const messaging = firebase.messaging(app);
+
+    console.log(messaging);
+
+    messaging.getToken()
+        .then((token) => {
+            console.log('FCM Token:', token);
+            // Now you can use this token to send push notifications to this device
+            fetch('/send_notification', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ token: token }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Notification response:', data);
+                // Handle the response as needed
+            })
+            .catch(error => {
+                console.error('Error sending notification:', error);
+                // Handle the error as needed
+            });
+        })
+        .catch((error) => {
+            console.error('Error obtaining FCM token:', error);
+        });
+
+</script>
+
+</body>
 </html>

@@ -456,6 +456,16 @@ def get_all_team_flight():
         db.session.close()
 
 
+<<<<<<< HEAD
+=======
+
+def check_login_by_email(email):
+    with app.app_context():
+        user = User.query.filter_by(email=email).first()
+        return user
+
+
+>>>>>>> f88c19ac85b0a0e18417f992f17e0bacc6b4ba8a
 def add_user(username, password, avatar, name, CCCD, gender, phone, email, birthday, id_role, id_team_flight ):
     user = User(username= username.strip(),
                 password=password,
@@ -482,6 +492,7 @@ def add_team_flight(description):
     team_flight = TeamFlight(description =description)
     db.session.add(team_flight)
     db.session.commit()
+
 
 
 
