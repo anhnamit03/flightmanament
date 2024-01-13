@@ -386,6 +386,17 @@ class info_book_ticket(object):
         self.id_flight = id_flight
 
 
+class Customer:
+    def __init__(self, username, cccd, gender, phone, email, birthday):
+        self.username = username
+        self.cccd = cccd
+        self.gender = gender
+        self.phone = phone
+        self.email = email
+        self.birthday = birthday
+
+
+
 # Function cho việc đặt vé
 def reder_interface_for_book_ticket_customer(id_flight):
 
@@ -445,6 +456,8 @@ def get_all_team_flight():
         db.session.close()
 
 
+<<<<<<< HEAD
+=======
 
 def check_login_by_email(email):
     with app.app_context():
@@ -452,6 +465,7 @@ def check_login_by_email(email):
         return user
 
 
+>>>>>>> f88c19ac85b0a0e18417f992f17e0bacc6b4ba8a
 def add_user(username, password, avatar, name, CCCD, gender, phone, email, birthday, id_role, id_team_flight ):
     user = User(username= username.strip(),
                 password=password,
