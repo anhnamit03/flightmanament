@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/cardticket.css') }}">
-<section class="articles">
-{% for item in value_from_session %}
+<section>
+<form class="articles" method="post" action="{{ url_for('test')}}">
+    {% for item in value_from_session %}
   <article>
     <div class="article-wrapper">
       <div class="article-body">
@@ -14,27 +15,28 @@
           {% endif %}
         <p>Số ghế:{{ item }} </p>
          <div class="field input-field">
-            <input type="text" placeholder="Họ Và Tên" class="input" id="{{item}}" name="username">
+            <input type="text" placeholder="Họ Và Tên" class="input" id="username{{item}}" name="username{{item}}">
         </div>
         <div class="field input-field">
-            <input type="text" placeholder="Số căn cước" class="input" id="cccd" name="username">
+            <input type="text" placeholder="Số căn cước" class="input" id="cccd{{item}}" name="cccd{{item}}">
         </div>
         <div class="field input-field gender">
-            <input type="number" placeholder="Giới Tính" class="input" id="gender" name="username">
+            <input type="number" placeholder="Giới Tính" class="input" id="gender{{item}}" name="gender{{item}}">
         </div>
         <div class="field input-field">
-            <input type="text" placeholder="Số điện thoại" class="input" id="phone" name="username">
+            <input type="text" placeholder="Số điện thoại" class="input" id="phone{{item}}" name="phone{{item}}">
         </div>
         <div class="field input-field">
-            <input type="email" placeholder="Email" class="input" id="email" name="username">
+            <input type="email" placeholder="Email" class="input" id="email{{item}}" name="email{{item}}">
         </div>
         <div class="field input-field">
-            <input type="date" placeholder="Ngày Sinh" class="input" id="birday" name="username">
+            <input type="date" placeholder="Ngày Sinh" class="input" id="birthday{{item}}" name="birthday{{item}}">
         </div>
       </div>
     </div>
   </article>
 {% endfor %}
+
 <button type="submit" class="btn" style="padding: 16px;
                                                 margin-left:1000px;
                                                 width: 160px;
@@ -48,7 +50,7 @@
                                                 cursor: pointer;">
     Thanh toán
 </button>
-
+</form>
 
 
 

@@ -218,13 +218,32 @@ def protected():
     return 'Logged in as: ' + current_user.name
 
 
-@app.route('/test')
+@app.route('/test', methods=['get', 'post'])
 def test():
     selected_flight_id = session.get('selected_flight_id')
     flight_info = utils.reder_interface_for_book_ticket_customer(selected_flight_id)
     value_from_session = session.get('list_seat')
-    a =  type(flight_info.list_seat_rank_1)
-    return render_template('test.html',value_from_session=value_from_session, flight_info=flight_info, a=a)
+    price = 0
+    for item in value_from_session:
+        if int(item) in flight_info.list_seat_rank_1:
+            price += flight_info.price_seat_rank_1
+        elif int(item) in flight_info.list_seat_rank_2:
+            price += flight_info.price_seat_rank_2
+    session["price"] = price
+    a = type(flight_info.list_seat_rank_1)
+    list_customers = []
+    if request.method.__eq__('POST'):
+         for item in value_from_session:
+             username = request.form.get('username' + item)
+             cccd = request.form.get('cccd' + item)
+             gender = request.form.get('gender' + item)
+             phone = request.form.get('phone' + item)
+             email = request.form.get('email' + item)
+             birthday = request.form.get('birthday' + item)
+             customer = Customer( username, cccd, gender, phone, email, birthday)
+             list_customers.append(customer)
+
+    return render_template('test.html',value_from_session=value_from_session, flight_info=flight_info, a=a, list_customers=list_customers)
 
 
 @app.route("/401")

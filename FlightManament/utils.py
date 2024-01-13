@@ -386,6 +386,17 @@ class info_book_ticket(object):
         self.id_flight = id_flight
 
 
+class Customer:
+    def __init__(self, username, cccd, gender, phone, email, birthday):
+        self.username = username
+        self.cccd = cccd
+        self.gender = gender
+        self.phone = phone
+        self.email = email
+        self.birthday = birthday
+
+
+
 # Function cho việc đặt vé
 def reder_interface_for_book_ticket_customer(id_flight):
 
@@ -443,7 +454,6 @@ def get_all_team_flight():
         team_flight = [{key: value for key, value in team.items() if key != '_sa_instance_state'} for team in team_flight]
         return team_flight
         db.session.close()
-
 
 
 def add_user(username, password, avatar, name, CCCD, gender, phone, email, birthday, id_role, id_team_flight ):
