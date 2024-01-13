@@ -463,6 +463,12 @@ def get_all_team_flight():
         db.session.close()
 
 
+def check_login_by_email(email):
+    with app.app_context():
+        user = User.query.filter_by(email=email).first()
+        return user
+
+
 if __name__ == '__main__':
     print(get_all_roles())
     print(reder_interface_for_book_ticket_customer(1).id_flight)

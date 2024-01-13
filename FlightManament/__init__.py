@@ -9,9 +9,9 @@ from flask_mail_sendgrid import MailSendGrid
 
 app = Flask(__name__)
 app.secret_key = 'sbsfusf!$%^&*&%^$$$$%^&'
-app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+pymysql://root:anhnam0123@localhost/flightmanament?charset=utf8mb4'
+# app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+pymysql://root:anhnam0123@localhost/flightmanament?charset=utf8mb4'
 
-# app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+pymysql://admin:123456@localhost/flightmanament?charset=utf8mb4'
+app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+pymysql://admin:123456@localhost/flightmanament?charset=utf8mb4'
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 app.config["PAGE_SIZE"] = 8
 

@@ -114,19 +114,15 @@ def callback_login_sso():
     # Store user info in session or database as needed
     session['user_info'] = user_info
 
-    if user_info is not None:
-        #  send message
-        msg = Message("Hello",
-                      sender="dangvykhoi@gmail.com",
 
-                      recipients=[user_info["email"]])
 
-        msg.template_id = 'd-3b20516cd9424fe59bed6499de841098'
-        msg.dynamic_template_data = {'name': user_info["name"]}
+    # check user already in db
+    user = utils.check_login_by_email(user_info["email"])
+    if user:
+        login_user(user=user)
+        return redirect(url_for('home'))
 
-    mail.send(msg)
 
-    # // send otp
     return redirect(url_for('home'))
 
 
@@ -230,6 +226,7 @@ def protected():
     return 'Logged in as: ' + current_user.name
 
 
+
 @app.route('/test')
 def test():
     selected_flight_id = session.get('selected_flight_id')
@@ -244,19 +241,28 @@ def ffgdd():
     return render_template('401.html')
 
 
-@app.route("/payment")
+@app.route("/payment", methods=["GET", "POST"])
 def payment():
     return render_template('payment.html')
 
 
 @app.route("/create-checkout-session", methods=['GET', 'POST'])
 def create_checkout_session():
-    domain_url = "http://127.0.0.1:5000"
     stripe.api_key = stripe_keys["secret_key"]
 
     try:
-        # Retrieve the product details from the form or database
-        products = ['Product A', 'Product B', 'Product C']  # Replace this with your list of products
+        # get infor of customer payment
+        name = request.form.get('name')
+        identity_number = request.form.get('identityNumber')
+        gender = request.form.get('gender')
+        phone = request.form.get('numberPhone')
+        email = request.form.get('email')
+        birth_day = request.form.get('birthDay')
+
+
+
+
+
         amount = 1000000  # Set the amount in the smallest unit of your currency (e.g., cents for USD)
 
         # Create a PaymentIntent
@@ -272,29 +278,45 @@ def create_checkout_session():
             confirm=True,  # Confirm the payment immediately,
 
         )
+
+        session["email_to"] = email
+        session["name_to"] = name
+        session["payment_state"] = True
+
         return jsonify({'clientSecret': intent.client_secret})
 
 
-        # checkout_session = stripe.checkout.Session.create(
-        #     success_url=domain_url + "success?session_id={CHECKOUT_SESSION_ID}",
-        #     cancel_url=domain_url + "cancelled",
-        #     payment_method_types=["card"],
-        #     mode="payment",
-        #     line_items=[
-        #         {
-        #             'price': 'price_1OHTpxAKLdt3jKp1W0zFWNKi',  # Sử dụng `price` ID của sản phẩm đã có sẵn
-        #             'quantity': 1,
-        #         }
-        #     ]
-        # )
-        return jsonify({"sessionId": charge["id"]})
     except Exception as e:
-        return jsonify(error=str(e)), 403
+        return jsonify(error=str(e))
 
 
 @app.route("/success")
 def success():
-    return render_template("success.html")
+    # save data success
+
+    # push noti
+
+    if "payment_state" in session:
+        check_payment = session["payment_state"]
+        if check_payment:
+            # send mail
+            email = session['email_to']
+            name =  session["name_to"]
+            if email :
+                #  send message
+                msg = Message("Hello",
+                              sender="dangvykhoi@gmail.com",
+
+                              recipients=[email])
+
+                msg.template_id = 'd-3b20516cd9424fe59bed6499de841098'
+                msg.dynamic_template_data = {'name': name}
+                mail.send(msg)
+                return render_template("success.html")
+    else:
+        return redirect(url_for('home'))
+
+
 
 
 @app.route("/cancelled")
