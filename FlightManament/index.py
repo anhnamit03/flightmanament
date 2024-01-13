@@ -269,7 +269,7 @@ def create_checkout_session():
 
 
 
-        amount = 1000000  # Set the amount in the smallest unit of your currency (e.g., cents for USD)
+        amount = session.get('price')# Set the amount in the smallest unit of your currency (e.g., cents for USD)
 
         # Create a PaymentIntent
         intent = stripe.PaymentIntent.create(

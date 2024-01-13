@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/cardticket.css') }}">
 
 <section>
-<form class="articles" method="post" action="{{ url_for('test')}}">
+<form class="articles" id="payment-form" action="/payment" method="POST">
     {% for item in value_from_session %}
   <article>
     <div class="article-wrapper">
@@ -37,48 +37,7 @@
     </div>
   </article>
 {% endfor %}
-
-<button type="submit" class="btn" style="padding: 16px;
-
-
-<form id="payment-form" action="/payment" method="POST">
-    <section class="articles">
-        {% for item in value_from_session %}
-        <article>
-            <div class="article-wrapper">
-                <div class="article-body">
-                    <h2>ID chuyến bay:{{ flight_info.id_flight}}</h2>
-                    {% if item|int in flight_info.list_seat_rank_1 %}
-                    <h3>Thể loại vé: <span>Thương gia</span></h3>
-                    <h3>Tiền vé: <span>{{ "{:,.1f}".format(flight_info.price_seat_rank_1) }} VNĐ</span></h3>
-                    {% else %}
-                    <h3>Thể loại vé: <span>Phổ thông</span></h3>
-                    <h3>Tiền vé: <span>{{ "{:,.1f}".format(flight_info.price_seat_rank_2) }} VNĐ</span></h3>
-                    {% endif %}
-                    <p>Số ghế:{{ item }} </p>
-                    <div class="field input-field">
-                        <input type="text" placeholder="Họ Và Tên" class="input" id="{{item}}" name="username">
-                    </div>
-                    <div class="field input-field">
-                        <input type="text" placeholder="Số căn cước" class="input" id="cccd" name="username">
-                    </div>
-                    <div class="field input-field gender">
-                        <input type="number" placeholder="Giới Tính" class="input" id="gender" name="username">
-                    </div>
-                    <div class="field input-field">
-                        <input type="text" placeholder="Số điện thoại" class="input" id="phone" name="username">
-                    </div>
-                    <div class="field input-field">
-                        <input type="email" placeholder="Email" class="input" id="email" name="username">
-                    </div>
-                    <div class="field input-field">
-                        <input type="date" placeholder="Ngày Sinh" class="input" id="birday" name="username">
-                    </div>
-                </div>
-            </div>
-        </article>
-        {% endfor %}
-        <button type="submit" class="btn" style="padding: 16px;
+    <button type="submit" class="btn" style="padding: 16px;
                                                 margin-left:1000px;
                                                 width: 160px;
                                                 border-radius: 20px;
@@ -89,7 +48,6 @@
                                                 border: 1px solid #fff;
                                                 color:white;
                                                 cursor: pointer;">
-
     Thanh toán
 </button>
 </form>
