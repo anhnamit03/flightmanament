@@ -132,30 +132,19 @@
     </style>
   </head>
   <body>
-    <nav>
-      <input type="checkbox" id="check">
-      <label for="check" class="checkbtn">
-        <i class="fas fa-bars"></i>
-      </label>
-      <label class="logo">DesignX</label>
-      <ul>
-        <li><a class="active" href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Services</a></li>
-        <li><a href="#">Contact</a></li>
-        <li><a href="#">Feedback</a></li>
-      </ul>
-    </nav>
-    <div class="main-block">
-    <form action="/">
+
+
+    {% if message1 %}
+        <h2>{{message1}}</h2>
+    {% endif %}
+    <div class="main-block" >
+    <form method="post" action="{{ url_for('hrmcheck') }}" enctype="multipart/form-data">
       <h1>Create a account</h1>
-
-
         <div  class="account-details">
-          <div><label>User name</label><input type="text" name="name" required></div>
-          <div><label>CCCD</label><input type="text" name="name" required></div>
-          <div><label>Password</label><input type="password" name="name" required></div>
-          <div><label>Phone</label><input type="number" name="name" required></div>
+          <div><label>User name</label><input type="text" name="username" id="username" required></div>
+          <div><label>CCCD</label><input type="text" name="cccd" id="cccd" required></div>
+          <div><label>Password</label><input type="password" name="password" id="password" required></div>
+          <div><label>Phone</label><input type="number" name="phone" id="phone" required></div>
 
         </div>
 
@@ -163,41 +152,63 @@
 
         <div  class="personal-details">
           <div>
-            <div><label>Họ và tên</label><input type="text" name="name"></div>
-            <div><label>Ngày sinh</label><input type="date" name="name"></div>
-            <div><label>Avata</label><input type="file" name="name" required></div>
+            <div><label>Họ và tên</label><input type="text" name="fullname" id="fullname"></div>
+            <div><label>Ngày sinh</label><input type="date" name="birthday" id="birthday" ></div>
+            <div><label>email</label><input type="email" name="email" id="email" ></div>
+            <div><label>Avata</label><input type="file" name="avata" id="avata"  required></div>
           </div>
           <div>
             <div>
 
               <label>Gender</label>
               <div class="gender">
-                <input type="radio" value="none" id="male" name="gender" required/>
+                <input type="radio" value="true" id="male" name="gender" required/>
                 <label for="male" class="radio">Male</label>
-                <input type="radio" value="none" id="female" name="gender" required/>
+                <input type="radio" value="false" id="female" name="gender" required/>
                 <label for="female" class="radio">Female</label>
               </div>
             </div>
-
             <div>
-
               <label>Chức vụ</label>
-              <select required id="role">
-                
+              <select required id="role" name="role">
               </select>
             </div>
              <div>
               <label>Team bay</label>
-              <select required id="team_flight" >
-
+              <select required id="team_flight" name="team_flight" >
               </select>
             </div>
           </div>
         </div>
 
 
-      <button type="submit" >Submit</button>
+      <button type="submit" name="action"  value="form1_submit">Submit</button>
     </form>
+    </div>
+
+
+        {% if message2 %}
+            <h2>{{ message2 }}</h2>
+        {% endif %}
+        <div class="main-block" >
+    <form method="post" action="{{ url_for('hrmcheck') }}" enctype="multipart/form-data">
+      <h1>Create a team fly</h1>
+        <br><br><br>
+
+        <div  class="personal-details">
+          <div>
+            <div><label>Mô tả team bay</label><input type="text" name="teamflight" id="teamflight"></div>
+
+          </div>
+
+        </div>
+
+
+      <button type="submit"  name="action"  value="form2_submit" >Submit</button>
+    </form>
+
+
+
     </div>
  <footer class="footer">
         <div class="container">

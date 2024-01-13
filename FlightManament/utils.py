@@ -1,9 +1,4 @@
-import json, os
-from FlightManament import app, db
 from FlightManament.models import *
-import hashlib
-from datetime import datetime
-from sqlalchemy.orm import aliased
 from geopy.distance import geodesic
 from FlightManament import app, db
 from FlightManament.models import FlightRouteType
@@ -11,19 +6,6 @@ from datetime import datetime, timedelta
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy import and_
 from sqlalchemy import func
-
-
-
-def add_user(name, password, username, **kwargs):
-    password = hashlib.md5(password.strip().encode('utf-8')).hexdigest()
-    user = User(name=name.strip(),
-                username=username.strip(),
-                password=password,
-                email=kwargs.get('email'),
-                avatar=kwargs.get('avatar'))
-
-    db.session.add(user)
-    db.session.commit()
 
 
 def get_name_airport():
@@ -463,10 +445,41 @@ def get_all_team_flight():
         db.session.close()
 
 
+
 def check_login_by_email(email):
     with app.app_context():
         user = User.query.filter_by(email=email).first()
         return user
+
+
+def add_user(username, password, avatar, name, CCCD, gender, phone, email, birthday, id_role, id_team_flight ):
+    user = User(username= username.strip(),
+                password=password,
+                avatar=avatar,
+                name=name,
+                CCCD=CCCD,
+                gender=gender,
+                phone=phone,
+                email=email,
+                birthday=birthday,
+                id_role=id_role,
+                id_team_flight=id_team_flight)
+    db.session.add(user)
+    db.session.commit()
+
+
+def get_id_role(position):
+    with app.app_context():
+        role = Role.query.filter_by(position=position).first()
+        return role.id
+
+
+def add_team_flight(description):
+    team_flight = TeamFlight(description =description)
+    db.session.add(team_flight)
+    db.session.commit()
+
+
 
 
 if __name__ == '__main__':

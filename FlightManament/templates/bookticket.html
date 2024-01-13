@@ -189,22 +189,21 @@
                         <div class="itinerary-part-offer second">
 
                             <div class="offer-branch">
-                                 <div style="display:block; ">
-                            <h3 style="text-align:center; align-items:center; color:indianred ">{{flight.type_flight}}</h3>
-                            <br>
+                                <div style="display:block; ">
+                                    <h3 style="text-align:center; align-items:center; color:indianred ">
+                                        {{flight.type_flight}}</h3>
+                                    <br>
 
-                                     {% for i in range(flight.list_stop_points|length) %}
+                                    {% for i in range(flight.list_stop_points|length) %}
 
-                            <div style="text-align:center; align-items:center;border: 2px solid #018de5; padding: 10px;">
-                                <h4 style="display:inline-flex; color:#018de5">điểm dừng {{  i+1 }}:</h4>
-                                <span style="margin-left:150px">{{ flight.list_stop_points[i] }}</span>
-                            </div>
+                                    <div style="text-align:center; align-items:center;border: 2px solid #018de5; padding: 10px;">
+                                        <h4 style="display:inline-flex; color:#018de5">điểm dừng {{ i+1 }}:</h4>
+                                        <span style="margin-left:150px">{{ flight.list_stop_points[i] }}</span>
+                                    </div>
 
-                                     {% endfor %}
+                                    {% endfor %}
 
-
-
-                        </div>
+                                </div>
 
                                 <div class="show-ticket">
                                     <h1>Còn Vé</h1>
@@ -249,60 +248,64 @@
 
                                 <div class="extand-ticket">
 
-                                    <form action="{{ url_for('book_ticket') }}" method="post" enctype="multipart/form-data">
+                                    <form action="{{ url_for('book_ticket') }}" method="post"
+                                          enctype="multipart/form-data">
                                         <div class="seat-container">
                                             {% for item in flight.list_seat_rank_1 %}
-                                                {% if item not in flight.list_seated %}
-                                                    <div class="seatnam">
-                                                        <li class="seat">
-                                                            <input type="checkbox" id="{{ item }}" value="{{ item }}" name="seat"  />
-                                                            <label for="{{ item }}">{{item}}</label>
-                                                        </li>
-                                                    </div>
-                                                {% else %}
-                                                    <div class="seatnam ">
-                                                            <div class="book">{{item}}
-                                                            </div>
-                                                    </div>
-                                                {% endif %}
+                                            {% if item not in flight.list_seated %}
+                                            <div class="seatnam">
+                                                <li class="seat">
+                                                    <input type="checkbox" id="{{ item }}" value="{{ item }}"
+                                                           name="seat"/>
+                                                    <label for="{{ item }}">{{item}}</label>
+                                                </li>
+                                            </div>
+                                            {% else %}
+                                            <div class="seatnam ">
+                                                <div class="book">{{item}}
+                                                </div>
+                                            </div>
+                                            {% endif %}
                                             {% endfor %}
-                                            <div class="cc"style=" display:block;
+                                            <div class="cc" style=" display:block;
                                                 width: 100%;
                                                 height:30px;
                                                 background-color:yellowgreen;
                                                 text-align:center;
                                                 color:orangered"
-                                                >
+                                            >
                                                 Đây là ghế hạng 2
                                             </div>
                                             {% for item in flight.list_seat_rank_2 %}
-                                                {% if item not in flight.list_seated %}
-                                                    <div class="seatnam">
-                                                        <li class="seat">
-                                                            <input type="checkbox" id="{{item}}" value="{{ item }}" name="seat"/>
-                                                            <label for="{{item}}">{{item}}</label>
-                                                        </li>
-                                                    </div>
-                                                {% else %}
-                                                    <div class="seatnam ">
-                                                            <div class="book">{{item}}
-                                                            </div>
-                                                    </div>
-                                                {% endif %}
+                                            {% if item not in flight.list_seated %}
+                                            <div class="seatnam">
+                                                <li class="seat">
+                                                    <input type="checkbox" id="{{item}}" value="{{ item }}"
+                                                           name="seat"/>
+                                                    <label for="{{item}}">{{item}}</label>
+                                                </li>
+                                            </div>
+                                            {% else %}
+                                            <div class="seatnam ">
+                                                <div class="book">{{item}}
+                                                </div>
+                                            </div>
+                                            {% endif %}
                                             {% endfor %}
-                                             <div class="cc"style=" display:block;
+                                            <div class="cc" style=" display:block;
                                                 width: 100%;
                                                 height:30px;
                                                 background-color:yellowgreen;
                                                 text-align:center;
                                                 color:orangered"
-                                                >
+                                            >
                                                 Đây là ghế hạng 1
                                             </div>
 
                                         </div>
                                         <br>
-                                        <input type="hidden" name="id_flight" value="{{ flight.id_flight }}" id="id_flight">
+                                        <input type="hidden" name="id_flight" value="{{ flight.id_flight }}"
+                                               id="id_flight">
 
 
                                         <button type="submit" class="btn" style="padding: 16px;
@@ -313,7 +316,7 @@
                                                 background-color: #018de5;
                                                 border: 1px solid #fff;
                                                 cursor: pointer;">
-                                                <i class="fa-solid fa-check"></i>
+                                            <i class="fa-solid fa-check"></i>
                                         </button>
                                     </form>
 

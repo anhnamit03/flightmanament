@@ -1,25 +1,13 @@
-import math
-import time
-import pickle
-
 import cloudinary.uploader
-import flask
 import flask_login
 import stripe
 import utils
 import requests
 from flask import render_template, request, redirect, url_for, session, jsonify, Response
-
 from flask_login import login_required, current_user, login_user
-
-from FlightManament import app, mail, login_manager, stripe_keys
-
-from FlightManament import app
+from FlightManament import  mail, login_manager, stripe_keys
 from utils import *
 from flask_mail import Message
-from FlightManament.models import User
-import jwt
-
 stripe.api_key = stripe_keys["secret_key"]
 
 
@@ -399,12 +387,77 @@ def forme():
     return render_template("forme.html")
 
 
-
-@app.route("/hrmcheck")
+@app.route("/hrmcheck", methods=['get', 'post'])
 def hrmcheck():
-    list_role =  utils.get_all_roles()
+    message1 = ""
+    message2 = ""
+    avatar_path = None
+    list_role = utils.get_all_roles()
     team_flight = utils.get_all_team_flight()
-    return render_template("hr_manager.html",list_role=list_role, team_flight=team_flight)
+    if request.method.__eq__('POST'):
+        if request.form.get('action') == 'form1_submit':
+            username = request.form.get('username')
+            password = request.form.get('password')
+            email = request.form.get('email')
+            phone = request.form.get('phone')
+            name = request.form.get('fullname')
+            birthday = request.form.get('birthday')
+            CCCD = request.form.get('cccd')
+            avatar = request.files.get('avata')
+            if avatar:
+                res = cloudinary.uploader.upload(avatar)
+                avatar_path = res['secure_url']
+            gender = request.form.get('gender').lower() == 'true'
+            id_role = utils.get_id_role(request.form.get('role'))
+            id_team_flight = request.form.get('team_flight')
+            utils.add_user(username=username,
+                    password=password,
+                    avatar=avatar_path,
+                    name=name,
+                    CCCD=CCCD,
+                    gender=gender,
+                    phone=phone,
+                    email=email,
+                    birthday=birthday,
+                    id_role=id_role,
+                    id_team_flight=id_team_flight)
+            message1 = "Đã thêm thành công 1 user"
+        elif request.form.get('action') == 'form2_submit':
+            teamflight = request.form.get('teamflight')
+            utils.add_team_flight(teamflight)
+            message2 = "Thêm thành công 1 team fly"
+    return render_template("hr_manager.html",list_role=list_role, team_flight=team_flight,message1=message1,message2=message2)
+
+
+@app.route('/flightmanager')
+def flightmanager():
+    all_flight = []  # Khởi tạo danh sách trống
+    destinations = utils.get_name_airport()
+    if request.method.__eq__("GET"):
+        destination = request.args.get('destination')
+        departure = request.args.get('departure')
+        go_date = request.args.get('go_date')
+        if destination and departure and go_date:
+            list_flight_id = utils.get_flight(destination, departure, go_date)
+
+            if list_flight_id:
+                for flight_id in list_flight_id:
+                    flight_info = utils.reder_interface_for_book_ticket_customer(flight_id)
+                    if flight_info:
+                        all_flight.append(flight_info)
+    list_seat = []
+    if request.method.__eq__("POST"):
+        session["list_seat"] = request.form.getlist('seat')
+        session['selected_flight_id'] = request.form.get('id_flight')
+        return redirect(url_for('test'))
+    return render_template("flightmanager.html",
+                           destinations=destinations,
+                           destination=destination,
+                           departure=departure,
+                           go_date=go_date,
+                           all_flight=all_flight,
+                           )
+
 
 
 if __name__ == "__main__":
