@@ -19,148 +19,180 @@
 <br><br><br><br><br>
 
 <!-- Booking Tickets -->
-<div class="booking_ticket">
-    <div class="grid">
-        <div class="row_grid">
+
+{% for item in list_flight_not_start %}
+
+<form>
+    <div class="booking_ticket">
+        <div class="grid">
+            <div class="row_grid">
+                <div class="col_12">
+                    <div class="card_ticket">
+                        <!-- // row -->
+                        <div class="group-content  ">
+                            <div class="card-content">
 
 
-            <div class="col_12">
+                                <div class=" from">
+                                    <h3 class="time_from">{{item.id}}</h3>
+                                </div>
 
 
-            <div class="card_ticket">
-                <!-- // row -->
-                <div class="group-content price_1 ">
-                    <div class="card-content">
-                        <div class=" from">
-                            <h3 class="time_from">ID: 1</h3>
+                                <div class=" from">
+                                    <h3 class="time_from">SGN</h3>
+                                </div>
+
+                                <div class=" center">
+                                    <i class="fa-solid fa-plane"></i>
+                                </div>
+
+                                <div class=" to">
+                                    <h3 class="sign_to">HAN</h3>
+                                </div>
+
+                                <div class=" to">
+                                    <h3 class="time_to">Ngày bay: 2024-01-30</h3>
+                                </div>
+
+                                <div class=" to">
+                                    <h3 class="time_to">Giờ bay: 08:00</h3>
+                                </div>
+                            </div>
+
+
+                            <div class=" prices">
+                                <div class="price_1">
+                                    <a href="#">Thông tin chi tiết</a>
+                                    <i class="fa-solid fa-chevron-down"></i>
+
+
+                                </div>
+
+                                <div class="price_2" style="display:None">
+                                    <a href="#"></a>
+                                    <i class="fa-solid fa-chevron-down"></i>
+                                </div>
+                            </div>
                         </div>
-                         <div class=" from">
-                            <h3 class="time_from">SGN</h3>
-
-                        </div>
-
-                        <div class=" center">
-                            <i class="fa-solid fa-plane"></i>
-
-                        </div>
-
-                        <div class=" to">
-
-                            <h3 class="sign_to">HAN</h3>
-                        </div>
-                        <div class=" to">
-                            <h3 class="time_to">Ngày bay: 2024-01-30</h3>
-
-                        </div>
-                        <div class=" to">
-                            <h3 class="time_to">Giờ bay:  08:00</h3>
-
-                        </div>
-
-                    </div>
 
 
-                    <div class=" prices">
-                        <div class="price_1" >
-                            <a href="#">Thông tin chi tiết</a>
-                            <i class="fa-solid fa-chevron-down"></i>
+                        <div class="itinerary-part-offer">
+                            <div class="offer-branch">
+                                <div class="content-header">
+                                    <h1>Chi tiết chuyến bay</h1>
+                                </div>
 
 
-                        </div>
+                                <div class="extand-ticket">
 
-                        <div class="price_2" style="display:None">
-                            <a href="#"></a>
-                            <i class="fa-solid fa-chevron-down"></i>
+                                    <ul>
+
+                                        <li>
+                                            id_flight_route : {{item.id_flight_route}}
+                                        </li>
+
+                                        <li>
+                                            id_team_flight : {{item.id_team_flight}}
+                                        </li>
+
+                                        <li>
+                                            id_plane : {{item.id_plane}}
+                                        </li>
+
+                                        <li>
+                                            start_time : {{item.start_time}}
+                                        </li>
+
+                                    </ul>
+
+                                </div>
+                            </div>
+                            <div class="offer-branch">
+                                <div class="content-header">
+                                    <h1>Sửa chuyến bay</h1>
+                                </div>
+
+
+                                <div class="extand-ticket">
+
+
+                                    <div style="height:30px">
+                                        <label for="flight_route_{{item.id}}" class="form__label">Flight Route </label>
+                                        <select class="form__input" id="flight_route_{{item.id}}"
+                                                style="height:30px;width:70%">
+                                            {% for num in list_id_flight_route %}
+                                            <option value="{{ num }}" {% if num== item.id_flight_route %}selected{%
+                                                    endif %}>{{ num }}
+                                            </option>
+
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                    <br/>
+
+                                    <div style="height:30px">
+                                        <label for="team_flight_{{item.id}}" class="form__label">Team Flight </label>
+
+                                        <select class="form__input" id="team_flight_{{item.id}}"
+                                                style="height:30px;width:70%">
+                                            {% for num in list_id_team_flight %}
+                                            <option value="{{ num }}" {% if num== item.id_team_flight %}selected{% endif
+                                                    %}>{{ num }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+
+                                    </div>
+                                    <br/>
+
+                                    <div style="height:30px">
+                                        <label for="plane_{{item.id}}" class="form__label">Plane </label>
+                                        <select class="form__input" id="plane_{{item.id}}"
+                                                style="height:30px;width:70%">
+                                            {% for num in list_id_plane %}
+                                            <option value="{{ num }}" {% if num== item.id_plane %}selected{% endif %}>{{
+                                                num }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <br/>
+
+
+                                    <div style="height:30px">
+                                        <label for="start_time_{{ item.id }}" class="form__label">Start Time </label>
+                                        <input type="datetime-local" class="form__input" id="start_time_{{ item.id }}"
+                                               style="height:30px;width:70%" value="{{item.start_time}}"/>
+                                    </div>
+
+
+                                    <br/>
+
+
+                                </div>
+
+
+                                <div class="button_action_container">
+                                    <button type="button" class="btn-delete btn-action" onclick="deleteFlight({{item.id}})">Xóa
+                                    </button>
+                                    <button type="button" class="btn-fix btn-action" onclick="updateFlight({{item.id}})">Sửa
+                                    </button>
+                                </div>
+
+
+                            </div>
+
                         </div>
                     </div>
                 </div>
 
-
-
-
-
-
-                <div class="itinerary-part-offer">
-                    <div class="offer-branch">
-                        <div class="content-header">
-                            <h1>Chi tiết chuyến bay</h1>
-                        </div>
-
-
-                        <div class="extand-ticket">
-                            <ul>
-                                <li>
-                                    Thể loại chuyến bay: chuyến bay không điểm dừng
-                                </li>
-                                <li>
-                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
-                                    Không bao gồm hành lý ký gửi
-                                </li>
-                                <li>
-                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
-                                    Thay đổi mất phí
-                                </li>
-                                <li>
-                                    <i class="fa-solid fa-xmark" style="color: crimson;"></i>
-                                    Không được phép đổi chuyến tại sân bay
-                                </li>
-                                <li>
-                                    <i class="fa-solid fa-dollar-sign" style="color: #018de5;"></i>
-                                    Hoàn/hủy vé mất phí
-                                </li>
-                                <li>
-                                    <i class="fa-regular fa-paper-plane" style="color: #0d65fd;"></i>
-                                    Tích lũy 10% số dặm
-                                </li>
-                                <li>
-                                    <a href="#">XEM CHI TIẾT</a>
-                                </li>
-
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="offer-branch">
-                        <div class="content-header">
-                            <h1>Sửa chuyến bay</h1>
-                        </div>
-                        <div class="extand-ticket">
-                           <form>
-                                <div style="height:30px">
-                                    <label for="name" class="form__label">Name </label>
-                                  <input type="text" placeholder="Name" class="form__input" id="name"  style="height:30px;width:70%"/>
-
-                              </div>
-                               <br />
-                                 <div style="height:30px">
-                                    <label for="name" class="form__label">Name </label>
-                                  <input type="text" placeholder="Name" class="form__input" id="name"  style="height:30px;width:70%"/>
-
-                              </div>
-                               <br />
-                                 <div style="height:30px">
-                                    <label for="name" class="form__label">Name </label>
-                                  <input type="text" placeholder="Name" class="form__input" id="name"  style="height:30px;width:70%"/>
-
-                              </div>
-                               <br />
-                                 <div style="height:30px">
-                                    <label for="name" class="form__label">Name </label>
-                                  <input type="text" placeholder="Name" class="form__input" id="name"  style="height:30px;width:70%"/>
-                              </div>
-                               <br />
-
-                           </form>
-                        </div>
-                    </div>
-
-                </div>
             </div>
         </div>
     </div>
-    </div>
-    </div>
-    </div>
-</div>
+</form>
+{% endfor %}
+
 
 <script>
     var fromDateShow = document.querySelector('#destination');
@@ -214,6 +246,70 @@
     });
 
 
+</script>
+
+<!--delete flight-->
+<script>
+    function deleteFlight(flight_id) {
+        // Replace 'flight_id' with the actual ID you want to delete
+
+        // Make an AJAX request
+        $.ajax({
+            type: 'DELETE',
+            url: '/delete_flight/' + flight_id,
+            success: function(response) {
+                if (response.success) {
+                    alert('Deletion successful');  // Replace with your actual handling
+                      location.reload();
+                } else {
+                    alert('Deletion failed');  // Replace with your actual handling
+                }
+            },
+            error: function(error) {
+                console.error(error);
+                // Handle error, update UI or perform any other actions
+            }
+        });
+    }
+</script>
+
+
+<!--update flight-->
+
+<script>
+    function updateFlight(flightId) {
+
+        var flightRoute = document.getElementById("flight_route" +"_"+flightId).value;
+        var teamFlight = document.getElementById("team_flight"+"_"+flightId).value;
+        var plane = document.getElementById("plane"+"_"+flightId).value;
+        var startTime = document.getElementById("start_time"+"_"+flightId).value;
+
+        console.log(flightRoute)
+        // Make an AJAX request to update the flight
+       $.ajax({
+        type: 'PUT',
+        url: '/update_flight/' + flightId,
+        contentType: 'application/json',  // Set content type to JSON
+        data: JSON.stringify({
+            flight_route: flightRoute,
+            team_flight: teamFlight,
+            plane: plane,
+            start_time: startTime
+        }),
+        success: function(response) {
+           if (response.success) {
+                    alert('Update successful');  // Replace with your actual handling
+                      location.reload();
+                } else {
+                    alert('Deletion failed');  // Replace with your actual handling
+                }
+        },
+        error: function(error) {
+            // Handle error
+        }
+    });
+
+    }
 </script>
 <script src="{{ url_for('static', filename='javascript/flightmanager.js')}}"></script>
 

@@ -29,7 +29,7 @@ class Flight(BaseModel):
     id_plane = Column(Integer, ForeignKey('Plane.id'), nullable=False)
     id_team_flight = Column(Integer, ForeignKey('TeamFlight.id'), nullable=False)
     id_flight_route = Column(Integer, ForeignKey('FlightRoute.id'), nullable=False)
-
+    is_delete = Column(Integer,  nullable=True)
     def __str__(self):
         return self.name
 

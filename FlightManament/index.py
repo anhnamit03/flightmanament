@@ -459,8 +459,11 @@ def hrmcheck():
 
 @app.route('/flightmanager')
 def flightmanager():
+
     all_flight = []  # Khởi tạo danh sách trống
     destinations = utils.get_name_airport()
+
+
     if request.method.__eq__("GET"):
         destination = request.args.get('destination')
         departure = request.args.get('departure')
@@ -473,18 +476,72 @@ def flightmanager():
                     flight_info = utils.reder_interface_for_book_ticket_customer(flight_id)
                     if flight_info:
                         all_flight.append(flight_info)
+
+
+    #   Khoi
+    #   get flight haven't start
+        list_flight_not_start = utils.get_flight_not_start()
+
+    #    get list flight route
+        list_id_flight_route = utils.get_list_id_unique_flight_route()
+    #    get list team flight
+        list_id_team_flight = utils.get_list_id_unique_team_flight()
+    #    get list id plane
+        list_id_plane = utils.get_list_id_unique_flight()
+
+        return render_template("flightmanager.html",
+                               destinations=destinations,
+                               destination=destination,
+                               departure=departure,
+                               go_date=go_date,
+                               all_flight=all_flight,
+                               list_flight_not_start = list_flight_not_start,
+
+                               list_id_flight_route = list_id_flight_route,
+                               list_id_team_flight = list_id_team_flight,
+                               list_id_plane = list_id_plane
+                               )
+
+
     list_seat = []
     if request.method.__eq__("POST"):
         session["list_seat"] = request.form.getlist('seat')
         session['selected_flight_id'] = request.form.get('id_flight')
         return redirect(url_for('test'))
-    return render_template("flightmanager.html",
-                           destinations=destinations,
-                           destination=destination,
-                           departure=departure,
-                           go_date=go_date,
-                           all_flight=all_flight,
-                           )
+
+
+
+# handle delte flight
+@app.route('/delete_flight/<int:flight_id>', methods=['GET', 'DELETE'])
+def delete_flight(flight_id):
+    success = utils.delete_flight_by_id(flight_id)
+    return jsonify(success=success)
+
+@app.route('/update_flight/<int:flight_id>', methods=['GET', 'PUT'])
+def update_flight(flight_id):
+    try:
+        flight_dto = Flight()
+
+        data = request.json  # Assuming the data is sent as JSON in the request body
+        flight_dto.id_flight_route = data.get('flight_route')
+        flight_dto.id_team_flight = data.get('team_flight' )
+        flight_dto.id_plane = data.get('plane' )
+        flight_dto.start_time = data.get('start_time')
+        flight_dto.id = flight_id
+
+        utils.update_flight_by_id(flight_dto)
+
+
+        return jsonify(success=True)
+
+    except Exception as e:
+        return jsonify(success=False, error=str(e))
+
+
+    success = utils.delete_flight_by_id(flight_id)
+
+    return jsonify(success=success)
+
 
 
 if __name__ == "__main__":
