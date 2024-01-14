@@ -8,12 +8,11 @@ from sqlalchemy import and_
 from sqlalchemy import func
 
 
+
 def get_name_airport():
     names = Airport.query.with_entities(Airport.name).all()
     name_list = [name[0] for name in names]
     return name_list
-
-
 def check_login(username, password):
     if username and password:
         return User.query.filter(User.username.__eq__(username.strip()),
@@ -265,12 +264,12 @@ def get_all_type_seat_ids():
 def calculate_length_flight(destination, departure, flight_schedules):
     length = 0
 
-    if flight_schedules == None:
+    if len(flight_schedules) == 0:
         length = distance_between_airport(destination, departure)
     elif len(flight_schedules) == 1:
         length = distance_between_airport(destination, get_airport_by_id(flight_schedules)[0].id_airport) \
                  + distance_between_airport(departure, get_airport_by_id(flight_schedules)[0].id_airport)
-    else:
+    elif len(flight_schedules) == 2:
         length = distance_between_airport(get_airport_by_id(flight_schedules[1].id_airport),
                                           get_airport_by_id(flight_schedules[0].id_airport))
         for i in range(len(flight_schedules)):
@@ -279,7 +278,8 @@ def calculate_length_flight(destination, departure, flight_schedules):
                 length += distance_between_airport(destination, get_airport_by_id(flight_schedules[i].id_airport))
             if flight_schedules[i].id_stop_point == 2:
                 length += distance_between_airport(departure, get_airport_by_id(flight_schedules[i].id_airport))
-        return length
+
+    return length
 
 
 def get_flight_route_by_id(id_flight_router):
@@ -386,17 +386,6 @@ class info_book_ticket(object):
         self.id_flight = id_flight
 
 
-class Customer:
-    def __init__(self, username, cccd, gender, phone, email, birthday):
-        self.username = username
-        self.cccd = cccd
-        self.gender = gender
-        self.phone = phone
-        self.email = email
-        self.birthday = birthday
-
-
-
 # Function cho việc đặt vé
 def reder_interface_for_book_ticket_customer(id_flight):
 
@@ -480,10 +469,28 @@ def add_user(username, password, avatar, name, CCCD, gender, phone, email, birth
     db.session.commit()
 
 
+def add_customer(name, CCCD, gender, phone, email, birthday ):
+    customer = Customer(name=name,
+                        CCCD=CCCD,
+                        gender=gender,
+                        phone=phone,
+                        email=email,
+                        birthday=birthday)
+    with app.app_context():
+        db.session.add(customer)
+        db.session.commit()
+
+
 def get_id_role(position):
     with app.app_context():
         role = Role.query.filter_by(position=position).first()
         return role.id
+
+
+def get_id_customer(CCCD):
+    with app.app_context():
+        customer = Customer.query.filter_by(CCCD=CCCD).first()
+        return customer.id
 
 
 def add_team_flight(description):
@@ -492,10 +499,76 @@ def add_team_flight(description):
     db.session.commit()
 
 
+def add_ticket(id_seat,id_buyer,id_passenger,id_flight,id_ticket_status, **kwargs):
+    employee_responsible = kwargs.get('employee_responsible', None)
+    ticket = Ticket(
+        id_seat=id_seat,
+        id_buyer=id_buyer,
+        id_passenger=id_passenger,
+        id_flight=id_flight,
+        id_ticket_status=id_ticket_status,
+        purchase_time= datetime.strftime(datetime.now(),'%Y-%m-%d %H:%M:%S'),
+        employee_responsible=employee_responsible
+    )
+    db.session.add(ticket)
+    db.session.commit()
+
+
+def get_flight_by_year_and_month(year, month):
+    with app.app_context():
+        # Lấy danh sách các chuyến bay có trường start_time thuộc về năm và tháng đã chỉ định
+        flights = Flight.query.filter(
+            db.extract('year', Flight.start_time) == year,
+            db.extract('month', Flight.start_time) == month
+        ).all()
+
+        return flights
+
+
+def flight_route_stats():
+    with app.app_context():
+        return FlightRoute.query.join(Flight, Flight.id_flight_route.__eq__(FlightRoute.id), isouter=True) \
+                                .add_column(FlightRoute.id.label('flight_route_id')) \
+                                .add_column(func.count(Flight.id).label('flight_count')) \
+                                .group_by(FlightRoute.id) \
+                                .all()
+
+def revenue_by_flight_id(flight_id):
+    total = 0
+    with app.app_context():
+        try:
+            tickets = Ticket.query.filter(Ticket.id_flight == flight_id).all()
+            list_seat = [ticket.id_seat for ticket in tickets]
+            a = reder_interface_for_book_ticket_customer(flight_id)
+            for item in list_seat:
+                if item in a.list_seat_rank_2:
+                    total += a.price_seat_rank_2
+                elif item in a.list_seat_rank_1:
+                    total += a.price_seat_rank_1
+        except Exception as e:
+
+            total = 0  # Hoặc giá trị mặc định khác phù hợp với trường hợp lỗi của bạn
+    return total
+
+def get_revenue_by_route_flight(id_router_flight):
+    total = 0
+    with app.app_context():
+        flights = Flight.query.filter(Flight.id_flight_route == id_router_flight).all()
+        if flights:
+            id_flights = [flight.id for flight in flights]
+            for item in id_flights:
+                total += revenue_by_flight_id(item)
+
+    return total
+
+
+
+
 
 
 if __name__ == '__main__':
-    print(get_all_roles())
-    print(reder_interface_for_book_ticket_customer(1).id_flight)
+    print(reder_interface_for_book_ticket_customer(10).price_seat_rank_1)
+
+
 
 

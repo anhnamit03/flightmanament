@@ -7,6 +7,8 @@ from flask import render_template, request, redirect, url_for, session, jsonify,
 from flask_login import login_required, current_user, login_user
 from FlightManament import  mail, login_manager, stripe_keys
 from utils import *
+from FlightManament import app
+
 from flask_mail import Message
 stripe.api_key = stripe_keys["secret_key"]
 
@@ -227,19 +229,10 @@ def test():
             price += flight_info.price_seat_rank_2
     session["price"] = price
     a = type(flight_info.list_seat_rank_1)
-    list_customers = []
-    if request.method.__eq__('POST'):
-         for item in value_from_session:
-             username = request.form.get('username' + item)
-             cccd = request.form.get('cccd' + item)
-             gender = request.form.get('gender' + item)
-             phone = request.form.get('phone' + item)
-             email = request.form.get('email' + item)
-             birthday = request.form.get('birthday' + item)
-             customer = Customer( username, cccd, gender, phone, email, birthday)
-             list_customers.append(customer)
 
-    return render_template('test.html',value_from_session=value_from_session, flight_info=flight_info, a=a, list_customers=list_customers)
+
+
+    return render_template('test.html',value_from_session=value_from_session, flight_info=flight_info, a=a)
 
 
 @app.route("/401")
@@ -249,6 +242,19 @@ def ffgdd():
 
 @app.route("/payment", methods=["GET", "POST"])
 def payment():
+    list_customers = []
+    value_from_session = session.get('list_seat')
+    if request.method.__eq__('POST'):
+         for item in value_from_session:
+             name = request.form.get('username' + item)
+             CCCD = request.form.get('cccd' + item)
+             gender = request.form.get('gender' + item)
+             phone = request.form.get('phone' + item)
+             email = request.form.get('email' + item)
+             birthday = request.form.get('birthday' + item)
+             customer = {'name': name,'CCCD': CCCD,'gender': gender,'phone': phone,'email': email,'birthday': birthday}
+             list_customers.append(customer)
+         session["list_customers"] = list_customers
     return render_template('payment.html')
 
 
@@ -264,13 +270,7 @@ def create_checkout_session():
         phone = request.form.get('numberPhone')
         email = request.form.get('email')
         birth_day = request.form.get('birthDay')
-
-
-
-
-
         amount = session.get('price')# Set the amount in the smallest unit of your currency (e.g., cents for USD)
-
         # Create a PaymentIntent
         intent = stripe.PaymentIntent.create(
             amount=amount,
@@ -282,16 +282,12 @@ def create_checkout_session():
             },
             confirmation_method='manual',  # Use manual confirmation for better control
             confirm=True,  # Confirm the payment immediately,
-
         )
-
         session["email_to"] = email
         session["name_to"] = name
         session["payment_state"] = True
-
+        session["buyer"] = {'name': name,'CCCD': identity_number,'gender': gender,'phone': phone,'email': email,'birthday': birth_day}
         return jsonify({'clientSecret': intent.client_secret})
-
-
     except Exception as e:
         return jsonify(error=str(e))
 
@@ -303,26 +299,40 @@ def success():
     # push noti
 
     if "payment_state" in session:
+
+        buyer = session.get('buyer')
+        if buyer:
+            utils.add_customer(buyer['name'], buyer['CCCD'], int(buyer['gender']), buyer['phone'], buyer['email'], buyer['birthday'])
+        list_customer = session.get('list_customers')
+        if list_customer:
+            for customer in list_customer:
+                print(list_customer)
+                utils.add_customer(customer['name'], customer['CCCD'], int(customer['gender']), customer['phone'], customer['email'], customer['birthday'])
+
+        selected_flight_id = session.get('selected_flight_id')
+        value_from_session = session.get('list_seat')
+        for i in range(len(value_from_session)):
+
+
+            utils.add_ticket(value_from_session[i],utils.get_id_customer(buyer['CCCD']),
+                             utils.get_id_customer(list_customer[i]['CCCD']),
+                             selected_flight_id,1)
         check_payment = session["payment_state"]
         if check_payment:
             # send mail
             email = session['email_to']
-            name =  session["name_to"]
-            if email :
+            name = session["name_to"]
+            if email:
                 #  send message
                 msg = Message("Hello",
                               sender="dangvykhoi@gmail.com",
-
                               recipients=[email])
-
                 msg.template_id = 'd-3b20516cd9424fe59bed6499de841098'
                 msg.dynamic_template_data = {'name': name}
                 mail.send(msg)
                 return render_template("success.html")
     else:
         return redirect(url_for('home'))
-
-
 
 
 @app.route("/cancelled")
@@ -477,6 +487,6 @@ def flightmanager():
                            )
 
 
-
 if __name__ == "__main__":
+    from FlightManament.admin import *
     app.run(debug=True)

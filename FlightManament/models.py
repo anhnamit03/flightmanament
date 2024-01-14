@@ -135,7 +135,7 @@ class Ticket(BaseModel):
 class Customer(BaseModel):
     __tablename__ = "Customer"
     name = Column(String(255))
-    CCCD = Column(String(12), default=None, nullable=False, unique=True)
+    CCCD = Column(String(12), default=None, nullable=False)
     gender = Column(Boolean, default=False)
     phone = Column(String(10), nullable=False)
     email = Column(String(50), nullable=False)
