@@ -1,3 +1,5 @@
+from operator import or_
+
 from FlightManament.models import *
 from geopy.distance import geodesic
 from FlightManament import app, db
@@ -479,6 +481,16 @@ def add_user(username, password, avatar, name, CCCD, gender, phone, email, birth
     db.session.add(user)
     db.session.commit()
 
+def get_flight_not_start():
+    with app.app_context():
+        current_time = datetime.now()
+        flights_not_started = Flight.query.filter(
+            and_(
+                Flight.start_time > current_time,
+                or_(Flight.is_delete != 1, Flight.is_delete.is_(None))
+            )
+        ).all()
+        return flights_not_started
 
 def get_id_role(position):
     with app.app_context():
@@ -491,6 +503,57 @@ def add_team_flight(description):
     db.session.add(team_flight)
     db.session.commit()
 
+
+# khoi working with flight table
+# get unique id flight route
+def get_list_id_unique_flight_route():
+    with app.app_context():
+        unique_ids = db.session.query(FlightRoute.id).distinct().all()
+        # Extract the IDs from the result
+        id_list = [id_[0] for id_ in unique_ids]
+        return id_list
+
+# get unique id id team flight
+def get_list_id_unique_team_flight():
+    with app.app_context():
+        unique_ids = db.session.query(TeamFlight.id).distinct().all()
+        # Extract the IDs from the result
+        id_list = [id_[0] for id_ in unique_ids]
+        return id_list
+
+# get unique id id team flight
+def get_list_id_unique_flight():
+    with app.app_context():
+        unique_ids = db.session.query(Flight.id).distinct().all()
+        # Extract the IDs from the result
+        id_list = [id_[0] for id_ in unique_ids]
+        return id_list
+
+
+def delete_flight_by_id(id):
+
+    flight_to_delete = Flight.query.filter_by(id=id).first()
+    if flight_to_delete:
+        flight_to_delete.is_delete = 1
+        db.session.commit()
+        return True
+
+    return False
+
+def update_flight_by_id(obj):
+
+    flight_to_update = Flight.query.filter_by(id=obj.id).first()
+
+    if flight_to_update:
+        flight_to_update.id_flight_route = obj.id_flight_route
+        flight_to_update.id_team_flight = obj.id_team_flight
+        flight_to_update.id_plane = obj.id_plane
+        flight_to_update.start_time = obj.start_time
+
+        db.session.commit()
+        return True
+
+    return False
 
 
 

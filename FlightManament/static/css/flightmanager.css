@@ -374,7 +374,7 @@
     border: 1px solid #c8c8c8;
     border-top: none;
     padding: 10px 12px;
-    display: none;
+    display: flex;
 
 }
 .content-header{
@@ -519,7 +519,7 @@
 .cockpit {
   height: 250px;
   position: relative;
-  overflow: hidden;
+
   text-align: center;
   border-bottom: 5px solid #d8d8d8;
 }
@@ -611,7 +611,7 @@ ol {
 .seat input[type=checkbox]:disabled + label {
   background: #dddddd;
   text-indent: -9999px;
-  overflow: hidden;
+
 }
 
 .seat input[type=checkbox]:disabled + label:after {
@@ -762,4 +762,48 @@ ol {
     height: 30px;
     color: white
 
+}
+
+.btn-action{
+    width: 12%;
+    margin: 5px;
+    padding: 10px;
+}
+
+.button_action_container {
+    text-align: right;
+}
+
+.btn-action {
+    /* Add any additional styling for your buttons */
+    margin-left: 10px; /* Add some margin between the buttons */
+}
+.button_action_container {
+    text-align: right;
+    margin-top: 20px;  /* Add margin to separate from other content */
+}
+
+.btn-action {
+    padding: 10px 20px;  /* Adjust padding for better spacing */
+    margin-left: 10px;  /* Add margin between buttons */
+    border: 2px solid #007bff;  /* Add a blue border */
+    border-radius: 4px;  /* Add border-radius for rounded corners */
+    background-color: #007bff;  /* Blue background color */
+    color: #fff;  /* White text color */
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;  /* Smooth transitions */
+}
+
+.btn-action:hover {
+    background-color: #0056b3;  /* Darker blue on hover */
+    border-color: #0056b3;  /* Darker blue border on hover */
+    color: #fff;  /* White text color on hover */
+}
+.btn-delete{
+      background-color: red;
+       color: white;
+}
+.btn-fix{
+  background-color: #00a347;
+       color: white;
 }
